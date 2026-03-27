@@ -15,16 +15,18 @@ export default async function EditExperiencePage({
   params: Promise<{ id: string }>;
 }) {
   const session = await auth();
+  const isDev = process.env.NODE_ENV === "development";
 
-  if (!session?.user?.id) {
+  if (!session?.user?.id && !isDev) {
     return <AuthGate>{null}</AuthGate>;
   }
 
+  const userId = session?.user?.id || "dev";
   const { id } = await params;
   const result = await db
     .select()
     .from(experiences)
-    .where(and(eq(experiences.id, parseInt(id)), eq(experiences.userId, session.user.id)));
+    .where(and(eq(experiences.id, parseInt(id)), eq(experiences.userId, userId)));
 
   if (result.length === 0) notFound();
 

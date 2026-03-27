@@ -197,7 +197,7 @@ export default function TripContextForm({
                 key={s}
                 type="button"
                 onClick={() => setPrompt(s)}
-                className={`px-3.5 py-2 text-[11px] tracking-[0.03em] rounded-md border transition-colors ${
+                className={`px-4 py-2.5 md:px-3.5 md:py-2 text-[13px] md:text-[11px] tracking-[0.03em] rounded-md border transition-colors ${
                   prompt === s
                     ? "border-[#1A1A1A]/30 text-[#1A1A1A]/70"
                     : "border-[#D4D0C8] text-[#1A1A1A]/40 hover:border-[#1A1A1A]/30 hover:text-[#1A1A1A]/60"
@@ -212,12 +212,12 @@ export default function TripContextForm({
         {/* Secondary: Quick params — compact inline row */}
         <div className="grid grid-cols-3 gap-4 mb-4">
           <div>
-            <label htmlFor="discover-month" className="text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-0.5 block">{t("discover.month")}</label>
+            <label htmlFor="discover-month" className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-1 md:mb-0.5 block">{t("discover.month")}</label>
             <select
               id="discover-month"
               value={month}
               onChange={(e) => setMonth(e.target.value)}
-              className="w-full bg-transparent border-b border-[#D4D0C8] py-1.5 text-sm focus:border-[#1A1A1A]/40 transition-colors appearance-none cursor-pointer"
+              className="w-full bg-transparent border-b border-[#D4D0C8] py-2.5 md:py-1.5 text-base md:text-sm focus:border-[#1A1A1A]/40 transition-colors appearance-none cursor-pointer"
             >
               <option value="">{t("discover.any")}</option>
               {MONTHS.map((m) => (
@@ -226,7 +226,7 @@ export default function TripContextForm({
             </select>
           </div>
           <div>
-            <label htmlFor="discover-days" className="text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-0.5 block">{t("discover.days")}</label>
+            <label htmlFor="discover-days" className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-1 md:mb-0.5 block">{t("discover.days")}</label>
             <input
               id="discover-days"
               type="number"
@@ -235,18 +235,18 @@ export default function TripContextForm({
               placeholder="7"
               min="1"
               max="90"
-              className="w-full bg-transparent border-b border-[#D4D0C8] py-1.5 text-sm focus:border-[#1A1A1A]/40 transition-colors placeholder:text-[#1A1A1A]/25"
+              className="w-full bg-transparent border-b border-[#D4D0C8] py-2.5 md:py-1.5 text-base md:text-sm focus:border-[#1A1A1A]/40 transition-colors placeholder:text-[#1A1A1A]/25"
             />
           </div>
           <div>
-            <label htmlFor="discover-budget" className="text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-0.5 block">{t("discover.budget")}</label>
+            <label htmlFor="discover-budget" className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-1 md:mb-0.5 block">{t("discover.budget")}</label>
             <input
               id="discover-budget"
               type="text"
               value={budget}
               onChange={(e) => setBudget(e.target.value)}
               placeholder="$2000"
-              className="w-full bg-transparent border-b border-[#D4D0C8] py-1.5 text-sm focus:border-[#1A1A1A]/40 transition-colors placeholder:text-[#1A1A1A]/25"
+              className="w-full bg-transparent border-b border-[#D4D0C8] py-2.5 md:py-1.5 text-base md:text-sm focus:border-[#1A1A1A]/40 transition-colors placeholder:text-[#1A1A1A]/25"
             />
           </div>
         </div>
@@ -268,15 +268,15 @@ export default function TripContextForm({
           <div className="overflow-hidden">
           <div className="space-y-4 mb-4 pl-3 border-l border-[#D4D0C8]/50">
             <div>
-              <label className="text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-1.5 block">{t("discover.travelingWith")}</label>
-              <div className="flex flex-wrap gap-1" role="group" aria-label={t("discover.travelingWith")}>
+              <label className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-2 md:mb-1.5 block">{t("discover.travelingWith")}</label>
+              <div className="flex flex-wrap gap-1.5 md:gap-1" role="group" aria-label={t("discover.travelingWith")}>
                 {PARTNER_TYPES.map((p) => (
                   <button
                     key={p}
                     type="button"
                     aria-pressed={companion === p}
                     onClick={() => setCompanion(companion === p ? "" : p)}
-                    className={`px-2.5 py-1 text-[9px] tracking-[0.1em] uppercase transition-colors ${
+                    className={`px-3 py-2 md:px-2.5 md:py-1 text-[11px] md:text-[9px] tracking-[0.1em] uppercase transition-colors ${
                       companion === p
                         ? "bg-[#EBCFBE] text-[#1A1A1A]"
                         : "bg-[#D4D0C8]/20 text-[#1A1A1A]/35 hover:text-[#1A1A1A]/50 hover:bg-[#D4D0C8]/40"
@@ -288,15 +288,15 @@ export default function TripContextForm({
               </div>
             </div>
             <div>
-              <label className="text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-1.5 block">{t("discover.ageRange")}</label>
-              <div className="flex flex-wrap gap-1" role="group" aria-label={t("discover.ageRange")}>
+              <label className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-2 md:mb-1.5 block">{t("discover.ageRange")}</label>
+              <div className="flex flex-wrap gap-1.5 md:gap-1" role="group" aria-label={t("discover.ageRange")}>
                 {AGE_RANGES.map((a) => (
                   <button
                     key={a}
                     type="button"
                     aria-pressed={ageRange === a}
                     onClick={() => setAgeRange(ageRange === a ? "" : a)}
-                    className={`px-2.5 py-1 text-[9px] tracking-[0.1em] uppercase transition-colors ${
+                    className={`px-3 py-2 md:px-2.5 md:py-1 text-[11px] md:text-[9px] tracking-[0.1em] uppercase transition-colors ${
                       ageRange === a
                         ? "bg-[#1A1A1A] text-white"
                         : "bg-[#D4D0C8]/20 text-[#1A1A1A]/35 hover:text-[#1A1A1A]/50 hover:bg-[#D4D0C8]/40"
@@ -316,7 +316,7 @@ export default function TripContextForm({
           <button
             onClick={handleDiscover}
             disabled={loading}
-            className={`w-full py-3.5 text-[11px] tracking-[0.25em] uppercase flex items-center justify-center gap-2.5 transition-all ${
+            className={`w-full py-4 md:py-3.5 text-xs md:text-[11px] tracking-[0.25em] uppercase flex items-center justify-center gap-2.5 transition-all ${
               loading
                 ? "bg-[#1A1A1A]/80 text-white"
                 : "bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/85 disabled:bg-[#D4D0C8] disabled:text-[#1A1A1A]/30 disabled:cursor-not-allowed"
@@ -389,8 +389,8 @@ export default function TripContextForm({
             <div className="space-y-6">
               {/* Insight */}
               {result.travelInsight && (
-                <div className="py-4 px-5 bg-[#EBCFBE] border-l-2 border-[#EBCFBE]">
-                  <p className="text-sm text-[#1A1A1A]/70 italic leading-relaxed">
+                <div className="py-4 px-5 bg-[#EBCFBE]/25 border-l border-[#EBCFBE]">
+                  <p className="font-serif text-sm text-[#1A1A1A]/40 italic leading-relaxed">
                     {result.travelInsight}
                   </p>
                 </div>
@@ -406,11 +406,11 @@ export default function TripContextForm({
                   {result.recommendations.map((rec, i) => (
                     <div
                       key={i}
-                      className="border-t border-[#D4D0C8] py-5 group"
+                      className={`py-5 md:py-5 group ${i > 0 ? "border-t border-[#D4D0C8]/50 md:border-[#D4D0C8]" : "border-t border-[#D4D0C8]"}`}
                     >
                       <div className="flex items-start gap-4">
                         {/* Thumbnail */}
-                        <div className="shrink-0 w-28 h-20 relative overflow-hidden bg-[#D4D0C8]/20">
+                        <div className="shrink-0 w-24 h-[4.5rem] md:w-28 md:h-20 relative overflow-hidden bg-[#D4D0C8]/20">
                           {photos[i] ? (
                             <Image
                               src={photos[i].thumbUrl}
@@ -432,7 +432,7 @@ export default function TripContextForm({
                                 href={googleSearchUrl(rec.name, rec.country)}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="font-serif text-base leading-tight hover:text-[#1A1A1A]/60 transition-colors inline-flex items-start gap-1.5 group/link"
+                                className="font-serif text-lg md:text-base leading-tight hover:text-[#1A1A1A]/60 transition-colors inline-flex items-start gap-1.5 group/link"
                               >
                                 {rec.name}
                                 <ExternalLink size={10} className="shrink-0 mt-1 opacity-0 group-hover/link:opacity-40 transition-opacity" />
@@ -443,22 +443,22 @@ export default function TripContextForm({
                                 </span>
                               )}
                             </div>
-                            <p className="text-xs text-[#1A1A1A]/50 mt-0.5">
+                            <p className="text-sm md:text-xs text-[#1A1A1A]/50 mt-0.5">
                               {rec.country}
                             </p>
-                            <p className="text-xs text-[#1A1A1A]/55 mt-1.5 leading-relaxed line-clamp-2">
+                            <p className="text-sm md:text-xs text-[#1A1A1A]/55 mt-1.5 leading-relaxed line-clamp-2">
                               {rec.description}
                             </p>
                             <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2">
-                              <span className="text-[10px] tracking-[0.1em] text-[#1A1A1A]/40">
+                              <span className="text-xs md:text-[10px] tracking-[0.1em] text-[#1A1A1A]/40">
                                 {rec.bestMonths}
                               </span>
-                              <span className="text-[10px] text-[#1A1A1A]/20">·</span>
-                              <span className="text-[10px] tracking-[0.1em] text-[#1A1A1A]/40">
+                              <span className="text-xs md:text-[10px] text-[#1A1A1A]/20">·</span>
+                              <span className="text-xs md:text-[10px] tracking-[0.1em] text-[#1A1A1A]/40">
                                 {rec.estimatedDays}d
                               </span>
-                              <span className="text-[10px] text-[#1A1A1A]/20">·</span>
-                              <span className="text-[10px] tracking-[0.1em] text-[#1A1A1A]/40">
+                              <span className="text-xs md:text-[10px] text-[#1A1A1A]/20">·</span>
+                              <span className="text-xs md:text-[10px] tracking-[0.1em] text-[#1A1A1A]/40">
                                 {rec.estimatedBudget}
                               </span>
                             </div>
@@ -469,7 +469,7 @@ export default function TripContextForm({
                           <button
                             onClick={() => addToBucketList(rec, i)}
                             disabled={addingToList.has(i) || addedToList.has(i)}
-                            className={`shrink-0 inline-flex items-center gap-1.5 px-3 py-2 text-[9px] tracking-[0.15em] uppercase border transition-all ${
+                            className={`shrink-0 inline-flex items-center gap-1.5 px-4 py-3 md:px-3 md:py-2 text-[11px] md:text-[9px] tracking-[0.15em] uppercase border transition-all ${
                               addedToList.has(i)
                                 ? "border-[#EBCFBE] bg-[#EBCFBE] text-[#1A1A1A]/70"
                                 : addingToList.has(i)
@@ -493,17 +493,17 @@ export default function TripContextForm({
               </div>
 
               {/* Footer actions */}
-              <div className="border-t border-[#D4D0C8] pt-5 flex gap-4">
+              <div className="border-t border-[#D4D0C8]/50 md:border-[#D4D0C8] pt-5 flex gap-4">
                 <button
                   onClick={handleDiscover}
                   disabled={loading}
-                  className="border border-[#D4D0C8] px-5 py-2.5 text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/50 hover:border-[#1A1A1A]/30 hover:text-[#1A1A1A]/70 transition-colors"
+                  className="border border-[#D4D0C8] px-5 py-3 md:py-2.5 text-xs md:text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/50 hover:border-[#1A1A1A]/30 hover:text-[#1A1A1A]/70 transition-colors"
                 >
                   {t("discover.discoverMore")}
                 </button>
                 <button
                   onClick={() => router.push("/bucket-list")}
-                  className="inline-flex items-center gap-2 text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors"
+                  className="inline-flex items-center gap-2 text-xs md:text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors"
                 >
                   {t("discover.viewBucketList")}
                   <ArrowRight size={10} />

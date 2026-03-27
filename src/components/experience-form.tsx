@@ -165,7 +165,7 @@ export default function ExperienceForm({
     ...pendingPhotos.map((p) => ({ ...p, id: 0, experienceId: 0, isPending: true as const })),
   ];
 
-  const labelClass = "text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/50 mb-1 block";
+  const labelClass = "text-xs md:text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/50 mb-1.5 md:mb-1 block";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
@@ -194,7 +194,7 @@ export default function ExperienceForm({
               type="button"
               aria-pressed={status === s}
               onClick={() => setStatus(s)}
-              className={`px-4 py-2 text-[10px] tracking-[0.15em] uppercase border transition-colors ${
+              className={`px-4 py-3 md:py-2 text-xs md:text-[10px] tracking-[0.15em] uppercase border transition-colors ${
                 status === s
                   ? "bg-[#EBCFBE] text-[#1A1A1A] border-[#EBCFBE]"
                   : "border-[#D4D0C8] text-[#1A1A1A]/50 hover:border-[#1A1A1A]/30"
@@ -252,7 +252,7 @@ export default function ExperienceForm({
         <button
           type="button"
           onClick={() => setShowPhotoPicker(!showPhotoPicker)}
-          className="border border-[#D4D0C8] px-4 py-2 text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/50 hover:border-[#1A1A1A]/30 transition-colors mt-2"
+          className="border border-[#D4D0C8] px-4 py-3 md:py-2 text-xs md:text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/50 hover:border-[#1A1A1A]/30 transition-colors mt-2"
         >
           {showPhotoPicker ? t("form.hidePhotos") : t("form.findPhotos")}
         </button>
@@ -266,11 +266,11 @@ export default function ExperienceForm({
         )}
       </div>
 
-      <div className="border-t border-[#D4D0C8] pt-6 flex items-center justify-between">
+      <div className="border-t border-[#D4D0C8]/50 md:border-[#D4D0C8] pt-6 flex items-center justify-between">
         <button
           type="submit"
           disabled={saving}
-          className="bg-[#1A1A1A] text-white px-8 py-3 text-[10px] tracking-[0.2em] uppercase hover:bg-[#1A1A1A]/80 transition-colors disabled:opacity-50"
+          className="bg-[#1A1A1A] text-white px-8 py-3.5 md:py-3 text-xs md:text-[10px] tracking-[0.2em] uppercase hover:bg-[#1A1A1A]/80 transition-colors disabled:opacity-50"
         >
           {saving ? t("form.saving") : isEdit ? t("form.update") : t("form.addToList")}
         </button>
@@ -280,7 +280,7 @@ export default function ExperienceForm({
             type="button"
             onClick={handleDelete}
             disabled={saving}
-            className="text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/30 hover:text-red-500 transition-colors"
+            className="text-xs md:text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/30 hover:text-red-500 transition-colors py-2"
           >
             {t("form.delete")}
           </button>

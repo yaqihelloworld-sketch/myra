@@ -21,12 +21,12 @@ export default function Nav() {
         <Link href="/" className="font-serif text-xl tracking-tight shrink-0">
           Myra
         </Link>
-        <div className="flex items-center gap-4 md:gap-8">
+        <div className="flex items-center gap-5 md:gap-8">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`text-[10px] md:text-xs tracking-[0.15em] md:tracking-[0.2em] whitespace-nowrap transition-colors ${
+              className={`text-xs md:text-xs tracking-[0.15em] md:tracking-[0.2em] whitespace-nowrap transition-colors py-1 ${
                 pathname === link.href ||
                 (link.href !== "/" && pathname.startsWith(link.href))
                   ? "text-[#1A1A1A]"
@@ -38,7 +38,7 @@ export default function Nav() {
           ))}
           <button
             onClick={() => setLang(lang === "en" ? "zh" : "en")}
-            className="text-[10px] md:text-xs tracking-wide text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors border-l border-[#D4D0C8] pl-4 md:pl-6 whitespace-nowrap"
+            className="text-xs md:text-xs tracking-wide text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors border-l border-[#D4D0C8] pl-5 md:pl-6 py-1 whitespace-nowrap"
             aria-label={lang === "en" ? "Switch to Chinese" : "切换到英文"}
           >
             {lang === "en" ? "中文" : "EN"}

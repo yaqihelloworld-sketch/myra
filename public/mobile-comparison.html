@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Myra Mobile UI Comparison — Current vs Proposed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F7F5F0;
+    --text: #1A1A1A;
+    --accent: #EBCFBE;
+    --border: #D4D0C8;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'Inter', -apple-system, sans-serif;
+  }
+
+  body {
+    font-family: var(--sans);
+    background: #E8E4DE;
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px 48px;
+  }
+
+  /* Header */
+  .page-header {
+    text-align: center;
+    margin-bottom: 32px;
+    max-width: 600px;
+  }
+  .page-header h1 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .page-header p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+  }
+
+  /* Toggle */
+  .toggle-bar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: #fff;
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 28px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+  .toggle-btn {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border: none;
+    background: transparent;
+    color: #888;
+    padding: 10px 28px;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+  }
+  .toggle-btn.active {
+    background: var(--text);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .toggle-btn .badge {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .toggle-btn.active .badge-current { background: #e8c4c4; color: #8b3a3a; }
+  .toggle-btn.active .badge-proposed { background: #c4e8c4; color: #3a8b3a; }
+  .toggle-btn:not(.active) .badge { background: #e0e0e0; color: #999; }
+
+  /* Side-by-side layout */
+  .comparison-area {
+    display: flex;
+    gap: 48px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Phone frame */
+  .phone-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .phone-wrapper.hidden {
+    display: none;
+  }
+  .phone-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .phone-label .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .phone-label .dot-red { background: #d97777; }
+  .phone-label .dot-green { background: #6ab56a; }
+
+  .phone-frame {
+    width: 375px;
+    background: #1a1a1a;
+    border-radius: 44px;
+    padding: 12px;
+    box-shadow:
+      0 20px 60px rgba(0,0,0,0.2),
+      inset 0 0 0 2px #333;
+  }
+  .phone-notch {
+    width: 120px;
+    height: 28px;
+    background: #1a1a1a;
+    border-radius: 0 0 18px 18px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    margin-top: -1px;
+  }
+  .phone-screen {
+    background: var(--bg);
+    border-radius: 34px;
+    overflow: hidden;
+    position: relative;
+  }
+  .phone-status-bar {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .phone-status-bar span:first-child { font-size: 14px; font-weight: 700; }
+  .phone-content {
+    padding: 0 16px 24px;
+    max-height: 700px;
+    overflow-y: auto;
+  }
+  .phone-content::-webkit-scrollbar { width: 0; }
+
+  /* Sections inside phone */
+  .section-label {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #999;
+    margin: 20px 0 8px;
+    padding-left: 2px;
+  }
+  .section-label:first-child { margin-top: 8px; }
+
+  /* ─── Home Cards ─── */
+  .home-cards {
+    display: flex;
+    gap: 10px;
+  }
+  .home-card {
+    flex: 1;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 14px;
+    text-align: center;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+  }
+  .home-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .home-card .icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .home-card .card-title {
+    font-family: var(--serif);
+    line-height: 1.3;
+  }
+  .home-card .card-sub {
+    color: #888;
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  /* current card sizing */
+  .current .home-card .card-title { font-size: 14px; }
+  .current .home-card .card-sub { font-size: 10px; }
+
+  /* proposed card sizing */
+  .proposed .home-card .card-title { font-size: 16px; }
+  .proposed .home-card .card-sub { font-size: 12px; }
+
+  /* ─── Discover Form ─── */
+  .discover-form { margin-top: 4px; }
+
+  .form-label {
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: #555;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .current .form-label { font-size: 9px; }
+  .proposed .form-label { font-size: 11px; }
+
+  .form-textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fff;
+    font-family: var(--sans);
+    color: var(--text);
+    resize: none;
+    outline: none;
+    margin-bottom: 12px;
+  }
+  .current .form-textarea { font-size: 14px; padding: 10px 12px; }
+  .proposed .form-textarea { font-size: 16px; padding: 12px 14px; }
+
+  .chips-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .chip {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-family: var(--sans);
+    cursor: pointer;
+    color: var(--text);
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .chip:hover { background: var(--accent); border-color: var(--accent); }
+
+  .current .chip { font-size: 11px; padding: 6px 14px; }
+  .proposed .chip {
+    font-size: 13px;
+    padding: 8px 16px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Inputs row */
+  .input-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .input-group label {
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: #555;
+    margin-bottom: 4px;
+  }
+  .current .input-group label { font-size: 9px; }
+  .proposed .input-group label { font-size: 11px; }
+
+  .input-group select,
+  .input-group input {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    font-family: var(--sans);
+    color: var(--text);
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .current .input-group select,
+  .current .input-group input {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+  .proposed .input-group select,
+  .proposed .input-group input {
+    font-size: 16px;
+    padding: 10px 12px;
+  }
+
+  /* Filter buttons */
+  .filter-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    border: 1px solid var(--border);
+    background: #fff;
+    border-radius: 6px;
+    font-family: var(--sans);
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .filter-btn.active-filter {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .current .filter-btn {
+    font-size: 9px;
+    padding: 4px 10px;
+    letter-spacing: 0.08em;
+  }
+  .proposed .filter-btn {
+    font-size: 11px;
+    padding: 10px 12px;
+    letter-spacing: 0.08em;
+    min-height: 44px;
+  }
+
+  /* Discover CTA */
+  .discover-btn {
+    width: 100%;
+    border: none;
+    background: var(--text);
+    color: #fff;
+    font-family: var(--sans);
+    font-weight: 500;
+    text-transform: uppercase;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .discover-btn:hover { opacity: 0.85; }
+  .current .discover-btn {
+    padding: 14px 0;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+  }
+  .proposed .discover-btn {
+    padding: 16px 0;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    min-height: 48px;
+  }
+
+  /* ─── Result Card ─── */
+  .result-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+  .result-img {
+    width: 100%;
+    height: 160px;
+    background: linear-gradient(135deg, #c8b8a8 0%, #a89888 50%, #d4c4b4 100%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 10px;
+    position: relative;
+  }
+  .result-img::before {
+    content: 'Kyoto, Japan';
+    position: absolute;
+    bottom: 10px;
+    left: 12px;
+    color: #fff;
+    font-family: var(--serif);
+    font-size: 20px;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  }
+  .result-img .heart {
+    width: 32px; height: 32px;
+    background: rgba(255,255,255,0.85);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .result-body { padding: 14px; }
+
+  .result-title {
+    font-family: var(--serif);
+    font-weight: 500;
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .current .result-title { font-size: 16px; }
+  .proposed .result-title { font-size: 18px; }
+
+  .result-meta {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+    color: #888;
+    flex-wrap: wrap;
+  }
+  .result-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .current .result-meta { font-size: 10px; }
+  .proposed .result-meta { font-size: 12px; }
+
+  .result-desc {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #555;
+    margin-bottom: 14px;
+  }
+
+  .add-plan-btn {
+    border: 1px solid var(--text);
+    background: transparent;
+    color: var(--text);
+    font-family: var(--sans);
+    font-weight: 500;
+    text-transform: uppercase;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .add-plan-btn:hover {
+    background: var(--text);
+    color: #fff;
+  }
+  .current .add-plan-btn {
+    font-size: 9px;
+    padding: 8px 12px;
+    letter-spacing: 0.1em;
+  }
+  .proposed .add-plan-btn {
+    font-size: 11px;
+    padding: 12px 16px;
+    letter-spacing: 0.1em;
+    min-height: 44px;
+  }
+
+  /* 44px tap target overlay */
+  .tap-guide {
+    display: none;
+  }
+  .show-guides .tap-guide {
+    display: block;
+    position: absolute;
+    border: 1.5px dashed #6ab56a;
+    border-radius: 6px;
+    pointer-events: none;
+    z-index: 10;
+    min-height: 44px;
+    min-width: 44px;
+  }
+  .tap-guide-label {
+    position: absolute;
+    top: -7px;
+    right: 4px;
+    background: #6ab56a;
+    color: #fff;
+    font-size: 7px;
+    font-weight: 700;
+    padding: 1px 4px;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  /* Relative positioning for guide parents */
+  .guide-parent {
+    position: relative;
+    display: inline-flex;
+  }
+
+  /* Guide toggle */
+  .guide-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    font-size: 11px;
+    color: #666;
+    cursor: pointer;
+    user-select: none;
+  }
+  .guide-toggle input { display: none; }
+  .guide-toggle .switch {
+    width: 36px; height: 20px;
+    background: #ccc;
+    border-radius: 10px;
+    position: relative;
+    transition: background 0.2s;
+  }
+  .guide-toggle input:checked + .switch { background: #6ab56a; }
+  .guide-toggle .switch::after {
+    content: '';
+    width: 16px; height: 16px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px; left: 2px;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
+  .guide-toggle input:checked + .switch::after { transform: translateX(16px); }
+
+  /* View mode classes */
+  .mode-side-by-side .phone-wrapper { display: flex; }
+  .mode-side-by-side .phone-wrapper.hidden { display: none; }
+
+  /* Annotation callouts */
+  .annotation {
+    background: #FFFDE7;
+    border: 1px solid #F0E68C;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 11px;
+    color: #665500;
+    line-height: 1.5;
+    margin: 8px 0 4px;
+  }
+  .annotation strong { font-weight: 600; }
+
+  /* Summary stats bar */
+  .stats-bar {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .stat-item {
+    text-align: center;
+  }
+  .stat-value {
+    font-size: 22px;
+    font-weight: 600;
+    font-family: var(--serif);
+  }
+  .stat-value.red { color: #c06060; }
+  .stat-value.green { color: #5a9a5a; }
+  .stat-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #888;
+    margin-top: 2px;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .comparison-area { gap: 24px; }
+    .phone-frame { transform: scale(0.9); transform-origin: top center; }
+  }
+  @media (max-width: 500px) {
+    .phone-frame { transform: scale(0.75); transform-origin: top center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Myra Mobile UI Audit</h1>
+  <p>Side-by-side comparison of current and proposed mobile tap targets, font sizes, and input scaling. All proposed changes meet WCAG 2.2 target size guidelines (44px minimum).</p>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-value red">9px</div>
+    <div class="stat-label">Current min font</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value green">11px</div>
+    <div class="stat-label">Proposed min font</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value red">28px</div>
+    <div class="stat-label">Current min tap</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value green">44px</div>
+    <div class="stat-label">Proposed min tap</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value red">14px</div>
+    <div class="stat-label">Current input font</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value green">16px</div>
+    <div class="stat-label">Proposed (no zoom)</div>
+  </div>
+</div>
+
+<div class="toggle-bar">
+  <button class="toggle-btn active" onclick="setView('both')" id="btn-both">
+    Both
+  </button>
+  <button class="toggle-btn" onclick="setView('current')" id="btn-current">
+    Current <span class="badge badge-current">Before</span>
+  </button>
+  <button class="toggle-btn" onclick="setView('proposed')" id="btn-proposed">
+    Proposed <span class="badge badge-proposed">After</span>
+  </button>
+</div>
+
+<div class="comparison-area" id="compArea">
+
+  <!-- ═══════ CURRENT ═══════ -->
+  <div class="phone-wrapper" id="phone-current">
+    <div class="phone-label">
+      <span class="dot dot-red"></span> Current
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen current">
+        <div class="phone-status-bar">
+          <span>9:41</span>
+          <span style="font-size:11px;">myra</span>
+          <span style="font-size:10px;">100%</span>
+        </div>
+        <div class="phone-content">
+
+          <!-- Home Cards -->
+          <div class="section-label">Home Cards</div>
+          <div class="home-cards">
+            <div class="home-card">
+              <span class="icon">&#128214;</span>
+              <div class="card-title">Add to Bucket List</div>
+              <div class="card-sub">Save your dream destinations</div>
+            </div>
+            <div class="home-card">
+              <span class="icon">&#127758;</span>
+              <div class="card-title">Discover a Trip</div>
+              <div class="card-sub">AI-curated recommendations</div>
+            </div>
+          </div>
+
+          <!-- Discover Form -->
+          <div class="section-label">Discover Form</div>
+          <div class="discover-form">
+            <label class="form-label">Describe your ideal trip</label>
+            <textarea class="form-textarea" rows="2" placeholder="Quiet beaches, local cuisine, cultural sites..."></textarea>
+
+            <label class="form-label" style="margin-bottom:6px;">Quick ideas</label>
+            <div class="chips-wrap">
+              <span class="chip">Romantic getaway</span>
+              <span class="chip">Adventure</span>
+              <span class="chip">Off the beaten path</span>
+              <span class="chip">Family-friendly</span>
+            </div>
+
+            <div class="input-row">
+              <div class="input-group">
+                <label>Month</label>
+                <select><option>March</option></select>
+              </div>
+              <div class="input-group">
+                <label>Days</label>
+                <input type="text" value="7">
+              </div>
+              <div class="input-group">
+                <label>Budget</label>
+                <select><option>$$</option></select>
+              </div>
+            </div>
+
+            <div class="filter-row">
+              <button class="filter-btn active-filter">All</button>
+              <button class="filter-btn">Beach</button>
+              <button class="filter-btn">Mountain</button>
+              <button class="filter-btn">City</button>
+              <button class="filter-btn">Cultural</button>
+            </div>
+
+            <button class="discover-btn">Discover</button>
+          </div>
+
+          <!-- Result Card -->
+          <div class="section-label">Result Card</div>
+          <div class="result-card">
+            <div class="result-img">
+              <div class="heart">&#9825;</div>
+            </div>
+            <div class="result-body">
+              <div class="result-title">Cherry Blossom Season in Kyoto</div>
+              <div class="result-meta">
+                <span>&#9992; 12h flight</span>
+                <span>&#128197; 7 days</span>
+                <span>&#128176; $$</span>
+                <span>&#9733; 4.8</span>
+              </div>
+              <div class="result-desc">Wander through ancient temples framed by sakura trees, explore traditional tea houses, and savor kaiseki cuisine.</div>
+              <button class="add-plan-btn">+ Add to Plan</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ PROPOSED ═══════ -->
+  <div class="phone-wrapper" id="phone-proposed">
+    <div class="phone-label">
+      <span class="dot dot-green"></span> Proposed
+    </div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen proposed" id="proposedScreen">
+        <div class="phone-status-bar">
+          <span>9:41</span>
+          <span style="font-size:11px;">myra</span>
+          <span style="font-size:10px;">100%</span>
+        </div>
+        <div class="phone-content">
+
+          <!-- Home Cards -->
+          <div class="section-label">Home Cards</div>
+          <div class="home-cards">
+            <div class="home-card">
+              <span class="icon">&#128214;</span>
+              <div class="card-title">Add to Bucket List</div>
+              <div class="card-sub">Save your dream destinations</div>
+            </div>
+            <div class="home-card">
+              <span class="icon">&#127758;</span>
+              <div class="card-title">Discover a Trip</div>
+              <div class="card-sub">AI-curated recommendations</div>
+            </div>
+          </div>
+
+          <!-- Discover Form -->
+          <div class="section-label">Discover Form</div>
+          <div class="discover-form">
+            <label class="form-label">Describe your ideal trip</label>
+            <textarea class="form-textarea" rows="2" placeholder="Quiet beaches, local cuisine, cultural sites..."></textarea>
+
+            <label class="form-label" style="margin-bottom:6px;">Quick ideas</label>
+            <div class="chips-wrap">
+              <span class="chip guide-parent">
+                Romantic getaway
+                <span class="tap-guide" style="inset:-2px;"><span class="tap-guide-label">44px</span></span>
+              </span>
+              <span class="chip guide-parent">
+                Adventure
+                <span class="tap-guide" style="inset:-2px;"><span class="tap-guide-label">44px</span></span>
+              </span>
+              <span class="chip guide-parent">
+                Off the beaten path
+                <span class="tap-guide" style="inset:-2px;"></span>
+              </span>
+              <span class="chip guide-parent">
+                Family-friendly
+                <span class="tap-guide" style="inset:-2px;"></span>
+              </span>
+            </div>
+
+            <div class="annotation">
+              <strong>Chips:</strong> 11px &rarr; 13px text, padding increased. Min height 44px for reliable tapping.
+            </div>
+
+            <div class="input-row">
+              <div class="input-group">
+                <label>Month</label>
+                <select><option>March</option></select>
+              </div>
+              <div class="input-group">
+                <label>Days</label>
+                <input type="text" value="7">
+              </div>
+              <div class="input-group">
+                <label>Budget</label>
+                <select><option>$$</option></select>
+              </div>
+            </div>
+
+            <div class="annotation">
+              <strong>Inputs:</strong> 14px &rarr; 16px prevents iOS auto-zoom on focus. Padding increased for comfortable tapping.
+            </div>
+
+            <div class="filter-row">
+              <button class="filter-btn active-filter guide-parent">
+                All
+                <span class="tap-guide" style="inset:-2px;"><span class="tap-guide-label">44px</span></span>
+              </button>
+              <button class="filter-btn guide-parent">
+                Beach
+                <span class="tap-guide" style="inset:-2px;"></span>
+              </button>
+              <button class="filter-btn guide-parent">
+                Mountain
+                <span class="tap-guide" style="inset:-2px;"></span>
+              </button>
+              <button class="filter-btn guide-parent">
+                City
+                <span class="tap-guide" style="inset:-2px;"></span>
+              </button>
+              <button class="filter-btn guide-parent">
+                Cultural
+                <span class="tap-guide" style="inset:-2px;"></span>
+              </button>
+            </div>
+
+            <button class="discover-btn guide-parent" style="position:relative;">
+              Discover
+              <span class="tap-guide" style="inset:-2px;"><span class="tap-guide-label">48px</span></span>
+            </button>
+          </div>
+
+          <!-- Result Card -->
+          <div class="section-label">Result Card</div>
+          <div class="result-card">
+            <div class="result-img">
+              <div class="heart">&#9825;</div>
+            </div>
+            <div class="result-body">
+              <div class="result-title">Cherry Blossom Season in Kyoto</div>
+              <div class="result-meta">
+                <span>&#9992; 12h flight</span>
+                <span>&#128197; 7 days</span>
+                <span>&#128176; $$</span>
+                <span>&#9733; 4.8</span>
+              </div>
+              <div class="result-desc">Wander through ancient temples framed by sakura trees, explore traditional tea houses, and savor kaiseki cuisine.</div>
+              <button class="add-plan-btn guide-parent" style="position:relative;">
+                + Add to Plan
+                <span class="tap-guide" style="inset:-2px;"><span class="tap-guide-label">44px</span></span>
+              </button>
+            </div>
+          </div>
+
+          <div class="annotation" style="margin-top:10px;">
+            <strong>Result card:</strong> Title 16px &rarr; 18px, meta 10px &rarr; 12px, button 9px &rarr; 11px with 44px min tap target.
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <label class="guide-toggle">
+      <input type="checkbox" id="guideCheck" onchange="toggleGuides(this.checked)">
+      <span class="switch"></span>
+      Show 44px tap target guides
+    </label>
+  </div>
+
+</div>
+
+<script>
+  function setView(mode) {
+    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn-' + mode).classList.add('active');
+
+    const current = document.getElementById('phone-current');
+    const proposed = document.getElementById('phone-proposed');
+
+    if (mode === 'both') {
+      current.classList.remove('hidden');
+      proposed.classList.remove('hidden');
+    } else if (mode === 'current') {
+      current.classList.remove('hidden');
+      proposed.classList.add('hidden');
+    } else {
+      current.classList.add('hidden');
+      proposed.classList.remove('hidden');
+    }
+  }
+
+  function toggleGuides(on) {
+    const screen = document.getElementById('proposedScreen');
+    if (on) {
+      screen.classList.add('show-guides');
+    } else {
+      screen.classList.remove('show-guides');
+    }
+  }
+</script>
+
+</body>
+</html>

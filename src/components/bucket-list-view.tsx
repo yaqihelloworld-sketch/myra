@@ -40,40 +40,40 @@ export default function BucketListView({
             role="tab"
             aria-selected={tab === "wishlist"}
             onClick={() => setTab("wishlist")}
-            className={`px-6 py-2.5 text-[10px] tracking-[0.2em] uppercase transition-colors ${
+            className={`px-4 py-3 md:px-6 md:py-2.5 text-xs md:text-[10px] tracking-[0.15em] md:tracking-[0.2em] uppercase transition-colors ${
               tab === "wishlist"
                 ? "bg-[#1A1A1A] text-white"
                 : "text-[#1A1A1A]/40 hover:text-[#1A1A1A]/70"
             }`}
           >
             {t("bucket.wishlist")}
-            <span className="ml-2 text-[9px] opacity-50">{count.wishlist}</span>
+            <span className="ml-1.5 md:ml-2 text-[9px] opacity-50">{count.wishlist}</span>
           </button>
           <button
             role="tab"
             aria-selected={tab === "planned"}
             onClick={() => setTab("planned")}
-            className={`px-6 py-2.5 text-[10px] tracking-[0.2em] uppercase transition-colors ${
+            className={`px-4 py-3 md:px-6 md:py-2.5 text-xs md:text-[10px] tracking-[0.15em] md:tracking-[0.2em] uppercase transition-colors ${
               tab === "planned"
                 ? "bg-[#1A1A1A] text-white"
                 : "text-[#1A1A1A]/40 hover:text-[#1A1A1A]/70"
             }`}
           >
             {t("bucket.planned")}
-            <span className="ml-2 text-[9px] opacity-50">{count.planned}</span>
+            <span className="ml-1.5 md:ml-2 text-[9px] opacity-50">{count.planned}</span>
           </button>
           <button
             role="tab"
             aria-selected={tab === "visited"}
             onClick={() => setTab("visited")}
-            className={`px-6 py-2.5 text-[10px] tracking-[0.2em] uppercase transition-colors ${
+            className={`px-4 py-3 md:px-6 md:py-2.5 text-xs md:text-[10px] tracking-[0.15em] md:tracking-[0.2em] uppercase transition-colors ${
               tab === "visited"
                 ? "bg-[#1A1A1A] text-white"
                 : "text-[#1A1A1A]/40 hover:text-[#1A1A1A]/70"
             }`}
           >
             {t("bucket.visited")}
-            <span className="ml-2 text-[9px] opacity-50">{count.visited}</span>
+            <span className="ml-1.5 md:ml-2 text-[9px] opacity-50">{count.visited}</span>
           </button>
         </div>
 
@@ -81,7 +81,7 @@ export default function BucketListView({
         <div className="flex border border-[#D4D0C8]" role="group" aria-label="View mode">
           <button
             onClick={() => setView("card")}
-            className={`p-2.5 transition-colors ${
+            className={`p-3 md:p-2.5 transition-colors ${
               view === "card"
                 ? "bg-[#1A1A1A] text-white"
                 : "text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60"
@@ -93,7 +93,7 @@ export default function BucketListView({
           </button>
           <button
             onClick={() => setView("list")}
-            className={`p-2.5 transition-colors ${
+            className={`p-3 md:p-2.5 transition-colors ${
               view === "list"
                 ? "bg-[#1A1A1A] text-white"
                 : "text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60"

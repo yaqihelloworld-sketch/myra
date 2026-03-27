@@ -32,7 +32,7 @@ export default function HomeContent({
       <div className="grid md:grid-cols-2 gap-3 max-w-2xl mx-auto mb-20">
         <Link
           href="/bucket-list/new"
-          className="bg-white p-6 rounded-lg shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.03)] group hover:bg-[#EBCFBE] active:bg-[#EBCFBE] transition-colors"
+          className="bg-white p-5 md:p-6 rounded-lg shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.03)] group hover:bg-[#EBCFBE] active:bg-[#EBCFBE] transition-colors"
         >
           <Image
             src="/book.svg"
@@ -42,18 +42,17 @@ export default function HomeContent({
             className="mb-3 opacity-75 group-hover:opacity-100 transition-opacity"
             aria-hidden="true"
           />
-          <h2 className="font-serif text-xl mb-1.5 flex items-center gap-2">
+          <h2 className="font-serif text-lg md:text-xl mb-1.5">
             {t("home.addBucketList")}
-            <span className="text-sm text-[#1A1A1A]/25">&#8250;</span>
           </h2>
-          <p className="text-xs text-[#1A1A1A]/40 leading-relaxed">
+          <p className="text-sm md:text-xs text-[#1A1A1A]/40 leading-relaxed">
             {t("home.addBucketListDesc")}
           </p>
         </Link>
 
         <Link
           href="/trips/new"
-          className="bg-white p-6 rounded-lg shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.03)] group hover:bg-[#EBCFBE] active:bg-[#EBCFBE] transition-colors"
+          className="bg-white p-5 md:p-6 rounded-lg shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.03)] group hover:bg-[#EBCFBE] active:bg-[#EBCFBE] transition-colors"
         >
           <Image
             src="/globe-icon.svg"
@@ -63,11 +62,10 @@ export default function HomeContent({
             className="mb-3 opacity-75 group-hover:opacity-100 transition-opacity"
             aria-hidden="true"
           />
-          <h2 className="font-serif text-xl mb-1.5 flex items-center gap-2">
+          <h2 className="font-serif text-lg md:text-xl mb-1.5">
             {t("home.discoverTrip")}
-            <span className="text-sm text-[#1A1A1A]/25">&#8250;</span>
           </h2>
-          <p className="text-xs text-[#1A1A1A]/40 leading-relaxed">
+          <p className="text-sm md:text-xs text-[#1A1A1A]/40 leading-relaxed">
             {t("home.discoverTripDesc")}
           </p>
         </Link>

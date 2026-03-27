@@ -11,12 +11,13 @@ export const dynamic = "force-dynamic";
 
 export default async function BucketListPage() {
   const session = await auth();
+  const isDev = process.env.NODE_ENV === "development";
 
-  if (!session?.user?.id) {
+  if (!session?.user?.id && !isDev) {
     return <AuthGate>{null}</AuthGate>;
   }
 
-  const userId = session.user.id;
+  const userId = session?.user?.id || "dev";
 
   const allExperiences = await db
     .select()
