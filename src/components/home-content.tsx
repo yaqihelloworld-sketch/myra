@@ -29,20 +29,23 @@ export default function HomeContent({
       </div>
 
       {/* Intent Cards */}
-      <div className="grid md:grid-cols-2 gap-px bg-[#D4D0C8] max-w-2xl mx-auto mb-20">
+      <div className="grid md:grid-cols-2 gap-3 max-w-2xl mx-auto mb-20">
         <Link
           href="/bucket-list/new"
-          className="bg-[#F7F5F0] p-10 group hover:bg-[#EBCFBE] transition-colors"
+          className="bg-white p-6 rounded-lg shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.03)] group hover:bg-[#EBCFBE] active:bg-[#EBCFBE] transition-colors"
         >
           <Image
             src="/book.svg"
             alt=""
-            width={52}
-            height={52}
-            className="mb-3 opacity-80 group-hover:opacity-100 transition-opacity"
+            width={44}
+            height={44}
+            className="mb-3 opacity-75 group-hover:opacity-100 transition-opacity"
             aria-hidden="true"
           />
-          <h2 className="font-serif text-xl mb-2">{t("home.addBucketList")}</h2>
+          <h2 className="font-serif text-xl mb-1.5 flex items-center gap-2">
+            {t("home.addBucketList")}
+            <span className="text-sm text-[#1A1A1A]/25">&#8250;</span>
+          </h2>
           <p className="text-xs text-[#1A1A1A]/40 leading-relaxed">
             {t("home.addBucketListDesc")}
           </p>
@@ -50,17 +53,20 @@ export default function HomeContent({
 
         <Link
           href="/trips/new"
-          className="bg-[#F7F5F0] p-10 group hover:bg-[#EBCFBE] transition-colors"
+          className="bg-white p-6 rounded-lg shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.03)] group hover:bg-[#EBCFBE] active:bg-[#EBCFBE] transition-colors"
         >
           <Image
             src="/globe-icon.svg"
             alt=""
-            width={52}
-            height={52}
-            className="mb-3 opacity-80 group-hover:opacity-100 transition-opacity"
+            width={44}
+            height={44}
+            className="mb-3 opacity-75 group-hover:opacity-100 transition-opacity"
             aria-hidden="true"
           />
-          <h2 className="font-serif text-xl mb-2">{t("home.discoverTrip")}</h2>
+          <h2 className="font-serif text-xl mb-1.5 flex items-center gap-2">
+            {t("home.discoverTrip")}
+            <span className="text-sm text-[#1A1A1A]/25">&#8250;</span>
+          </h2>
           <p className="text-xs text-[#1A1A1A]/40 leading-relaxed">
             {t("home.discoverTripDesc")}
           </p>

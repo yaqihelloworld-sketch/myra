@@ -2,15 +2,19 @@ import { db } from "@/db";
 import { experiences } from "@/db/schema";
 import { like, eq, and, sql } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
+import { getUser, unauthorized } from "@/lib/get-user";
 
 export async function GET(request: NextRequest) {
+  const user = await getUser();
+  if (!user) return unauthorized();
+
   const { searchParams } = request.nextUrl;
   const status = searchParams.get("status");
   const season = searchParams.get("season");
   const partnerType = searchParams.get("partnerType");
   const maxDays = searchParams.get("maxDays");
 
-  const conditions = [];
+  const conditions = [eq(experiences.userId, user.id!)];
   if (status) conditions.push(eq(experiences.status, status));
   if (season) conditions.push(like(experiences.idealSeasons, `%${season}%`));
   if (partnerType)
@@ -20,22 +24,23 @@ export async function GET(request: NextRequest) {
       sql`${experiences.estimatedDays} <= ${parseInt(maxDays)} OR ${experiences.estimatedDays} IS NULL`
     );
 
-  const results =
-    conditions.length > 0
-      ? await db
-          .select()
-          .from(experiences)
-          .where(and(...conditions))
-      : await db.select().from(experiences);
+  const results = await db
+    .select()
+    .from(experiences)
+    .where(and(...conditions));
 
   return NextResponse.json(results);
 }
 
 export async function POST(request: NextRequest) {
+  const user = await getUser();
+  if (!user) return unauthorized();
+
   const body = await request.json();
   const result = await db
     .insert(experiences)
     .values({
+      userId: user.id!,
       name: body.name,
       description: body.description || null,
       city: body.city || null,

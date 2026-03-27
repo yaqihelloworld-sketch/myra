@@ -1,25 +1,29 @@
 import { db } from "@/db";
 import { experiences } from "@/db/schema";
-import { eq, sql } from "drizzle-orm";
+import { eq, and, sql } from "drizzle-orm";
 import HomeContent from "@/components/home-content";
+import { auth } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
+  const session = await auth();
+  const userId = session?.user?.id || "";
+
   const wishlistCount = await db
     .select({ count: sql<number>`count(*)` })
     .from(experiences)
-    .where(eq(experiences.status, "wishlist"));
+    .where(and(eq(experiences.status, "wishlist"), eq(experiences.userId, userId)));
 
   const plannedCount = await db
     .select({ count: sql<number>`count(*)` })
     .from(experiences)
-    .where(eq(experiences.status, "planned"));
+    .where(and(eq(experiences.status, "planned"), eq(experiences.userId, userId)));
 
   const visitedCount = await db
     .select({ count: sql<number>`count(*)` })
     .from(experiences)
-    .where(eq(experiences.status, "visited"));
+    .where(and(eq(experiences.status, "visited"), eq(experiences.userId, userId)));
 
   return (
     <HomeContent

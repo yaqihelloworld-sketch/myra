@@ -2,6 +2,7 @@ import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 
 export const experiences = sqliteTable("experiences", {
   id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: text("user_id").notNull().default(""),
   name: text("name").notNull(),
   description: text("description"),
   city: text("city"),
@@ -18,6 +19,7 @@ export const experiences = sqliteTable("experiences", {
 
 export const trips = sqliteTable("trips", {
   id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: text("user_id").notNull().default(""),
   name: text("name").notNull(),
   startDate: text("start_date"),
   endDate: text("end_date"),

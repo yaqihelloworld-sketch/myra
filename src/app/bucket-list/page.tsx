@@ -1,16 +1,21 @@
 import { db } from "@/db";
 import { experiences, experiencePhotos } from "@/db/schema";
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import BucketListView from "@/components/bucket-list-view";
 import BucketListSuggestions from "@/components/bucket-list-suggestions";
 import BucketListHeader from "@/components/bucket-list-header";
+import { auth } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function BucketListPage() {
+  const session = await auth();
+  const userId = session?.user?.id || "";
+
   const allExperiences = await db
     .select()
     .from(experiences)
+    .where(eq(experiences.userId, userId))
     .orderBy(desc(experiences.createdAt));
 
   // Fetch first photo for each experience

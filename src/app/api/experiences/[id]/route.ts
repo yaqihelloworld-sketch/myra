@@ -1,17 +1,21 @@
 import { db } from "@/db";
 import { experiences } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
+import { getUser, unauthorized } from "@/lib/get-user";
 
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const user = await getUser();
+  if (!user) return unauthorized();
+
   const { id } = await params;
   const result = await db
     .select()
     .from(experiences)
-    .where(eq(experiences.id, parseInt(id)));
+    .where(and(eq(experiences.id, parseInt(id)), eq(experiences.userId, user.id!)));
 
   if (result.length === 0) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -23,6 +27,9 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const user = await getUser();
+  if (!user) return unauthorized();
+
   const { id } = await params;
   const body = await request.json();
   const result = await db
@@ -38,7 +45,7 @@ export async function PUT(
       doByAge: body.doByAge || null,
       status: body.status || "wishlist",
     })
-    .where(eq(experiences.id, parseInt(id)))
+    .where(and(eq(experiences.id, parseInt(id)), eq(experiences.userId, user.id!)))
     .returning();
 
   if (result.length === 0) {
@@ -51,7 +58,12 @@ export async function DELETE(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const user = await getUser();
+  if (!user) return unauthorized();
+
   const { id } = await params;
-  await db.delete(experiences).where(eq(experiences.id, parseInt(id)));
+  await db.delete(experiences).where(
+    and(eq(experiences.id, parseInt(id)), eq(experiences.userId, user.id!))
+  );
   return NextResponse.json({ success: true });
 }

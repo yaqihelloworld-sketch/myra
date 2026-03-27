@@ -2,9 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { db } from "@/db";
 import { experiences } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
+import { getUser, unauthorized } from "@/lib/get-user";
 
 export async function POST(request: NextRequest) {
+  const user = await getUser();
+  if (!user) return unauthorized();
+
   const apiKey = process.env.TRAVEL_PLANNER_ANTHROPIC_KEY || process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
@@ -20,7 +24,7 @@ export async function POST(request: NextRequest) {
   const wishlist = await db
     .select()
     .from(experiences)
-    .where(eq(experiences.status, "wishlist"));
+    .where(and(eq(experiences.status, "wishlist"), eq(experiences.userId, user.id!)));
 
   const bucketListContext =
     wishlist.length > 0

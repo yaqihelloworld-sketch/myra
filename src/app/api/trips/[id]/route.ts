@@ -1,19 +1,23 @@
 import { db } from "@/db";
 import { trips, tripExperiences, experiences } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
+import { getUser, unauthorized } from "@/lib/get-user";
 
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const user = await getUser();
+  if (!user) return unauthorized();
+
   const { id } = await params;
   const tripId = parseInt(id);
 
   const tripResult = await db
     .select()
     .from(trips)
-    .where(eq(trips.id, tripId));
+    .where(and(eq(trips.id, tripId), eq(trips.userId, user.id!)));
 
   if (tripResult.length === 0) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -35,6 +39,9 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const user = await getUser();
+  if (!user) return unauthorized();
+
   const { id } = await params;
   const tripId = parseInt(id);
   const body = await request.json();
@@ -48,7 +55,7 @@ export async function PUT(
       season: body.season || null,
       partnerType: body.partnerType || null,
     })
-    .where(eq(trips.id, tripId))
+    .where(and(eq(trips.id, tripId), eq(trips.userId, user.id!)))
     .returning();
 
   if (body.experienceIds !== undefined) {
@@ -70,7 +77,12 @@ export async function DELETE(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const user = await getUser();
+  if (!user) return unauthorized();
+
   const { id } = await params;
-  await db.delete(trips).where(eq(trips.id, parseInt(id)));
+  await db.delete(trips).where(
+    and(eq(trips.id, parseInt(id)), eq(trips.userId, user.id!))
+  );
   return NextResponse.json({ success: true });
 }

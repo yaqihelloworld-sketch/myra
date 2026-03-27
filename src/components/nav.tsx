@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useI18n } from "@/lib/i18n";
+import UserMenu from "@/components/user-menu";
 
 export default function Nav() {
   const pathname = usePathname();
@@ -42,6 +43,7 @@ export default function Nav() {
           >
             {lang === "en" ? "中文" : "EN"}
           </button>
+          <UserMenu />
         </div>
       </div>
     </nav>
