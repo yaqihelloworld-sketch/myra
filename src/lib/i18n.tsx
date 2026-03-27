@@ -68,7 +68,7 @@ const translations = {
   "discover.whatElse": { en: "What else is important?", zh: "还有什么重要的？" },
   "discover.whatElsePrefix": { en: "What else", zh: "其他" },
   "discover.travelingWith": { en: "Traveling with", zh: "旅伴" },
-  "discover.ageRange": { en: "Age range", zh: "年龄段" },
+  "discover.ageRange": { en: "Make this happen in my...", zh: "在我的...实现" },
   "discover.button": { en: "DISCOVER", zh: "开始探索" },
   "discover.discovering": { en: "DISCOVERING...", zh: "探索中..." },
   "discover.thinking1": { en: "Scanning your bucket list...", zh: "正在扫描你的心愿单..." },
