@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Myra — Animation Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1A1A1A;
+    --cream: #F7F5F0;
+    --warm-gray: #D4D0C8;
+    --blush: #EBCFBE;
+    --sage: #C5D1C0;
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, 'Helvetica Neue', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    padding: 40px 24px 120px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(26,26,26,0.4);
+    margin-bottom: 60px;
+  }
+
+  /* Section labels */
+  .demo-section {
+    margin-bottom: 64px;
+  }
+
+  .demo-label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(26,26,26,0.35);
+    margin-bottom: 6px;
+  }
+
+  .demo-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+
+  .demo-desc {
+    font-size: 12px;
+    color: rgba(26,26,26,0.5);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  .demo-meta {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: var(--blush);
+    color: var(--ink);
+    padding: 3px 8px;
+    margin-bottom: 20px;
+  }
+
+  .replay-btn {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: 1px solid var(--warm-gray);
+    background: transparent;
+    padding: 8px 16px;
+    cursor: pointer;
+    color: rgba(26,26,26,0.5);
+    transition: all 0.2s;
+    margin-top: 16px;
+  }
+  .replay-btn:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--warm-gray);
+    margin: 48px 0;
+  }
+
+  /* ======================== */
+  /* 1. PAGE ENTRANCE         */
+  /* ======================== */
+  .entrance-demo {
+    overflow: hidden;
+  }
+
+  .entrance-item {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .entrance-item.animate {
+    animation: fadeUp 600ms var(--ease-out-quart) forwards;
+  }
+
+  .entrance-item:nth-child(2).animate { animation-delay: 100ms; }
+  .entrance-item:nth-child(3).animate { animation-delay: 200ms; }
+  .entrance-item:nth-child(4).animate { animation-delay: 300ms; }
+
+  @keyframes fadeUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .entrance-box {
+    padding: 20px;
+    margin-bottom: 12px;
+    border: 1px solid var(--warm-gray);
+    border-radius: 2px;
+  }
+  .entrance-box h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+  }
+  .entrance-box p {
+    font-size: 11px;
+    color: rgba(26,26,26,0.4);
+    margin-top: 4px;
+  }
+
+  /* ======================== */
+  /* 2. TAB CONTENT SWITCH    */
+  /* ======================== */
+  .tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 20px;
+  }
+  .tab-btn {
+    padding: 10px 20px;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: 1px solid var(--warm-gray);
+    background: transparent;
+    cursor: pointer;
+    color: rgba(26,26,26,0.4);
+    transition: all 0.2s;
+    margin-right: -1px;
+  }
+  .tab-btn.active {
+    background: var(--ink);
+    color: white;
+    border-color: var(--ink);
+  }
+
+  .tab-content {
+    position: relative;
+    min-height: 120px;
+  }
+  .tab-panel {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 250ms var(--ease-out-quart), transform 250ms var(--ease-out-quart);
+    pointer-events: none;
+  }
+  .tab-panel.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    position: relative;
+  }
+
+  .tab-card {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    border: 1px solid var(--warm-gray);
+    margin-bottom: 8px;
+  }
+  .tab-card-img {
+    width: 60px;
+    height: 60px;
+    background: var(--warm-gray);
+    flex-shrink: 0;
+  }
+  .tab-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+  }
+  .tab-card p {
+    font-size: 10px;
+    color: rgba(26,26,26,0.4);
+    margin-top: 2px;
+  }
+
+  /* ======================== */
+  /* 3. ACCORDION             */
+  /* ======================== */
+  .accordion {
+    border: 1px solid var(--warm-gray);
+  }
+  .accordion-trigger {
+    width: 100%;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(26,26,26,0.4);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .accordion-trigger:hover { color: var(--ink); }
+
+  .accordion-arrow {
+    font-size: 8px;
+    transition: transform 300ms var(--ease-out-quart);
+    display: inline-block;
+  }
+  .accordion.open .accordion-arrow {
+    transform: rotate(90deg);
+  }
+
+  .accordion-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 350ms var(--ease-out-quart);
+  }
+  .accordion.open .accordion-body {
+    grid-template-rows: 1fr;
+  }
+  .accordion-inner {
+    overflow: hidden;
+  }
+  .accordion-content {
+    padding: 0 20px 20px;
+  }
+  .filter-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .filter-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(26,26,26,0.4);
+    margin-bottom: 6px;
+  }
+  .filter-value {
+    font-size: 13px;
+  }
+  .filter-group { flex: 1; }
+
+  /* ======================== */
+  /* 4. CARD HOVER            */
+  /* ======================== */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .polaroid {
+    cursor: pointer;
+    transition: transform 300ms var(--ease-out-quart), box-shadow 300ms var(--ease-out-quart);
+  }
+  .polaroid:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(26,26,26,0.08);
+  }
+  .polaroid-img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: var(--warm-gray);
+    overflow: hidden;
+    position: relative;
+  }
+  .polaroid-img-inner {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--warm-gray) 0%, var(--sage) 100%);
+    transition: transform 500ms var(--ease-out-quart);
+  }
+  .polaroid:hover .polaroid-img-inner {
+    transform: scale(1.03);
+  }
+  .polaroid-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: var(--blush);
+    padding: 3px 8px;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 200ms var(--ease-out-quart), transform 200ms var(--ease-out-quart);
+  }
+  .polaroid:hover .polaroid-badge {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .polaroid-caption {
+    padding: 10px 2px;
+  }
+  .polaroid-caption h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+  }
+  .polaroid-caption p {
+    font-size: 10px;
+    color: rgba(26,26,26,0.35);
+    margin-top: 2px;
+  }
+  .polaroid-tags {
+    display: flex;
+    gap: 4px;
+    margin-top: 6px;
+  }
+  .polaroid-tag {
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--blush);
+    padding: 3px 6px;
+    color: rgba(26,26,26,0.6);
+  }
+
+  /* ======================== */
+  /* 5. PHOTO STAGGER         */
+  /* ======================== */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .photo-item {
+    aspect-ratio: 1;
+    background: var(--warm-gray);
+    opacity: 0;
+    transform: scale(0.95);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+  .photo-item.animate {
+    animation: photoIn 300ms var(--ease-out-quart) forwards;
+  }
+  .photo-item:nth-child(2).animate { animation-delay: 60ms; }
+  .photo-item:nth-child(3).animate { animation-delay: 120ms; }
+  .photo-item:nth-child(4).animate { animation-delay: 180ms; }
+  .photo-item:nth-child(5).animate { animation-delay: 240ms; }
+  .photo-item:nth-child(6).animate { animation-delay: 300ms; }
+  .photo-item:nth-child(7).animate { animation-delay: 360ms; }
+  .photo-item:nth-child(8).animate { animation-delay: 420ms; }
+
+  @keyframes photoIn {
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .photo-item-inner {
+    width: 100%;
+    height: 100%;
+  }
+  .photo-item:nth-child(1) .photo-item-inner { background: linear-gradient(135deg, #c4a882, #8b7355); }
+  .photo-item:nth-child(2) .photo-item-inner { background: linear-gradient(135deg, #7a9e7e, #4a6b4e); }
+  .photo-item:nth-child(3) .photo-item-inner { background: linear-gradient(135deg, #8ba4b8, #5a7a90); }
+  .photo-item:nth-child(4) .photo-item-inner { background: linear-gradient(135deg, #c4a0a0, #8b6565); }
+  .photo-item:nth-child(5) .photo-item-inner { background: linear-gradient(135deg, #b8a888, #7a6e55); }
+  .photo-item:nth-child(6) .photo-item-inner { background: linear-gradient(135deg, #a0b8a0, #657a65); }
+  .photo-item:nth-child(7) .photo-item-inner { background: linear-gradient(135deg, #b8b0a0, #7a7265); }
+  .photo-item:nth-child(8) .photo-item-inner { background: linear-gradient(135deg, #a8b8c0, #657a82); }
+
+  /* ======================== */
+  /* 6. EMPTY STATE           */
+  /* ======================== */
+  .empty-state {
+    text-align: center;
+    padding: 48px 24px;
+    border: 1px dashed var(--warm-gray);
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .empty-state.animate {
+    animation: fadeUp 400ms var(--ease-out-quart) forwards;
+  }
+  .empty-state p {
+    font-size: 12px;
+    color: rgba(26,26,26,0.3);
+    letter-spacing: 0.1em;
+  }
+  .empty-state .empty-icon {
+    font-size: 24px;
+    margin-bottom: 12px;
+    opacity: 0.2;
+  }
+
+  /* ======================== */
+  /* 7. BUTTON FEEDBACK       */
+  /* ======================== */
+  .btn-demo-row {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    padding: 14px 32px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: transform 150ms var(--ease-out-quart), box-shadow 150ms var(--ease-out-quart);
+  }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(26,26,26,0.15);
+  }
+  .btn-primary:active {
+    transform: scale(0.97);
+    box-shadow: none;
+    transition-duration: 80ms;
+  }
+
+  .btn-secondary {
+    padding: 14px 32px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: transparent;
+    color: rgba(26,26,26,0.5);
+    border: 1px solid var(--warm-gray);
+    cursor: pointer;
+    transition: all 200ms var(--ease-out-quart);
+  }
+  .btn-secondary:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+    background: rgba(26,26,26,0.02);
+  }
+  .btn-secondary:active {
+    transform: scale(0.97);
+    transition-duration: 80ms;
+  }
+
+  .btn-accent {
+    padding: 14px 32px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: var(--blush);
+    color: var(--ink);
+    border: 1px solid var(--blush);
+    cursor: pointer;
+    transition: all 200ms var(--ease-out-quart);
+  }
+  .btn-accent:hover {
+    background: #e3c0aa;
+    border-color: #e3c0aa;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(235,207,190,0.3);
+  }
+  .btn-accent:active {
+    transform: scale(0.97);
+    box-shadow: none;
+    transition-duration: 80ms;
+  }
+
+  /* Success pulse */
+  .btn-success {
+    padding: 14px 32px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: var(--sage);
+    color: var(--ink);
+    border: 1px solid var(--sage);
+    cursor: pointer;
+    transition: all 200ms var(--ease-out-quart);
+  }
+  .btn-success.pulse {
+    animation: successPulse 500ms var(--ease-out-quart);
+  }
+  @keyframes successPulse {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.06); }
+    100% { transform: scale(1); }
+  }
+
+  /* ======================== */
+  /* REDUCED MOTION           */
+  /* ======================== */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<h1>Myra — Motion Design</h1>
+<p class="subtitle">Animation preview &middot; high &amp; medium priority</p>
+
+<!-- 1. PAGE ENTRANCE -->
+<div class="demo-section">
+  <p class="demo-label">High Priority &middot; 01</p>
+  <p class="demo-title">Page Entrance</p>
+  <p class="demo-desc">Staggered fade-up. Content reveals gracefully like turning pages in a journal.</p>
+  <span class="demo-meta">300–600ms &middot; 100ms stagger &middot; ease-out-quart</span>
+
+  <div class="entrance-demo" id="entrance-demo">
+    <div class="entrance-item entrance-box">
+      <h3>Where to Next?</h3>
+      <p>Page heading fades up first</p>
+    </div>
+    <div class="entrance-item entrance-box">
+      <h3>Search Input</h3>
+      <p>Prompt area follows 100ms later</p>
+    </div>
+    <div class="entrance-item entrance-box">
+      <h3>Suggestion Chips</h3>
+      <p>Options appear 200ms after heading</p>
+    </div>
+    <div class="entrance-item entrance-box">
+      <h3>Filters & Button</h3>
+      <p>Controls settle in last at 300ms</p>
+    </div>
+  </div>
+  <button class="replay-btn" onclick="replayEntrance()">&#8635; Replay</button>
+</div>
+
+<div class="divider"></div>
+
+<!-- 2. TAB CONTENT SWITCH -->
+<div class="demo-section">
+  <p class="demo-label">High Priority &middot; 02</p>
+  <p class="demo-title">Tab Content Switch</p>
+  <p class="demo-desc">Crossfade with subtle upward shift. No jarring content jump.</p>
+  <span class="demo-meta">250ms &middot; ease-out-quart</span>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(0)">Wishlist <span style="opacity:0.5">8</span></button>
+    <button class="tab-btn" onclick="switchTab(1)">Planned <span style="opacity:0.5">1</span></button>
+    <button class="tab-btn" onclick="switchTab(2)">Visited <span style="opacity:0.5">1</span></button>
+  </div>
+
+  <div class="tab-content">
+    <div class="tab-panel active" id="tab-0">
+      <div class="tab-card">
+        <div class="tab-card-img" style="background: linear-gradient(135deg, #c9a0c9, #7a557a)"></div>
+        <div><h4>Cherry Blossom in Japan</h4><p>Japan &middot; Spring</p></div>
+      </div>
+      <div class="tab-card">
+        <div class="tab-card-img" style="background: linear-gradient(135deg, #7a9e7e, #4a6b4e)"></div>
+        <div><h4>Machu Picchu Sunrise Hike</h4><p>Peru &middot; Winter, Spring</p></div>
+      </div>
+    </div>
+    <div class="tab-panel" id="tab-1">
+      <div class="tab-card">
+        <div class="tab-card-img" style="background: linear-gradient(135deg, #c4a882, #8b7355)"></div>
+        <div><h4>Christmas Markets</h4><p>Austria &middot; Winter</p></div>
+      </div>
+    </div>
+    <div class="tab-panel" id="tab-2">
+      <div class="tab-card">
+        <div class="tab-card-img" style="background: linear-gradient(135deg, #8ba4b8, #5a7a90)"></div>
+        <div><h4>Glacier Hiking</h4><p>Iceland &middot; Summer</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 3. ACCORDION -->
+<div class="demo-section">
+  <p class="demo-label">High Priority &middot; 03</p>
+  <p class="demo-title">Filter Expand / Collapse</p>
+  <p class="demo-desc">Smooth height animation using CSS grid. Arrow rotates in sync.</p>
+  <span class="demo-meta">350ms &middot; grid-template-rows &middot; ease-out-quart</span>
+
+  <div class="accordion" id="accordion">
+    <button class="accordion-trigger" onclick="toggleAccordion()">
+      <span class="accordion-arrow">&#9654;</span>
+      What else is important?
+    </button>
+    <div class="accordion-body">
+      <div class="accordion-inner">
+        <div class="accordion-content">
+          <div class="filter-row">
+            <div class="filter-group">
+              <p class="filter-label">Companion</p>
+              <p class="filter-value">Solo, Friends</p>
+            </div>
+            <div class="filter-group">
+              <p class="filter-label">Age Range</p>
+              <p class="filter-value">Before 40</p>
+            </div>
+            <div class="filter-group">
+              <p class="filter-label">Vibe</p>
+              <p class="filter-value">Adventure</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 4. CARD HOVER -->
+<div class="demo-section">
+  <p class="demo-label">High Priority &middot; 04</p>
+  <p class="demo-title">Card Hover — Lift + Zoom</p>
+  <p class="demo-desc">Card lifts with shadow. Image zooms 3%. Badge reveals on hover. Try hovering.</p>
+  <span class="demo-meta">300ms lift &middot; 500ms zoom &middot; ease-out-quart</span>
+
+  <div class="cards-grid">
+    <div class="polaroid">
+      <div class="polaroid-img">
+        <div class="polaroid-img-inner" style="background: linear-gradient(135deg, #c9a0c9, #7a557a)"></div>
+        <div class="polaroid-badge">Planned</div>
+      </div>
+      <div class="polaroid-caption">
+        <h4>Cherry Blossom</h4>
+        <p>Japan</p>
+        <div class="polaroid-tags">
+          <span class="polaroid-tag">Spring</span>
+          <span class="polaroid-tag">Family</span>
+        </div>
+      </div>
+    </div>
+    <div class="polaroid">
+      <div class="polaroid-img">
+        <div class="polaroid-img-inner" style="background: linear-gradient(135deg, #7a9e7e, #4a6b4e)"></div>
+        <div class="polaroid-badge">Wishlist</div>
+      </div>
+      <div class="polaroid-caption">
+        <h4>Machu Picchu</h4>
+        <p>Peru</p>
+        <div class="polaroid-tags">
+          <span class="polaroid-tag">Winter</span>
+        </div>
+      </div>
+    </div>
+    <div class="polaroid">
+      <div class="polaroid-img">
+        <div class="polaroid-img-inner" style="background: linear-gradient(135deg, #8ba4b8, #5a7a90)"></div>
+        <div class="polaroid-badge">Visited</div>
+      </div>
+      <div class="polaroid-caption">
+        <h4>Glacier Hiking</h4>
+        <p>Iceland</p>
+        <div class="polaroid-tags">
+          <span class="polaroid-tag">Summer</span>
+          <span class="polaroid-tag">Solo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- 5. PHOTO STAGGER -->
+<div class="demo-section">
+  <p class="demo-label">Medium Priority &middot; 05</p>
+  <p class="demo-title">Photo Grid Stagger</p>
+  <p class="demo-desc">Photos fade in one-by-one with subtle scale. Creates a sense of curation.</p>
+  <span class="demo-meta">300ms per item &middot; 60ms stagger &middot; ease-out-quart</span>
+
+  <div class="photo-grid" id="photo-grid">
+    <div class="photo-item"><div class="photo-item-inner"></div></div>
+    <div class="photo-item"><div class="photo-item-inner"></div></div>
+    <div class="photo-item"><div class="photo-item-inner"></div></div>
+    <div class="photo-item"><div class="photo-item-inner"></div></div>
+    <div class="photo-item"><div class="photo-item-inner"></div></div>
+    <div class="photo-item"><div class="photo-item-inner"></div></div>
+    <div class="photo-item"><div class="photo-item-inner"></div></div>
+    <div class="photo-item"><div class="photo-item-inner"></div></div>
+  </div>
+  <button class="replay-btn" onclick="replayPhotos()">&#8635; Replay</button>
+</div>
+
+<div class="divider"></div>
+
+<!-- 6. EMPTY STATE -->
+<div class="demo-section">
+  <p class="demo-label">Medium Priority &middot; 06</p>
+  <p class="demo-title">Empty State Fade</p>
+  <p class="demo-desc">Gentle entrance when a tab has no items. Avoids a sudden blank feeling.</p>
+  <span class="demo-meta">400ms &middot; fade + translateY &middot; ease-out-quart</span>
+
+  <div class="empty-state" id="empty-state">
+    <div class="empty-icon">○</div>
+    <p>Nothing planned yet.</p>
+    <p style="margin-top: 4px; font-size: 11px;">Start by discovering a trip.</p>
+  </div>
+  <button class="replay-btn" onclick="replayEmpty()">&#8635; Replay</button>
+</div>
+
+<div class="divider"></div>
+
+<!-- 7. BUTTON FEEDBACK -->
+<div class="demo-section">
+  <p class="demo-label">Medium Priority &middot; 07</p>
+  <p class="demo-title">Button Feedback</p>
+  <p class="demo-desc">Subtle lift on hover, quick press on click. Success pulse on completion. Try clicking.</p>
+  <span class="demo-meta">80–200ms &middot; transform &middot; ease-out-quart</span>
+
+  <div class="btn-demo-row">
+    <button class="btn-primary">Discover</button>
+    <button class="btn-secondary">Find Photos</button>
+    <button class="btn-accent">Add to Plan</button>
+    <button class="btn-success" id="btn-success" onclick="triggerSuccess(this)">Save ✓</button>
+  </div>
+</div>
+
+<script>
+  // 1. Page entrance
+  function replayEntrance() {
+    const items = document.querySelectorAll('#entrance-demo .entrance-item');
+    items.forEach(el => el.classList.remove('animate'));
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        items.forEach(el => el.classList.add('animate'));
+      });
+    });
+  }
+  // Auto-play on load
+  setTimeout(replayEntrance, 300);
+
+  // 2. Tabs
+  function switchTab(idx) {
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+      btn.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('.tab-panel').forEach((panel, i) => {
+      panel.classList.toggle('active', i === idx);
+    });
+  }
+
+  // 3. Accordion
+  function toggleAccordion() {
+    document.getElementById('accordion').classList.toggle('open');
+  }
+
+  // 5. Photo stagger
+  function replayPhotos() {
+    const items = document.querySelectorAll('#photo-grid .photo-item');
+    items.forEach(el => el.classList.remove('animate'));
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        items.forEach(el => el.classList.add('animate'));
+      });
+    });
+  }
+  setTimeout(replayPhotos, 800);
+
+  // 6. Empty state
+  function replayEmpty() {
+    const el = document.getElementById('empty-state');
+    el.classList.remove('animate');
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        el.classList.add('animate');
+      });
+    });
+  }
+  setTimeout(replayEmpty, 1200);
+
+  // 7. Success pulse
+  function triggerSuccess(btn) {
+    btn.classList.remove('pulse');
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        btn.classList.add('pulse');
+      });
+    });
+  }
+</script>
+
+</body>
+</html>

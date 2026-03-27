@@ -36,6 +36,11 @@ yarn-error.log*
 # vercel
 .vercel
 
+# database
+travel.db
+travel.db-wal
+travel.db-shm
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

@@ -1,0 +1,23 @@
+"use client";
+
+import Link from "next/link";
+import { useI18n } from "@/lib/i18n";
+
+export default function DiscoverHeader() {
+  const { t } = useI18n();
+
+  return (
+    <div className="max-w-5xl mx-auto mb-10">
+      <Link
+        href="/trips"
+        className="text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors"
+      >
+        &larr; {t("discover.back")}
+      </Link>
+      <p className="text-[10px] tracking-[0.3em] uppercase text-[#1A1A1A]/40 mb-2 mt-6">
+        {t("discover.label")}
+      </p>
+      <h1 className="font-serif text-3xl">{t("discover.heading")}</h1>
+    </div>
+  );
+}

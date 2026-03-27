@@ -1,0 +1,518 @@
+"use client";
+
+import { useState, useEffect, useRef } from "react";
+import { PARTNER_TYPES } from "@/lib/types";
+import type { Experience } from "@/lib/types";
+import { Search, ArrowRight, BookmarkPlus, ExternalLink } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useI18n } from "@/lib/i18n";
+
+interface Recommendation {
+  name: string;
+  country: string;
+  description: string;
+  bestMonths: string;
+  estimatedDays: number;
+  estimatedBudget: string;
+  fromBucketList: boolean;
+  matchReason: string;
+}
+
+interface DiscoverResult {
+  recommendations: Recommendation[];
+  travelInsight: string;
+}
+
+interface PhotoResult {
+  thumbUrl: string;
+  altDescription: string | null;
+  photographerName: string;
+}
+
+const MONTHS = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+
+const AGE_RANGES = ["20s", "30s", "40s", "50s", "60+"];
+
+export default function TripContextForm({
+  preselectedExperience,
+}: {
+  preselectedExperience?: Experience;
+}) {
+  const router = useRouter();
+  const { t } = useI18n();
+  const [prompt, setPrompt] = useState("");
+  const [month, setMonth] = useState("");
+  const [days, setDays] = useState("");
+  const [companion, setCompanion] = useState("");
+  const [ageRange, setAgeRange] = useState("");
+  const [budget, setBudget] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<DiscoverResult | null>(null);
+  const [error, setError] = useState("");
+  const [addingToList, setAddingToList] = useState<Set<number>>(new Set());
+  const [addedToList, setAddedToList] = useState<Set<number>>(new Set());
+  const [thinkingStep, setThinkingStep] = useState(0);
+  const thinkingInterval = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [photos, setPhotos] = useState<Record<number, PhotoResult>>({});
+  const [showFilters, setShowFilters] = useState(false);
+
+  const PROMPT_SUGGESTIONS = [
+    t("discover.chip1"),
+    t("discover.chip2"),
+    t("discover.chip3"),
+  ];
+
+  const THINKING_STEPS = [
+    t("discover.thinking1"),
+    t("discover.thinking2"),
+    t("discover.thinking3"),
+    t("discover.thinking4"),
+    t("discover.thinking5"),
+    t("discover.thinking6"),
+  ];
+
+  // Fetch photos when results arrive
+  useEffect(() => {
+    if (!result) return;
+    setPhotos({});
+    result.recommendations.forEach(async (rec, i) => {
+      try {
+        const res = await fetch(`/api/photos/search?query=${encodeURIComponent(`${rec.name} ${rec.country}`)}`);
+        const data = await res.json();
+        if (data.length > 0) {
+          setPhotos((prev) => ({ ...prev, [i]: data[0] }));
+        }
+      } catch {
+        // Skip photo on error
+      }
+    });
+  }, [result]);
+
+  // Cycle through thinking steps while loading
+  useEffect(() => {
+    if (loading) {
+      setThinkingStep(0);
+      thinkingInterval.current = setInterval(() => {
+        setThinkingStep((prev) => {
+          if (prev < THINKING_STEPS.length - 1) return prev + 1;
+          return prev;
+        });
+      }, 2500);
+    } else {
+      if (thinkingInterval.current) {
+        clearInterval(thinkingInterval.current);
+        thinkingInterval.current = null;
+      }
+    }
+    return () => {
+      if (thinkingInterval.current) clearInterval(thinkingInterval.current);
+    };
+  }, [loading]);
+
+  async function handleDiscover() {
+    setLoading(true);
+    setError("");
+    setResult(null);
+
+    const effectivePrompt = prompt.trim() || PROMPT_SUGGESTIONS[Math.floor(Math.random() * PROMPT_SUGGESTIONS.length)];
+    if (!prompt.trim()) setPrompt(effectivePrompt);
+
+    try {
+      const res = await fetch("/api/discover", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: effectivePrompt, month, days, companion, ageRange, budget }),
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      setResult(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+    }
+    setLoading(false);
+  }
+
+  async function addToBucketList(rec: Recommendation, index: number) {
+    setAddingToList((prev) => new Set(prev).add(index));
+
+    const seasonMap: Record<string, string[]> = {
+      January: ["winter"], February: ["winter"], March: ["spring"],
+      April: ["spring"], May: ["spring"], June: ["summer"],
+      July: ["summer"], August: ["summer"], September: ["autumn"],
+      October: ["autumn"], November: ["autumn"], December: ["winter"],
+    };
+
+    const months = rec.bestMonths.split(/[-–,]/).map((m) => m.trim());
+    const seasons = [...new Set(months.flatMap((m) => seasonMap[m] || []))];
+
+    await fetch("/api/experiences", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: rec.name,
+        country: rec.country,
+        idealSeasons: seasons.join(","),
+        idealPartnerTypes: companion || "",
+        doByAge: ageRange ? (ageRange === "60+" ? "60+" : String(parseInt(ageRange) + 10)) : null,
+        status: "planned",
+      }),
+    });
+
+    setAddingToList((prev) => {
+      const next = new Set(prev);
+      next.delete(index);
+      return next;
+    });
+    setAddedToList((prev) => new Set(prev).add(index));
+  }
+
+  function googleSearchUrl(name: string, country: string) {
+    return `https://www.google.com/search?q=${encodeURIComponent(`${name} ${country} travel guide`)}`;
+  }
+
+  const hasResults = result || loading || error;
+
+  return (
+    <div className={`flex gap-0 ${hasResults ? "flex-col lg:flex-row" : "flex-col"}`}>
+      {/* LEFT PANE — Input */}
+      <div className={`${hasResults ? "lg:w-[420px] lg:shrink-0 lg:border-r lg:border-[#D4D0C8] lg:pr-10" : "max-w-2xl"}`}>
+        {/* Primary: The prompt — hero-sized, dominant */}
+        <div className="mb-6">
+          <label htmlFor="discover-prompt" className="sr-only">{t("form.nameLabel")}</label>
+          <textarea
+            id="discover-prompt"
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder={t("discover.placeholder")}
+            className="w-full bg-transparent border-b-2 border-[#D4D0C8] pb-[12px] pt-0 font-serif text-2xl md:text-4xl focus:border-[#1A1A1A]/30 transition-colors placeholder:text-[#1A1A1A]/15 resize-none leading-snug"
+            rows={2}
+          />
+          <div className="flex flex-wrap gap-2 mt-4">
+            {PROMPT_SUGGESTIONS.map((s) => (
+              <button
+                key={s}
+                type="button"
+                onClick={() => setPrompt(s)}
+                className={`px-3.5 py-2 text-[11px] tracking-[0.03em] rounded-md border transition-colors ${
+                  prompt === s
+                    ? "border-[#1A1A1A]/30 text-[#1A1A1A]/70"
+                    : "border-[#D4D0C8] text-[#1A1A1A]/40 hover:border-[#1A1A1A]/30 hover:text-[#1A1A1A]/60"
+                }`}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Secondary: Quick params — compact inline row */}
+        <div className="grid grid-cols-3 gap-4 mb-4">
+          <div>
+            <label htmlFor="discover-month" className="text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-0.5 block">{t("discover.month")}</label>
+            <select
+              id="discover-month"
+              value={month}
+              onChange={(e) => setMonth(e.target.value)}
+              className="w-full bg-transparent border-b border-[#D4D0C8] py-1.5 text-sm focus:border-[#1A1A1A]/40 transition-colors appearance-none cursor-pointer"
+            >
+              <option value="">{t("discover.any")}</option>
+              {MONTHS.map((m) => (
+                <option key={m} value={m}>{m}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="discover-days" className="text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-0.5 block">{t("discover.days")}</label>
+            <input
+              id="discover-days"
+              type="number"
+              value={days}
+              onChange={(e) => setDays(e.target.value)}
+              placeholder="7"
+              min="1"
+              max="90"
+              className="w-full bg-transparent border-b border-[#D4D0C8] py-1.5 text-sm focus:border-[#1A1A1A]/40 transition-colors placeholder:text-[#1A1A1A]/25"
+            />
+          </div>
+          <div>
+            <label htmlFor="discover-budget" className="text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-0.5 block">{t("discover.budget")}</label>
+            <input
+              id="discover-budget"
+              type="text"
+              value={budget}
+              onChange={(e) => setBudget(e.target.value)}
+              placeholder="$2000"
+              className="w-full bg-transparent border-b border-[#D4D0C8] py-1.5 text-sm focus:border-[#1A1A1A]/40 transition-colors placeholder:text-[#1A1A1A]/25"
+            />
+          </div>
+        </div>
+
+        {/* Tertiary: Collapsible filters */}
+        <button
+          type="button"
+          onClick={() => setShowFilters(!showFilters)}
+          aria-expanded={showFilters}
+          className="text-xs tracking-[0.1em] uppercase text-[#1A1A1A]/30 hover:text-[#1A1A1A]/50 transition-colors mb-4 flex items-center gap-1.5"
+        >
+          <span className={`text-[7px] inline-block transition-transform duration-300 ${showFilters ? "rotate-90" : ""}`} style={{ transitionTimingFunction: "cubic-bezier(0.25, 1, 0.5, 1)" }}>▶</span>
+          {companion || ageRange
+            ? `${t("discover.whatElsePrefix")}${companion ? ` · ${companion}` : ""}${ageRange ? ` · ${ageRange}` : ""}`
+            : t("discover.whatElse")}
+        </button>
+
+        <div className={`grid transition-[grid-template-rows] duration-350 ${showFilters ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`} style={{ transitionDuration: "350ms", transitionTimingFunction: "cubic-bezier(0.25, 1, 0.5, 1)" }}>
+          <div className="overflow-hidden">
+          <div className="space-y-4 mb-4 pl-3 border-l border-[#D4D0C8]/50">
+            <div>
+              <label className="text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-1.5 block">{t("discover.travelingWith")}</label>
+              <div className="flex flex-wrap gap-1" role="group" aria-label={t("discover.travelingWith")}>
+                {PARTNER_TYPES.map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    aria-pressed={companion === p}
+                    onClick={() => setCompanion(companion === p ? "" : p)}
+                    className={`px-2.5 py-1 text-[9px] tracking-[0.1em] uppercase transition-colors ${
+                      companion === p
+                        ? "bg-[#EBCFBE] text-[#1A1A1A]"
+                        : "bg-[#D4D0C8]/20 text-[#1A1A1A]/35 hover:text-[#1A1A1A]/50 hover:bg-[#D4D0C8]/40"
+                    }`}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <label className="text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-1.5 block">{t("discover.ageRange")}</label>
+              <div className="flex flex-wrap gap-1" role="group" aria-label={t("discover.ageRange")}>
+                {AGE_RANGES.map((a) => (
+                  <button
+                    key={a}
+                    type="button"
+                    aria-pressed={ageRange === a}
+                    onClick={() => setAgeRange(ageRange === a ? "" : a)}
+                    className={`px-2.5 py-1 text-[9px] tracking-[0.1em] uppercase transition-colors ${
+                      ageRange === a
+                        ? "bg-[#1A1A1A] text-white"
+                        : "bg-[#D4D0C8]/20 text-[#1A1A1A]/35 hover:text-[#1A1A1A]/50 hover:bg-[#D4D0C8]/40"
+                    }`}
+                  >
+                    {a}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+
+        {/* Discover button */}
+        <div className="pt-2">
+          <button
+            onClick={handleDiscover}
+            disabled={loading}
+            className={`w-full py-3.5 text-[11px] tracking-[0.25em] uppercase flex items-center justify-center gap-2.5 transition-all ${
+              loading
+                ? "bg-[#1A1A1A]/80 text-white"
+                : "bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]/85 disabled:bg-[#D4D0C8] disabled:text-[#1A1A1A]/30 disabled:cursor-not-allowed"
+            }`}
+          >
+            <Search size={13} className={loading ? "animate-bounce" : ""} />
+            {loading ? t("discover.discovering") : t("discover.button")}
+          </button>
+        </div>
+      </div>
+
+      {/* RIGHT PANE — Output */}
+      {hasResults && (
+        <div className="lg:flex-1 lg:pl-10 mt-10 lg:mt-0 min-w-0">
+          {/* Loading */}
+          {loading && (
+            <div className="space-y-6">
+              <div className="py-4 px-5 border-l-2 border-[#EBCFBE]">
+                <div className="space-y-2">
+                  {THINKING_STEPS.map((step, i) => (
+                    <p
+                      key={step}
+                      className={`text-xs transition-all duration-500 ${
+                        i < thinkingStep
+                          ? "text-[#1A1A1A]/30 line-through"
+                          : i === thinkingStep
+                          ? "text-[#1A1A1A]/70 font-medium"
+                          : "text-[#1A1A1A]/10"
+                      }`}
+                    >
+                      {i <= thinkingStep ? "✓" : "○"} {step}
+                    </p>
+                  ))}
+                </div>
+              </div>
+
+              {/* Shimmer cards */}
+              <div>
+                <div className="h-3 w-40 bg-[#D4D0C8]/40 rounded animate-pulse mb-6" />
+                {[1, 2, 3, 4].map((n) => (
+                  <div key={n} className="border-t border-[#D4D0C8] py-5">
+                    <div className="flex gap-4 items-start">
+                      <div className="w-28 h-20 bg-[#D4D0C8]/30 animate-pulse shrink-0" />
+                      <div className="flex-1 space-y-2.5">
+                        <div className="h-4 bg-[#D4D0C8]/40 rounded animate-pulse" style={{ width: `${50 + n * 10}%` }} />
+                        <div className="h-3 w-16 bg-[#D4D0C8]/25 rounded animate-pulse" />
+                        <div className="h-3 bg-[#D4D0C8]/20 rounded animate-pulse w-full" />
+                        <div className="flex gap-3">
+                          <div className="h-2.5 w-20 bg-[#D4D0C8]/15 rounded animate-pulse" />
+                          <div className="h-2.5 w-12 bg-[#D4D0C8]/15 rounded animate-pulse" />
+                          <div className="h-2.5 w-16 bg-[#D4D0C8]/15 rounded animate-pulse" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Error */}
+          {error && (
+            <div role="alert" className="py-3 px-4 bg-red-50 border-l-2 border-red-300">
+              <p className="text-xs text-red-600">{error}</p>
+            </div>
+          )}
+
+          {/* Results */}
+          {result && (
+            <div className="space-y-6">
+              {/* Insight */}
+              {result.travelInsight && (
+                <div className="py-4 px-5 bg-[#EBCFBE] border-l-2 border-[#EBCFBE]">
+                  <p className="text-sm text-[#1A1A1A]/70 italic leading-relaxed">
+                    {result.travelInsight}
+                  </p>
+                </div>
+              )}
+
+              {/* Recommendations */}
+              <div>
+                <h2 className="text-[11px] tracking-[0.2em] uppercase text-[#1A1A1A]/50 mb-4">
+                  {t("discover.recommended")}
+                </h2>
+
+                <div className="space-y-0">
+                  {result.recommendations.map((rec, i) => (
+                    <div
+                      key={i}
+                      className="border-t border-[#D4D0C8] py-5 group"
+                    >
+                      <div className="flex items-start gap-4">
+                        {/* Thumbnail */}
+                        <div className="shrink-0 w-28 h-20 relative overflow-hidden bg-[#D4D0C8]/20">
+                          {photos[i] ? (
+                            <Image
+                              src={photos[i].thumbUrl}
+                              alt={photos[i].altDescription || rec.name}
+                              fill
+                              className="object-cover"
+                              sizes="112px"
+                            />
+                          ) : (
+                            <div className="w-full h-full animate-pulse bg-[#D4D0C8]/30" />
+                          )}
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex-1 min-w-0 flex items-start justify-between gap-3">
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-start gap-2 flex-wrap">
+                              <a
+                                href={googleSearchUrl(rec.name, rec.country)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-serif text-base leading-tight hover:text-[#1A1A1A]/60 transition-colors inline-flex items-start gap-1.5 group/link"
+                              >
+                                {rec.name}
+                                <ExternalLink size={10} className="shrink-0 mt-1 opacity-0 group-hover/link:opacity-40 transition-opacity" />
+                              </a>
+                              {rec.fromBucketList && (
+                                <span className="shrink-0 mt-0.5 text-[8px] tracking-[0.15em] uppercase bg-[#EBCFBE] text-[#1A1A1A]/70 px-2 py-0.5">
+                                  {t("discover.inYourList")}
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-xs text-[#1A1A1A]/50 mt-0.5">
+                              {rec.country}
+                            </p>
+                            <p className="text-xs text-[#1A1A1A]/55 mt-1.5 leading-relaxed line-clamp-2">
+                              {rec.description}
+                            </p>
+                            <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2">
+                              <span className="text-[10px] tracking-[0.1em] text-[#1A1A1A]/40">
+                                {rec.bestMonths}
+                              </span>
+                              <span className="text-[10px] text-[#1A1A1A]/20">·</span>
+                              <span className="text-[10px] tracking-[0.1em] text-[#1A1A1A]/40">
+                                {rec.estimatedDays}d
+                              </span>
+                              <span className="text-[10px] text-[#1A1A1A]/20">·</span>
+                              <span className="text-[10px] tracking-[0.1em] text-[#1A1A1A]/40">
+                                {rec.estimatedBudget}
+                              </span>
+                            </div>
+                          </div>
+
+                        {/* Add to bucket list */}
+                        {!rec.fromBucketList && (
+                          <button
+                            onClick={() => addToBucketList(rec, i)}
+                            disabled={addingToList.has(i) || addedToList.has(i)}
+                            className={`shrink-0 inline-flex items-center gap-1.5 px-3 py-2 text-[9px] tracking-[0.15em] uppercase border transition-all ${
+                              addedToList.has(i)
+                                ? "border-[#EBCFBE] bg-[#EBCFBE] text-[#1A1A1A]/70"
+                                : addingToList.has(i)
+                                ? "border-[#D4D0C8] text-[#1A1A1A]/30 animate-pulse"
+                                : "border-[#D4D0C8] text-[#1A1A1A]/40 hover:border-[#1A1A1A] hover:text-[#1A1A1A]"
+                            }`}
+                          >
+                            <BookmarkPlus size={10} />
+                            {addedToList.has(i)
+                              ? t("discover.planned")
+                              : addingToList.has(i)
+                              ? t("discover.adding")
+                              : t("discover.addToPlan")}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Footer actions */}
+              <div className="border-t border-[#D4D0C8] pt-5 flex gap-4">
+                <button
+                  onClick={handleDiscover}
+                  disabled={loading}
+                  className="border border-[#D4D0C8] px-5 py-2.5 text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/50 hover:border-[#1A1A1A]/30 hover:text-[#1A1A1A]/70 transition-colors"
+                >
+                  {t("discover.discoverMore")}
+                </button>
+                <button
+                  onClick={() => router.push("/bucket-list")}
+                  className="inline-flex items-center gap-2 text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors"
+                >
+                  {t("discover.viewBucketList")}
+                  <ArrowRight size={10} />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
