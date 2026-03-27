@@ -4,13 +4,19 @@ import { desc, eq } from "drizzle-orm";
 import BucketListView from "@/components/bucket-list-view";
 import BucketListSuggestions from "@/components/bucket-list-suggestions";
 import BucketListHeader from "@/components/bucket-list-header";
+import AuthGate from "@/components/auth-gate";
 import { auth } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
 export default async function BucketListPage() {
   const session = await auth();
-  const userId = session?.user?.id || "";
+
+  if (!session?.user?.id) {
+    return <AuthGate>{null}</AuthGate>;
+  }
+
+  const userId = session.user.id;
 
   const allExperiences = await db
     .select()

@@ -1,9 +1,11 @@
 import { db } from "@/db";
 import { experiences } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import ExperienceForm from "@/components/experience-form";
 import ExperiencePageHeader from "@/components/experience-page-header";
+import AuthGate from "@/components/auth-gate";
+import { auth } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -12,11 +14,17 @@ export default async function EditExperiencePage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    return <AuthGate>{null}</AuthGate>;
+  }
+
   const { id } = await params;
   const result = await db
     .select()
     .from(experiences)
-    .where(eq(experiences.id, parseInt(id)));
+    .where(and(eq(experiences.id, parseInt(id)), eq(experiences.userId, session.user.id)));
 
   if (result.length === 0) notFound();
 
