@@ -107,26 +107,36 @@ export default function ExperienceForm({
       : "/api/experiences";
     const method = isEdit ? "PUT" : "POST";
 
-    const res = await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    const saved = await res.json();
-    const expId = isEdit ? experience.id : saved.id;
-
-    // Save pending photos
-    for (const photo of pendingPhotos) {
-      await fetch(`/api/experiences/${expId}/photos`, {
-        method: "POST",
+    try {
+      const res = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(photo),
+        body: JSON.stringify(payload),
       });
-    }
 
-    router.push("/bucket-list");
-    router.refresh();
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed to save");
+      }
+
+      const saved = await res.json();
+      const expId = isEdit ? experience.id : saved.id;
+
+      // Save pending photos
+      for (const photo of pendingPhotos) {
+        await fetch(`/api/experiences/${expId}/photos`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(photo),
+        });
+      }
+
+      router.refresh();
+      router.push("/bucket-list");
+    } catch (err) {
+      setSaving(false);
+      alert(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    }
   }
 
   async function handleDelete() {
