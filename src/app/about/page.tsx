@@ -18,7 +18,7 @@ export default function AboutPage() {
         href="/"
         className="text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors"
       >
-        &larr; HOME
+        {t("about.backHome")}
       </Link>
 
       <h1 className="font-serif text-3xl md:text-4xl mt-8 mb-3">
@@ -51,13 +51,13 @@ export default function AboutPage() {
           href="/trips/new"
           className="bg-[#1A1A1A] text-white px-6 py-3 text-xs tracking-[0.2em] uppercase hover:bg-[#1A1A1A]/85 transition-colors"
         >
-          START DISCOVERING
+          {t("about.startDiscovering")}
         </Link>
         <Link
           href="/bucket-list"
           className="border border-[#D4D0C8] px-6 py-3 text-xs tracking-[0.2em] uppercase text-[#1A1A1A]/50 hover:border-[#1A1A1A]/30 hover:text-[#1A1A1A]/70 transition-colors"
         >
-          MY BUCKET LIST
+          {t("about.myBucketList")}
         </Link>
       </div>
     </div>

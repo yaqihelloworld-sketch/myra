@@ -39,7 +39,7 @@ export default function Nav() {
           <button
             onClick={() => setLang(lang === "en" ? "zh" : "en")}
             className="text-[10px] md:text-xs tracking-wide text-[#1A1A1A]/40 hover:text-[#1A1A1A] active:text-[#1A1A1A] transition-colors border-l border-[#D4D0C8] pl-3 md:pl-6 py-2.5 md:py-1 whitespace-nowrap"
-            aria-label={lang === "en" ? "Switch to Chinese" : "切换到英文"}
+            aria-label={t("nav.switchLang")}
           >
             {lang === "en" ? "中文" : "EN"}
           </button>

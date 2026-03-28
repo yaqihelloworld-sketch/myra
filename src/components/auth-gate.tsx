@@ -1,9 +1,11 @@
 "use client";
 
 import { useSession, signIn } from "next-auth/react";
+import { useI18n } from "@/lib/i18n";
 
 export default function AuthGate({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
+  const { t } = useI18n();
 
   if (status === "loading") {
     return (
@@ -16,18 +18,18 @@ export default function AuthGate({ children }: { children: React.ReactNode }) {
   if (!session?.user) {
     return (
       <div className="flex flex-col items-center justify-center py-32 text-center px-6">
-        <p className="font-serif text-2xl md:text-3xl mb-3">Your dreams are waiting</p>
+        <p className="font-serif text-2xl md:text-3xl mb-3">{t("auth.heading")}</p>
         <p className="text-sm text-[#1A1A1A]/50 mb-2 max-w-sm leading-relaxed">
-          Sign in to start building your personal vision board of places and experiences.
+          {t("auth.desc")}
         </p>
         <p className="text-xs text-[#1A1A1A]/30 mb-8 max-w-xs">
-          Your list is private to you — only you can see what you save.
+          {t("auth.privacy")}
         </p>
         <button
           onClick={() => signIn("google")}
           className="text-xs tracking-[0.15em] border border-[#1A1A1A] px-6 py-3 hover:bg-[#1A1A1A] hover:text-[#F7F5F0] transition-colors"
         >
-          SIGN IN WITH GOOGLE
+          {t("auth.signInGoogle")}
         </button>
       </div>
     );

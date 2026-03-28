@@ -4,6 +4,7 @@ import Link from "next/link";
 import { formatIndex, parseCommaSeparated } from "@/lib/utils";
 import type { Experience } from "@/lib/types";
 import CardMenu from "./card-menu";
+import { useI18n } from "@/lib/i18n";
 
 export default function ExperienceCard({
   experience,
@@ -12,6 +13,7 @@ export default function ExperienceCard({
   experience: Experience;
   index: number;
 }) {
+  const { t } = useI18n();
   const seasons = parseCommaSeparated(experience.idealSeasons);
   const partnerTypes = parseCommaSeparated(experience.idealPartnerTypes);
 
@@ -37,7 +39,7 @@ export default function ExperienceCard({
                   key={s}
                   className="text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/40"
                 >
-                  {s}
+                  {t(`season.${s}` as any) || s}
                 </span>
               ))}
               {partnerTypes.length > 0 && seasons.length > 0 && (
@@ -48,7 +50,7 @@ export default function ExperienceCard({
                   key={p}
                   className="text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/40"
                 >
-                  {p}
+                  {t(`partner.${p}` as any) || p}
                 </span>
               ))}
             </div>

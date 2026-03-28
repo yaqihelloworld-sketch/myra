@@ -188,7 +188,7 @@ export default function BucketListSuggestions({
           className={`transition-transform duration-500 ${spinIcon ? "rotate-180" : ""}`}
           style={{ transitionTimingFunction: "cubic-bezier(0.25, 1, 0.5, 1)" }}
         />
-        SHUFFLE
+        {t("bucket.shuffle")}
       </button>
     </div>
   );

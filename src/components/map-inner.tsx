@@ -20,7 +20,7 @@ const STATUS_STYLES: Record<string, { color: string; fillColor: string; fillOpac
   visited: { color: "#1A1A1A", fillColor: "#1A1A1A", fillOpacity: 0.8 },
 };
 
-export default function MapInner({ pins }: { pins: MapPin[] }) {
+export default function MapInner({ pins, viewLabel = "View →" }: { pins: MapPin[]; viewLabel?: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.CircleMarker[]>([]);
@@ -73,7 +73,7 @@ export default function MapInner({ pins }: { pins: MapPin[] }) {
         `<div style="text-align:center;min-width:120px;font-family:system-ui,sans-serif;">` +
           `<p style="font-family:'Playfair Display',Georgia,serif;font-size:14px;margin:0 0 2px;">${pin.name}</p>` +
           `<p style="font-size:10px;color:rgba(26,26,26,0.4);margin:0 0 8px;">${location}</p>` +
-          `<a href="/bucket-list/${pin.id}" style="font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(26,26,26,0.5);text-decoration:none;">View →</a>` +
+          `<a href="/bucket-list/${pin.id}" style="font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(26,26,26,0.5);text-decoration:none;">${viewLabel}</a>` +
         `</div>`,
         { closeButton: false, className: "myra-popup" }
       );

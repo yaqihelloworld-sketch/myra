@@ -214,7 +214,7 @@ export default function BucketListView({
                 ? "bg-[#1A1A1A] text-white"
                 : "text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60"
             }`}
-            aria-label="Map view"
+            aria-label={t("map.view")}
             aria-pressed={view === "map"}
           >
             <Map size={16} />

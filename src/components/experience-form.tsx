@@ -298,7 +298,7 @@ export default function ExperienceForm({
                     : "border-[#D4D0C8] text-[#1A1A1A]/50 hover:border-[#1A1A1A]/30"
                 }`}
               >
-                {s === "visited" ? "completed" : s}
+                {t(`formStatus.${s}` as any)}
               </button>
             ))}
           </div>

@@ -3,8 +3,10 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { MoreVertical } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 export default function CardMenu({ experienceId }: { experienceId: number }) {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -43,7 +45,7 @@ export default function CardMenu({ experienceId }: { experienceId: number }) {
           setConfirming(false);
         }}
         className="px-1.5 pt-0.5 pb-1.5 text-[#1A1A1A]/20 hover:text-[#1A1A1A]/60 transition-colors opacity-0 group-hover:opacity-100"
-        aria-label="More options"
+        aria-label={t("menu.more")}
       >
         <MoreVertical size={14} />
       </button>
@@ -65,7 +67,7 @@ export default function CardMenu({ experienceId }: { experienceId: number }) {
                 : "text-[#1A1A1A]/50 hover:text-red-500 hover:bg-[#F7F5F0]"
             }`}
           >
-            {confirming ? "Confirm?" : "Delete"}
+            {confirming ? t("menu.confirm") : t("menu.delete")}
           </button>
         </div>
       )}

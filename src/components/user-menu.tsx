@@ -3,9 +3,11 @@
 import { useState, useRef, useEffect } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
+import { useI18n } from "@/lib/i18n";
 
 export default function UserMenu() {
   const { data: session, status } = useSession();
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -29,7 +31,7 @@ export default function UserMenu() {
         onClick={() => signIn("google")}
         className="text-[10px] md:text-xs tracking-[0.15em] text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors whitespace-nowrap"
       >
-        SIGN IN
+        {t("user.signIn")}
       </button>
     );
   }
@@ -65,7 +67,7 @@ export default function UserMenu() {
             onClick={() => { setOpen(false); signOut(); }}
             className="w-full text-left px-4 py-2.5 text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/50 hover:text-[#1A1A1A] hover:bg-[#F7F5F0] transition-colors"
           >
-            Sign out
+            {t("user.signOut")}
           </button>
         </div>
       )}

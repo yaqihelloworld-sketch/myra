@@ -161,6 +161,92 @@ const translations = {
   "photos.searching": { en: "Searching...", zh: "搜索中..." },
   "photos.noResults": { en: "No photos found. Try a different search.", zh: "未找到照片，请尝试其他搜索词。" },
   "photos.attribution": { en: "Photos provided by Unsplash", zh: "照片由 Unsplash 提供" },
+
+  // Auth gate
+  "auth.heading": { en: "Your dreams are waiting", zh: "你的梦想在等你" },
+  "auth.desc": { en: "Sign in to start building your personal vision board of places and experiences.", zh: "登录后开始构建你的专属旅行愿景板。" },
+  "auth.privacy": { en: "Your list is private to you — only you can see what you save.", zh: "你的列表完全私密——只有你能看到保存的内容。" },
+  "auth.signInGoogle": { en: "SIGN IN WITH GOOGLE", zh: "使用 GOOGLE 登录" },
+
+  // User menu
+  "user.signIn": { en: "SIGN IN", zh: "登录" },
+  "user.signOut": { en: "Sign out", zh: "退出登录" },
+
+  // Card menu
+  "menu.more": { en: "More options", zh: "更多选项" },
+  "menu.delete": { en: "Delete", zh: "删除" },
+  "menu.confirm": { en: "Confirm?", zh: "确认？" },
+
+  // Map
+  "map.loading": { en: "Placing your dreams on the map...", zh: "正在将你的梦想标注在地图上..." },
+  "map.view": { en: "Map view", zh: "地图视图" },
+  "map.viewPin": { en: "View →", zh: "查看 →" },
+
+  // Shuffle
+  "bucket.shuffle": { en: "SHUFFLE", zh: "换一批" },
+
+  // About page buttons
+  "about.backHome": { en: "← HOME", zh: "← 首页" },
+  "about.startDiscovering": { en: "START DISCOVERING", zh: "开始探索" },
+  "about.myBucketList": { en: "MY BUCKET LIST", zh: "我的心愿单" },
+
+  // Months
+  "month.january": { en: "January", zh: "一月" },
+  "month.february": { en: "February", zh: "二月" },
+  "month.march": { en: "March", zh: "三月" },
+  "month.april": { en: "April", zh: "四月" },
+  "month.may": { en: "May", zh: "五月" },
+  "month.june": { en: "June", zh: "六月" },
+  "month.july": { en: "July", zh: "七月" },
+  "month.august": { en: "August", zh: "八月" },
+  "month.september": { en: "September", zh: "九月" },
+  "month.october": { en: "October", zh: "十月" },
+  "month.november": { en: "November", zh: "十一月" },
+  "month.december": { en: "December", zh: "十二月" },
+
+  // Age ranges
+  "age.20s": { en: "20s", zh: "20多岁" },
+  "age.30s": { en: "30s", zh: "30多岁" },
+  "age.40s": { en: "40s", zh: "40多岁" },
+  "age.50s": { en: "50s", zh: "50多岁" },
+  "age.60+": { en: "60+", zh: "60岁以上" },
+
+  // Status display
+  "status.wishlist": { en: "WISHLIST", zh: "心愿" },
+  "status.planned": { en: "PLANNED", zh: "已计划" },
+  "status.visited": { en: "COMPLETED", zh: "已完成" },
+
+  // Experience form statuses (toggle buttons)
+  "formStatus.wishlist": { en: "wishlist", zh: "心愿" },
+  "formStatus.planned": { en: "planned", zh: "已计划" },
+  "formStatus.visited": { en: "completed", zh: "已完成" },
+
+  // Partner types
+  "partner.solo": { en: "solo", zh: "独自" },
+  "partner.romantic": { en: "romantic", zh: "情侣" },
+  "partner.family": { en: "family", zh: "家庭" },
+  "partner.friends": { en: "friends", zh: "朋友" },
+  "partner.kids": { en: "kids", zh: "亲子" },
+
+  // Seasons
+  "season.spring": { en: "spring", zh: "春" },
+  "season.summer": { en: "summer", zh: "夏" },
+  "season.autumn": { en: "autumn", zh: "秋" },
+  "season.winter": { en: "winter", zh: "冬" },
+
+  // Discover recommendations
+  "discover.bestMonths": { en: "Best months", zh: "最佳月份" },
+  "discover.days_label": { en: "days", zh: "天" },
+  "discover.matchReason": { en: "Why this matches", zh: "推荐理由" },
+
+  // Suggestions (bucket list inspirations) — these stay in English as they're experience names
+  // but metrics need translation
+  "metric.trending": { en: "Trending", zh: "热门趋势" },
+  "metric.mentions": { en: "mentions", zh: "次提及" },
+  "metric.say": { en: "say", zh: "认为" },
+
+  // Nav language toggle
+  "nav.switchLang": { en: "Switch to Chinese", zh: "切换到英文" },
 } as const;
 
 type TranslationKey = keyof typeof translations;

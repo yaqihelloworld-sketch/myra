@@ -31,10 +31,10 @@ interface PhotoResult {
   photographerName: string;
 }
 
-const MONTHS = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
-];
+const MONTH_KEYS = [
+  "january", "february", "march", "april", "may", "june",
+  "july", "august", "september", "october", "november", "december",
+] as const;
 
 const AGE_RANGES = ["20s", "30s", "40s", "50s", "60+"];
 
@@ -44,7 +44,7 @@ export default function TripContextForm({
   preselectedExperience?: Experience;
 }) {
   const router = useRouter();
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [prompt, setPrompt] = useState("");
   const [month, setMonth] = useState("");
   const [days, setDays] = useState("");
@@ -126,7 +126,7 @@ export default function TripContextForm({
       const res = await fetch("/api/discover", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: effectivePrompt, month, days, companion, ageRange, budget }),
+        body: JSON.stringify({ prompt: effectivePrompt, month, days, companion, ageRange, budget, lang }),
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
@@ -235,8 +235,8 @@ export default function TripContextForm({
               className="w-full bg-transparent border-b border-[#D4D0C8] py-2.5 md:py-1.5 text-base md:text-sm focus:border-[#1A1A1A]/40 transition-colors appearance-none cursor-pointer"
             >
               <option value="">{t("discover.any")}</option>
-              {MONTHS.map((m) => (
-                <option key={m} value={m}>{m}</option>
+              {MONTH_KEYS.map((m) => (
+                <option key={m} value={t(`month.${m}` as any)}>{t(`month.${m}` as any)}</option>
               ))}
             </select>
           </div>
@@ -297,7 +297,7 @@ export default function TripContextForm({
                         : "bg-[#D4D0C8]/20 text-[#1A1A1A]/35 hover:text-[#1A1A1A]/50 hover:bg-[#D4D0C8]/40 active:bg-[#D4D0C8]/40"
                     }`}
                   >
-                    {p}
+                    {t(`partner.${p}` as any)}
                   </button>
                 ))}
               </div>
@@ -317,7 +317,7 @@ export default function TripContextForm({
                         : "bg-[#D4D0C8]/20 text-[#1A1A1A]/35 hover:text-[#1A1A1A]/50 hover:bg-[#D4D0C8]/40 active:bg-[#D4D0C8]/40"
                     }`}
                   >
-                    {a}
+                    {t(`age.${a}` as any)}
                   </button>
                 ))}
               </div>

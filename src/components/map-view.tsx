@@ -103,11 +103,11 @@ export default function MapView({ experiences }: { experiences: Experience[] }) 
           <div className="absolute inset-0 z-[1000] bg-[#F7F5F0]/80 flex flex-col items-center justify-center gap-2">
             <div className="w-5 h-5 border-2 border-[#D4D0C8] border-t-[#1A1A1A] rounded-full animate-spin" />
             <p className="text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/40">
-              Placing your dreams on the map...
+              {t("map.loading")}
             </p>
           </div>
         )}
-        <MapInner pins={pins} />
+        <MapInner pins={pins} viewLabel={t("map.viewPin")} />
       </div>
 
       {/* Legend */}
