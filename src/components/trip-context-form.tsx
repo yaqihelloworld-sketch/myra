@@ -47,7 +47,7 @@ export default function TripContextForm({
   const { t, lang } = useI18n();
   const [prompt, setPrompt] = useState("");
   const [month, setMonth] = useState("");
-  const [days, setDays] = useState("");
+  const [days, setDays] = useState("7");
   const [companion, setCompanion] = useState("");
   const [ageRange, setAgeRange] = useState("");
   const [budget, setBudget] = useState("");
@@ -242,16 +242,18 @@ export default function TripContextForm({
           </div>
           <div>
             <label htmlFor="discover-days" className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-1 md:mb-0.5 block">{t("discover.days")}</label>
-            <input
+            <select
               id="discover-days"
-              type="number"
               value={days}
               onChange={(e) => setDays(e.target.value)}
-              placeholder="7"
-              min="1"
-              max="90"
-              className="w-full bg-transparent border-b border-[#D4D0C8] py-2.5 md:py-1.5 text-base md:text-sm focus:border-[#1A1A1A]/40 transition-colors placeholder:text-[#1A1A1A]/25"
-            />
+              className="w-full bg-transparent border-b border-[#D4D0C8] py-2.5 md:py-1.5 text-base md:text-sm focus:border-[#1A1A1A]/40 transition-colors appearance-none cursor-pointer"
+            >
+              <option value="3">{t("discover.weekend")}</option>
+              <option value="7">{t("discover.oneWeek")}</option>
+              <option value="14">{t("discover.twoWeeks")}</option>
+              <option value="30">{t("discover.oneMonth")}</option>
+              <option value="">{t("discover.noLimit")}</option>
+            </select>
           </div>
         </div>
 
