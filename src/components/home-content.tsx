@@ -114,7 +114,7 @@ export default function HomeContent({
         </h1>
       </div>
 
-      {/* Intent Cards */}
+      {/* Intent Cards — Discover first */}
       <div className="grid md:grid-cols-2 gap-3 max-w-2xl mx-auto mb-20">
         <Link
           href="/trips/new"

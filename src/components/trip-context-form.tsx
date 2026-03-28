@@ -25,6 +25,7 @@ interface DiscoverResult {
 }
 
 interface PhotoResult {
+  url?: string;
   thumbUrl: string;
   altDescription: string | null;
   photographerName: string;
@@ -223,8 +224,8 @@ export default function TripContextForm({
           )}
         </div>
 
-        {/* Secondary: Quick params — compact inline row */}
-        <div className="grid grid-cols-3 gap-4 mb-4">
+        {/* Secondary: Quick params — collapse on mobile when results showing */}
+        <div className={`grid grid-cols-3 gap-4 mb-4 ${hasResults ? "hidden md:grid" : ""}`}>
           <div>
             <label htmlFor="discover-month" className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-1 md:mb-0.5 block">{t("discover.month")}</label>
             <select
@@ -265,12 +266,12 @@ export default function TripContextForm({
           </div>
         </div>
 
-        {/* Tertiary: Collapsible filters */}
+        {/* Tertiary: Collapsible filters — hidden on mobile when results showing */}
         <button
           type="button"
           onClick={() => setShowFilters(!showFilters)}
           aria-expanded={showFilters}
-          className="text-xs tracking-[0.1em] uppercase text-[#1A1A1A]/30 hover:text-[#1A1A1A]/50 transition-colors mb-4 flex items-center gap-1.5"
+          className={`text-xs tracking-[0.1em] uppercase text-[#1A1A1A]/30 hover:text-[#1A1A1A]/50 transition-colors mb-4 flex items-center gap-1.5 ${hasResults ? "hidden md:flex" : ""}`}
         >
           <span className={`text-[7px] inline-block transition-transform duration-300 ${showFilters ? "rotate-90" : ""}`} style={{ transitionTimingFunction: "cubic-bezier(0.25, 1, 0.5, 1)" }}>▶</span>
           {companion || ageRange
@@ -278,7 +279,7 @@ export default function TripContextForm({
             : t("discover.whatElse")}
         </button>
 
-        <div className={`grid transition-[grid-template-rows] duration-350 ${showFilters ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`} style={{ transitionDuration: "350ms", transitionTimingFunction: "cubic-bezier(0.25, 1, 0.5, 1)" }}>
+        <div className={`grid transition-[grid-template-rows] duration-350 ${showFilters ? "grid-rows-[1fr]" : "grid-rows-[0fr]"} ${hasResults ? "hidden md:grid" : ""}`} style={{ transitionDuration: "350ms", transitionTimingFunction: "cubic-bezier(0.25, 1, 0.5, 1)" }}>
           <div className="overflow-hidden">
           <div className="space-y-4 mb-4 pl-3 border-l border-[#D4D0C8]/50">
             <div>
@@ -325,8 +326,8 @@ export default function TripContextForm({
           </div>
         </div>
 
-        {/* Discover button */}
-        <div className="pt-2">
+        {/* Discover button — hidden on mobile when results showing */}
+        <div className={`pt-2 ${hasResults ? "hidden md:block" : ""}`}>
           <button
             onClick={handleDiscover}
             disabled={loading}
@@ -427,11 +428,11 @@ export default function TripContextForm({
                         <div className="shrink-0 w-full h-36 md:w-28 md:h-20 relative overflow-hidden bg-[#D4D0C8]/20">
                           {photos[i] ? (
                             <Image
-                              src={photos[i].thumbUrl}
+                              src={photos[i].url || photos[i].thumbUrl}
                               alt={photos[i].altDescription || rec.name}
                               fill
                               className="object-cover"
-                              sizes="112px"
+                              sizes="(max-width: 768px) 100vw, 112px"
                             />
                           ) : (
                             <div className="w-full h-full animate-pulse bg-[#D4D0C8]/30" />
@@ -439,7 +440,7 @@ export default function TripContextForm({
                         </div>
 
                         {/* Content */}
-                        <div className="flex-1 min-w-0 flex items-start justify-between gap-3">
+                        <div className="flex-1 min-w-0 md:flex md:items-start md:justify-between md:gap-3">
                           <div className="min-w-0 flex-1">
                             <div className="flex items-start gap-2 flex-wrap">
                               <a
@@ -476,36 +477,68 @@ export default function TripContextForm({
                                 {rec.estimatedBudget}
                               </span>
                             </div>
+
+                            {/* Add to bucket list — below content on mobile, inline on desktop */}
+                            {!rec.fromBucketList && (
+                              <div className="mt-3 md:hidden">
+                                {addedToList.has(i) ? (
+                                  <a
+                                    href="/bucket-list?tab=planned"
+                                    className="inline-flex items-center gap-1.5 px-4 py-3 text-[11px] tracking-[0.15em] uppercase border border-[#EBCFBE] bg-[#EBCFBE] text-[#1A1A1A]/70 hover:bg-[#EBCFBE]/80 transition-all"
+                                  >
+                                    <ArrowRight size={10} />
+                                    {t("discover.planned")}
+                                  </a>
+                                ) : (
+                                  <button
+                                    onClick={() => addToBucketList(rec, i)}
+                                    disabled={addingToList.has(i)}
+                                    className={`inline-flex items-center gap-1.5 px-4 py-3 text-[11px] tracking-[0.15em] uppercase border transition-all ${
+                                      addingToList.has(i)
+                                        ? "border-[#D4D0C8] text-[#1A1A1A]/30 animate-pulse"
+                                        : "border-[#D4D0C8] text-[#1A1A1A]/40 hover:border-[#1A1A1A] hover:text-[#1A1A1A]"
+                                    }`}
+                                  >
+                                    <BookmarkPlus size={10} />
+                                    {addingToList.has(i)
+                                      ? t("discover.adding")
+                                      : t("discover.addToPlan")}
+                                  </button>
+                                )}
+                              </div>
+                            )}
                           </div>
 
-                        {/* Add to bucket list */}
-                        {!rec.fromBucketList && (
-                          addedToList.has(i) ? (
-                            <a
-                              href="/bucket-list?tab=planned"
-                              className="shrink-0 inline-flex items-center gap-1.5 px-4 py-3 md:px-3 md:py-2 text-[11px] md:text-[9px] tracking-[0.15em] uppercase border border-[#EBCFBE] bg-[#EBCFBE] text-[#1A1A1A]/70 hover:bg-[#EBCFBE]/80 transition-all"
-                            >
-                              <ArrowRight size={10} />
-                              {t("discover.planned")}
-                            </a>
-                          ) : (
-                            <button
-                              onClick={() => addToBucketList(rec, i)}
-                              disabled={addingToList.has(i)}
-                              className={`shrink-0 inline-flex items-center gap-1.5 px-4 py-3 md:px-3 md:py-2 text-[11px] md:text-[9px] tracking-[0.15em] uppercase border transition-all ${
-                                addingToList.has(i)
-                                  ? "border-[#D4D0C8] text-[#1A1A1A]/30 animate-pulse"
-                                  : "border-[#D4D0C8] text-[#1A1A1A]/40 hover:border-[#1A1A1A] hover:text-[#1A1A1A]"
-                              }`}
-                            >
-                              <BookmarkPlus size={10} />
-                              {addingToList.has(i)
-                                ? t("discover.adding")
-                                : t("discover.addToPlan")}
-                            </button>
-                          )
-                        )}
-                      </div>
+                          {/* Desktop-only action button */}
+                          {!rec.fromBucketList && (
+                            <div className="hidden md:block shrink-0 self-center">
+                              {addedToList.has(i) ? (
+                                <a
+                                  href="/bucket-list?tab=planned"
+                                  className="inline-flex items-center gap-1.5 px-3 py-2 text-[9px] tracking-[0.15em] uppercase border border-[#EBCFBE] bg-[#EBCFBE] text-[#1A1A1A]/70 hover:bg-[#EBCFBE]/80 transition-all"
+                                >
+                                  <ArrowRight size={10} />
+                                  {t("discover.planned")}
+                                </a>
+                              ) : (
+                                <button
+                                  onClick={() => addToBucketList(rec, i)}
+                                  disabled={addingToList.has(i)}
+                                  className={`inline-flex items-center gap-1.5 px-3 py-2 text-[9px] tracking-[0.15em] uppercase border transition-all ${
+                                    addingToList.has(i)
+                                      ? "border-[#D4D0C8] text-[#1A1A1A]/30 animate-pulse"
+                                      : "border-[#D4D0C8] text-[#1A1A1A]/40 hover:border-[#1A1A1A] hover:text-[#1A1A1A]"
+                                  }`}
+                                >
+                                  <BookmarkPlus size={10} />
+                                  {addingToList.has(i)
+                                    ? t("discover.adding")
+                                    : t("discover.addToPlan")}
+                                </button>
+                              )}
+                            </div>
+                          )}
+                        </div>
                     </div>
                   </div>
                   ))}
