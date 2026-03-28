@@ -10,9 +10,8 @@ export default function Nav() {
   const { lang, setLang, t } = useI18n();
 
   const links = [
-    { href: "/", label: t("nav.home") },
-    { href: "/bucket-list", label: t("nav.bucketList") },
     { href: "/trips/new", label: t("nav.discover") },
+    { href: "/bucket-list", label: t("nav.bucketList") },
   ];
 
   return (

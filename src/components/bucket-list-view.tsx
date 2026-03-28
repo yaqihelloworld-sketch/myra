@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ExperienceCard from "./experience-card";
 import type { Experience } from "@/lib/types";
 import { parseCommaSeparated } from "@/lib/utils";
@@ -8,6 +8,7 @@ import { LayoutGrid, List, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useI18n } from "@/lib/i18n";
+import { useSearchParams } from "next/navigation";
 
 type Tab = "wishlist" | "planned" | "visited";
 type ViewMode = "card" | "list";
@@ -19,9 +20,19 @@ export default function BucketListView({
   experiences: Experience[];
   photoMap: Record<number, { url: string; altDescription: string | null }>;
 }) {
-  const [tab, setTab] = useState<Tab>("wishlist");
+  const searchParams = useSearchParams();
+  const initialTab = (searchParams.get("tab") as Tab) || "wishlist";
+  const [tab, setTab] = useState<Tab>(initialTab);
   const [view, setView] = useState<ViewMode>("card");
   const { t } = useI18n();
+
+  // Sync tab with URL params
+  useEffect(() => {
+    const urlTab = searchParams.get("tab") as Tab;
+    if (urlTab && ["wishlist", "planned", "visited"].includes(urlTab)) {
+      setTab(urlTab);
+    }
+  }, [searchParams]);
 
   const wishlist = experiences.filter((e) => e.status === "wishlist");
   const planned = experiences.filter((e) => e.status === "planned");
@@ -33,7 +44,7 @@ export default function BucketListView({
   return (
     <div>
       {/* Controls row */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-8">
         {/* Segmented toggle */}
         <div className="flex border border-[#D4D0C8] w-fit" role="tablist" aria-label="Filter by status">
           <button

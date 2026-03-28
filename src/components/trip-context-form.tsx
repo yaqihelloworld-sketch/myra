@@ -389,8 +389,8 @@ export default function TripContextForm({
             <div className="space-y-6">
               {/* Insight */}
               {result.travelInsight && (
-                <div className="py-4 px-5 bg-[#EBCFBE]/25 border-l border-[#EBCFBE]">
-                  <p className="font-serif text-sm text-[#1A1A1A]/40 italic leading-relaxed">
+                <div className="py-4 px-5 border-l border-[#D4D0C8]">
+                  <p className="font-serif text-[13px] text-[#1A1A1A]/30 italic leading-relaxed">
                     {result.travelInsight}
                   </p>
                 </div>
@@ -466,24 +466,30 @@ export default function TripContextForm({
 
                         {/* Add to bucket list */}
                         {!rec.fromBucketList && (
-                          <button
-                            onClick={() => addToBucketList(rec, i)}
-                            disabled={addingToList.has(i) || addedToList.has(i)}
-                            className={`shrink-0 inline-flex items-center gap-1.5 px-4 py-3 md:px-3 md:py-2 text-[11px] md:text-[9px] tracking-[0.15em] uppercase border transition-all ${
-                              addedToList.has(i)
-                                ? "border-[#EBCFBE] bg-[#EBCFBE] text-[#1A1A1A]/70"
-                                : addingToList.has(i)
-                                ? "border-[#D4D0C8] text-[#1A1A1A]/30 animate-pulse"
-                                : "border-[#D4D0C8] text-[#1A1A1A]/40 hover:border-[#1A1A1A] hover:text-[#1A1A1A]"
-                            }`}
-                          >
-                            <BookmarkPlus size={10} />
-                            {addedToList.has(i)
-                              ? t("discover.planned")
-                              : addingToList.has(i)
-                              ? t("discover.adding")
-                              : t("discover.addToPlan")}
-                          </button>
+                          addedToList.has(i) ? (
+                            <a
+                              href="/bucket-list?tab=planned"
+                              className="shrink-0 inline-flex items-center gap-1.5 px-4 py-3 md:px-3 md:py-2 text-[11px] md:text-[9px] tracking-[0.15em] uppercase border border-[#EBCFBE] bg-[#EBCFBE] text-[#1A1A1A]/70 hover:bg-[#EBCFBE]/80 transition-all"
+                            >
+                              <ArrowRight size={10} />
+                              {t("discover.planned")}
+                            </a>
+                          ) : (
+                            <button
+                              onClick={() => addToBucketList(rec, i)}
+                              disabled={addingToList.has(i)}
+                              className={`shrink-0 inline-flex items-center gap-1.5 px-4 py-3 md:px-3 md:py-2 text-[11px] md:text-[9px] tracking-[0.15em] uppercase border transition-all ${
+                                addingToList.has(i)
+                                  ? "border-[#D4D0C8] text-[#1A1A1A]/30 animate-pulse"
+                                  : "border-[#D4D0C8] text-[#1A1A1A]/40 hover:border-[#1A1A1A] hover:text-[#1A1A1A]"
+                              }`}
+                            >
+                              <BookmarkPlus size={10} />
+                              {addingToList.has(i)
+                                ? t("discover.adding")
+                                : t("discover.addToPlan")}
+                            </button>
+                          )
                         )}
                       </div>
                     </div>
@@ -502,7 +508,7 @@ export default function TripContextForm({
                   {t("discover.discoverMore")}
                 </button>
                 <button
-                  onClick={() => router.push("/bucket-list")}
+                  onClick={() => router.push("/bucket-list?tab=planned")}
                   className="inline-flex items-center gap-2 text-xs md:text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors"
                 >
                   {t("discover.viewBucketList")}

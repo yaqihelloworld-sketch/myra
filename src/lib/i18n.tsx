@@ -12,8 +12,8 @@ const translations = {
 
   // Home page
   "home.quote": {
-    en: "The world is a book, and those who do not travel read only one page.",
-    zh: "世界是一本书，不旅行的人只读了一页。",
+    en: "Discover bucket-list experiences, then make them real.",
+    zh: "发现心愿清单上的体验，然后让它们成真。",
   },
   "home.heading1": { en: "Where Vision &", zh: "愿景与" },
   "home.heading2": { en: "Journey", zh: "旅程" },
@@ -52,7 +52,7 @@ const translations = {
   // Discover page
   "discover.back": { en: "BACK", zh: "返回" },
   "discover.label": { en: "DISCOVER", zh: "探索" },
-  "discover.heading": { en: "Where to Next?", zh: "下一站去哪？" },
+  "discover.heading": { en: "What I'm Looking for Next", zh: "我下一步想找什么" },
   "discover.subtitle": {
     en: "Tell us what you're looking for. We'll search your bucket list and beyond.",
     zh: "告诉我们你在寻找什么，我们将在你的心愿单内外为你搜索。",
@@ -81,7 +81,7 @@ const translations = {
   "discover.inYourList": { en: "IN YOUR LIST", zh: "在你的心愿单中" },
   "discover.addToPlan": { en: "ADD TO MY PLAN", zh: "加入计划" },
   "discover.adding": { en: "ADDING...", zh: "添加中..." },
-  "discover.planned": { en: "PLANNED", zh: "已计划" },
+  "discover.planned": { en: "VIEW IN MY LIST", zh: "查看我的列表" },
   "discover.discoverMore": { en: "DISCOVER MORE", zh: "发现更多" },
   "discover.viewBucketList": { en: "VIEW BUCKET LIST", zh: "查看心愿单" },
 
@@ -117,6 +117,22 @@ const translations = {
   // Edit experience page
   "editExp.back": { en: "BACK TO LIST", zh: "返回列表" },
   "editExp.label": { en: "EDIT", zh: "编辑" },
+
+  // About page
+  "about.label": { en: "ABOUT", zh: "关于" },
+  "about.heading": { en: "What is Myra?", zh: "Myra 是什么？" },
+  "about.p1": { en: "A travel inspiration tool for curious discoverers.", zh: "一个为好奇的探索者打造的旅行灵感工具。" },
+  "about.step1Title": { en: "Discover", zh: "探索" },
+  "about.step1Desc": { en: "Tell Myra what kind of journey you're dreaming of. She'll find experiences that match your mood, season, and style.", zh: "告诉 Myra 你梦想中的旅程。她会找到匹配你心情、季节和风格的体验。" },
+  "about.step2Title": { en: "Save", zh: "收藏" },
+  "about.step2Desc": { en: "Add the ones that speak to you. Your bucket list grows into a personal archive of places that matter.", zh: "收藏那些打动你的体验。你的心愿单会变成一份专属的旅行档案。" },
+  "about.step3Title": { en: "Complete", zh: "完成" },
+  "about.step3Desc": { en: "When you've lived the experience, mark it complete. Every journey deserves to be remembered.", zh: "当你完成体验时，标记为已完成。每段旅程都值得被铭记。" },
+  "about.whoTitle": { en: "Who is this for?", zh: "这是为谁打造的？" },
+  "about.whoDesc": { en: "For anyone who believes travel is more than logistics — it's how we grow, feel, and remember.", zh: "为每一个相信旅行不只是行程安排的人——旅行是我们成长、感受和记忆的方式。" },
+
+  // Footer
+  "footer.about": { en: "About", zh: "关于" },
 
   // Photo picker
   "photos.title": { en: "FIND PHOTOS", zh: "查找照片" },
