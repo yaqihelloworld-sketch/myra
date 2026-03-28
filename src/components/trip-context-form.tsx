@@ -204,7 +204,7 @@ export default function TripContextForm({
             className="w-full bg-transparent border-b-2 border-[#D4D0C8] pb-[12px] pt-0 font-serif text-2xl md:text-4xl focus:border-[#1A1A1A]/30 transition-colors placeholder:text-[#1A1A1A]/15 resize-none leading-snug"
             rows={2}
           />
-          {!hasResults && !loading && (
+          {!loading && !result && (
             <div className="flex flex-wrap gap-2 mt-4">
               {PROMPT_SUGGESTIONS.map((s) => (
                 <button
@@ -433,7 +433,8 @@ export default function TripContextForm({
                               fill
                               className="object-cover"
                               sizes="(max-width: 768px) 100vw, 112px"
-                              quality={80}
+                              quality={90}
+                              unoptimized
                             />
                           ) : (
                             <div className="w-full h-full animate-pulse bg-[#D4D0C8]/30" />
@@ -462,7 +463,7 @@ export default function TripContextForm({
                             <p className="text-sm md:text-xs text-[#1A1A1A]/50 mt-0.5">
                               {rec.country}
                             </p>
-                            <p className="text-[13px] md:text-xs text-[#1A1A1A]/55 mt-2 leading-relaxed line-clamp-none md:line-clamp-2">
+                            <p className="text-[13px] md:text-xs text-[#1A1A1A]/55 mt-2 leading-relaxed line-clamp-3 md:line-clamp-2">
                               {rec.description}
                             </p>
                             <div className="flex flex-wrap gap-x-3 gap-y-1.5 mt-3 md:mt-2">
