@@ -304,10 +304,9 @@ export default function ExperienceForm({
           <div className="h-px bg-[#1A1A1A]/10" />
         </div>
 
-        {/* Status toggle — only show when editing */}
-        {isEdit && (
-          <div>
-            <label className={labelClass}>&#9632; {t("form.status")}</label>
+        {/* Status toggle */}
+        <div>
+          <label className={labelClass}>&#9632; {t("form.status")}</label>
             <div className="flex gap-1 mt-2" role="group" aria-label="Status">
               {STATUSES.map((s) => (
                 <button
@@ -325,8 +324,7 @@ export default function ExperienceForm({
                 </button>
               ))}
             </div>
-          </div>
-        )}
+        </div>
 
         <div className="border-t border-[#D4D0C8]/50 md:border-[#D4D0C8] pt-6 flex items-center gap-4">
           <button

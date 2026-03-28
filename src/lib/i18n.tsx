@@ -104,7 +104,7 @@ const translations = {
   // Experience form
   "form.namePlaceholder": { en: "Attend Carnival in Rio", zh: "参加里约狂欢节" },
   "form.nameLabel": { en: "Experience name", zh: "体验名称" },
-  "form.descLabel": { en: "Why this matters to me (optional)", zh: "这对我意味着什么（选填）" },
+  "form.descLabel": { en: "Journal (optional)", zh: "日记（选填）" },
   "form.descPlaceholder": { en: "What makes this special? Why do you want to do this?", zh: "是什么让这段体验特别？你为什么想去？" },
   "form.status": { en: "STATUS", zh: "状态" },
   "form.country": { en: "COUNTRY", zh: "国家" },
