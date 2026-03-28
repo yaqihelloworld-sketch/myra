@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Sparkles, TrendingUp, Heart, Users } from "lucide-react";
+import { Sparkles, Shuffle, Heart, TrendingUp, Users } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 
 interface Suggestion {
@@ -51,14 +51,18 @@ const METRIC_COLOR = {
   popular: "text-[#1A1A1A]/25",
 };
 
+const BATCH_SIZE = 5;
+
 export default function BucketListSuggestions({
   existingNames,
 }: {
   existingNames: string[];
 }) {
   const router = useRouter();
-  const [showAll, setShowAll] = useState(false);
   const { t } = useI18n();
+  const [shuffleKey, setShuffleKey] = useState(0);
+  const [phase, setPhase] = useState<"visible" | "exit" | "enter">("visible");
+  const [spinIcon, setSpinIcon] = useState(false);
 
   const normalizedExisting = new Set(
     existingNames.map((n) => n.toLowerCase().trim())
@@ -68,7 +72,18 @@ export default function BucketListSuggestions({
     (s) => !normalizedExisting.has(s.name.toLowerCase().trim())
   );
 
-  const visible = showAll ? available : available.slice(0, 12);
+  const getShuffled = useCallback(() => {
+    const arr = [...available];
+    let seed = shuffleKey + 1;
+    for (let i = arr.length - 1; i > 0; i--) {
+      seed = (seed * 16807 + 11) % 2147483647;
+      const j = seed % (i + 1);
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr.slice(0, BATCH_SIZE);
+  }, [available.length, shuffleKey]);
+
+  const visible = getShuffled();
 
   if (available.length === 0) return null;
 
@@ -80,8 +95,58 @@ export default function BucketListSuggestions({
     router.push(`/bucket-list/new?${params.toString()}`);
   }
 
+  function handleShuffle() {
+    if (phase !== "visible") return;
+    setSpinIcon(true);
+    setPhase("exit");
+
+    // After exit animation completes, swap data and enter
+    setTimeout(() => {
+      setShuffleKey((k) => k + 1);
+      setPhase("enter");
+
+      // After enter animation completes, go back to visible
+      setTimeout(() => {
+        setPhase("visible");
+        setSpinIcon(false);
+      }, 350);
+    }, 300);
+  }
+
+  const chipStyle = (index: number) => {
+    if (phase === "exit") {
+      return {
+        opacity: 0,
+        transform: "translateY(8px)",
+        transition: `all 250ms cubic-bezier(0.25, 1, 0.5, 1)`,
+        transitionDelay: `${index * 40}ms`,
+      };
+    }
+    if (phase === "enter") {
+      return {
+        opacity: 1,
+        transform: "translateY(0)",
+        transition: `all 300ms cubic-bezier(0.25, 1, 0.5, 1)`,
+        transitionDelay: `${index * 60}ms`,
+      };
+    }
+    return {
+      opacity: 1,
+      transform: "translateY(0)",
+      transition: `all 300ms cubic-bezier(0.25, 1, 0.5, 1)`,
+    };
+  };
+
+  // Force initial enter state for new chips
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    if (phase === "enter") setMounted(false);
+    const raf = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(raf);
+  }, [phase, shuffleKey]);
+
   return (
-    <div className="mt-16 border-t border-[#D4D0C8] pt-10">
+    <div className="mt-16 border-t border-[#D4D0C8]/50 pt-10">
       <div className="flex items-center gap-2 mb-5">
         <Sparkles size={13} className="text-[#1A1A1A]/25" />
         <h2 className="text-[10px] tracking-[0.25em] uppercase text-[#1A1A1A]/40">
@@ -90,13 +155,14 @@ export default function BucketListSuggestions({
       </div>
 
       <div className="flex flex-wrap gap-2">
-        {visible.map((s) => {
+        {visible.map((s, i) => {
           const Icon = METRIC_ICON[s.metricType];
           return (
             <button
-              key={s.name}
+              key={`${shuffleKey}-${s.name}`}
               onClick={() => handleClick(s)}
-              className="group inline-flex items-center gap-2 border border-[#D4D0C8] px-3 py-2 hover:border-[#1A1A1A]/25 hover:bg-white transition-all"
+              className="group inline-flex items-center gap-2 border border-[#D4D0C8] px-3.5 py-2.5 md:px-3 md:py-2 hover:border-[#1A1A1A]/25 hover:bg-white active:bg-white"
+              style={chipStyle(i)}
             >
               <span className="text-xs text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] transition-colors">
                 {s.name}
@@ -112,14 +178,18 @@ export default function BucketListSuggestions({
         })}
       </div>
 
-      {!showAll && available.length > 12 && (
-        <button
-          onClick={() => setShowAll(true)}
-          className="mt-4 text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60 transition-colors"
-        >
-          {t("bucket.showMore")} ({available.length - 12})
-        </button>
-      )}
+      <button
+        onClick={handleShuffle}
+        disabled={phase !== "visible"}
+        className="mt-4 inline-flex items-center gap-1.5 text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60 transition-colors disabled:opacity-50"
+      >
+        <Shuffle
+          size={11}
+          className={`transition-transform duration-500 ${spinIcon ? "rotate-180" : ""}`}
+          style={{ transitionTimingFunction: "cubic-bezier(0.25, 1, 0.5, 1)" }}
+        />
+        SHUFFLE
+      </button>
     </div>
   );
 }

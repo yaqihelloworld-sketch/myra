@@ -25,7 +25,7 @@ export default function Nav() {
             <Link
               key={link.href}
               href={link.href}
-              className={`text-xs md:text-xs tracking-[0.15em] md:tracking-[0.2em] whitespace-nowrap transition-colors py-1 ${
+              className={`text-xs md:text-xs tracking-[0.15em] md:tracking-[0.2em] whitespace-nowrap transition-colors py-2.5 md:py-1 active:text-[#1A1A1A] ${
                 pathname === link.href ||
                 (link.href !== "/" && pathname.startsWith(link.href))
                   ? "text-[#1A1A1A]"
@@ -37,7 +37,7 @@ export default function Nav() {
           ))}
           <button
             onClick={() => setLang(lang === "en" ? "zh" : "en")}
-            className="text-xs md:text-xs tracking-wide text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors border-l border-[#D4D0C8] pl-5 md:pl-6 py-1 whitespace-nowrap"
+            className="text-xs md:text-xs tracking-wide text-[#1A1A1A]/40 hover:text-[#1A1A1A] active:text-[#1A1A1A] transition-colors border-l border-[#D4D0C8] pl-5 md:pl-6 py-2.5 md:py-1 whitespace-nowrap"
             aria-label={lang === "en" ? "Switch to Chinese" : "切换到英文"}
           >
             {lang === "en" ? "中文" : "EN"}

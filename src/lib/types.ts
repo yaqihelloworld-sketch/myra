@@ -1,9 +1,9 @@
 export type Status = "wishlist" | "planned" | "visited";
 export type Season = "spring" | "summer" | "autumn" | "winter";
-export type PartnerType = "solo" | "romantic" | "friends" | "family";
+export type PartnerType = "solo" | "romantic" | "friends" | "family" | "kids";
 
 export const SEASONS: Season[] = ["spring", "summer", "autumn", "winter"];
-export const PARTNER_TYPES: PartnerType[] = ["solo", "romantic", "friends", "family"];
+export const PARTNER_TYPES: PartnerType[] = ["solo", "romantic", "friends", "family", "kids"];
 export const STATUSES: Status[] = ["wishlist", "planned", "visited"];
 
 export type DoByAge = "30" | "40" | "50" | "60+";

@@ -45,14 +45,6 @@ export default function AboutPage() {
         ))}
       </div>
 
-      {/* Who is this for */}
-      <div className="border-t border-[#D4D0C8]/50 pt-10">
-        <h2 className="font-serif text-lg mb-2">{t("about.whoTitle")}</h2>
-        <p className="text-sm text-[#1A1A1A]/45 leading-relaxed">
-          {t("about.whoDesc")}
-        </p>
-      </div>
-
       {/* CTA */}
       <div className="mt-16 flex gap-4">
         <Link

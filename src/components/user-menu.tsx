@@ -31,12 +31,12 @@ export default function UserMenu() {
         <Image
           src={session.user.image}
           alt=""
-          width={28}
-          height={28}
-          className="rounded-full opacity-70 group-hover:opacity-100 transition-opacity"
+          width={36}
+          height={36}
+          className="rounded-full opacity-70 group-hover:opacity-100 group-active:opacity-100 transition-opacity w-9 h-9 md:w-7 md:h-7"
         />
       ) : (
-        <div className="w-7 h-7 rounded-full bg-[#EBCFBE] flex items-center justify-center text-[10px] font-medium text-[#1A1A1A]">
+        <div className="w-9 h-9 md:w-7 md:h-7 rounded-full bg-[#EBCFBE] flex items-center justify-center text-xs md:text-[10px] font-medium text-[#1A1A1A]">
           {session.user.name?.[0] || "?"}
         </div>
       )}

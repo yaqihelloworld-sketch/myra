@@ -119,7 +119,7 @@ export default function BucketListView({
 
       {/* Empty state */}
       {items.length === 0 ? (
-        <div className="text-center py-16 border-t border-[#D4D0C8]">
+        <div className="text-center py-10 md:py-16 border-t border-[#D4D0C8]">
           <p className="font-serif text-lg mb-1">
             {tab === "wishlist" ? t("bucket.emptyWishlist") : tab === "planned" ? t("bucket.emptyPlanned") : t("bucket.emptyVisited")}
           </p>
@@ -141,7 +141,7 @@ export default function BucketListView({
         </div>
       ) : (
         /* Card view — Polaroid wall */
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
           {items.map((exp) => (
             <PolaroidCard key={exp.id} experience={exp} photo={photoMap[exp.id]} />
           ))}
@@ -189,12 +189,12 @@ function PolaroidCard({
 
           {/* Status overlay */}
           {experience.status === "visited" && (
-            <div className="absolute top-2 right-2 bg-[#1A1A1A]/70 text-white text-[8px] tracking-[0.15em] uppercase px-2 py-0.5 backdrop-blur-sm">
+            <div className="absolute top-2 right-2 bg-[#1A1A1A]/70 text-white text-[9px] md:text-[8px] tracking-[0.15em] uppercase px-2 py-1 md:py-0.5 backdrop-blur-sm">
               {t("bucket.visited")}
             </div>
           )}
           {experience.status === "planned" && (
-            <div className="absolute top-2 right-2 bg-[#EBCFBE] text-[#1A1A1A]/70 text-[8px] tracking-[0.15em] uppercase px-2 py-0.5 backdrop-blur-sm">
+            <div className="absolute top-2 right-2 bg-[#EBCFBE] text-[#1A1A1A]/70 text-[9px] md:text-[8px] tracking-[0.15em] uppercase px-2 py-1 md:py-0.5 backdrop-blur-sm">
               {t("bucket.planned")}
             </div>
           )}

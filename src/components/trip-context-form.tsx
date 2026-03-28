@@ -276,10 +276,10 @@ export default function TripContextForm({
                     type="button"
                     aria-pressed={companion === p}
                     onClick={() => setCompanion(companion === p ? "" : p)}
-                    className={`px-3 py-2 md:px-2.5 md:py-1 text-[11px] md:text-[9px] tracking-[0.1em] uppercase transition-colors ${
+                    className={`px-3.5 py-2.5 md:px-2.5 md:py-1 text-[11px] md:text-[9px] tracking-[0.1em] uppercase transition-colors ${
                       companion === p
                         ? "bg-[#EBCFBE] text-[#1A1A1A]"
-                        : "bg-[#D4D0C8]/20 text-[#1A1A1A]/35 hover:text-[#1A1A1A]/50 hover:bg-[#D4D0C8]/40"
+                        : "bg-[#D4D0C8]/20 text-[#1A1A1A]/35 hover:text-[#1A1A1A]/50 hover:bg-[#D4D0C8]/40 active:bg-[#D4D0C8]/40"
                     }`}
                   >
                     {p}
@@ -296,10 +296,10 @@ export default function TripContextForm({
                     type="button"
                     aria-pressed={ageRange === a}
                     onClick={() => setAgeRange(ageRange === a ? "" : a)}
-                    className={`px-3 py-2 md:px-2.5 md:py-1 text-[11px] md:text-[9px] tracking-[0.1em] uppercase transition-colors ${
+                    className={`px-3.5 py-2.5 md:px-2.5 md:py-1 text-[11px] md:text-[9px] tracking-[0.1em] uppercase transition-colors ${
                       ageRange === a
                         ? "bg-[#1A1A1A] text-white"
-                        : "bg-[#D4D0C8]/20 text-[#1A1A1A]/35 hover:text-[#1A1A1A]/50 hover:bg-[#D4D0C8]/40"
+                        : "bg-[#D4D0C8]/20 text-[#1A1A1A]/35 hover:text-[#1A1A1A]/50 hover:bg-[#D4D0C8]/40 active:bg-[#D4D0C8]/40"
                     }`}
                   >
                     {a}
@@ -435,7 +435,7 @@ export default function TripContextForm({
                                 className="font-serif text-lg md:text-base leading-tight hover:text-[#1A1A1A]/60 transition-colors inline-flex items-start gap-1.5 group/link"
                               >
                                 {rec.name}
-                                <ExternalLink size={10} className="shrink-0 mt-1 opacity-0 group-hover/link:opacity-40 transition-opacity" />
+                                <ExternalLink size={10} className="shrink-0 mt-1 opacity-20 md:opacity-0 md:group-hover/link:opacity-40 transition-opacity" />
                               </a>
                               {rec.fromBucketList && (
                                 <span className="shrink-0 mt-0.5 text-[8px] tracking-[0.15em] uppercase bg-[#EBCFBE] text-[#1A1A1A]/70 px-2 py-0.5">

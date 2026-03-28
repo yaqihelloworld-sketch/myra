@@ -9,7 +9,7 @@ export default function DiscoverHeader() {
   return (
     <div className="max-w-5xl mx-auto mb-10">
       <Link
-        href="/trips"
+        href="/"
         className="text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors"
       >
         &larr; {t("discover.back")}
