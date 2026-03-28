@@ -200,12 +200,12 @@ export default function ExperienceForm({
 
   return (
     <div>
-      {/* Banner photo — full viewport width, breaking out of container */}
-      <div className="relative" style={{ marginLeft: "calc(-50vw + 50%)", marginRight: "calc(-50vw + 50%)", width: "100vw" }}>
+      {/* Banner photo — full viewport width, breaking out of container and top padding */}
+      <div className="relative -mt-10" style={{ marginLeft: "calc(-50vw + 50%)", marginRight: "calc(-50vw + 50%)", width: "100vw" }}>
         {allPhotos.length > 0 ? (
           <div className="relative w-full h-48 md:h-64 lg:h-72 group">
             <Image
-              src={allPhotos[0].url}
+              src={allPhotos[0].url.replace(/w=\d+/, "w=2400")}
               alt={allPhotos[0].altDescription || name || "Cover photo"}
               fill
               className="object-cover"
