@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import ExperienceCard from "./experience-card";
 import type { Experience } from "@/lib/types";
-import { parseCommaSeparated, deriveCategory, type ExperienceCategory } from "@/lib/utils";
+import { deriveCategory, type ExperienceCategory } from "@/lib/utils";
 import { LayoutGrid, List, MapPin, ChevronDown, Map } from "lucide-react";
 import MapView from "./map-view";
 import Image from "next/image";
@@ -298,8 +298,6 @@ function PolaroidCard({
   photo?: { url: string; altDescription: string | null };
   onPhotoAdded?: () => void;
 }) {
-  const seasons = parseCommaSeparated(experience.idealSeasons);
-  const partnerTypes = parseCommaSeparated(experience.idealPartnerTypes);
   const { t } = useI18n();
   return (
       <div className="block group">
@@ -338,7 +336,7 @@ function PolaroidCard({
           {/* Caption area — fixed height for uniform cards */}
           <Link href={`/bucket-list/${experience.id}`} className="pt-3 px-0.5 flex-1 flex flex-col min-h-[72px]">
             <div className="flex items-start justify-between">
-              <h3 className="font-serif text-sm leading-snug group-hover:text-[#1A1A1A]/70 transition-colors line-clamp-1 flex-1">
+              <h3 className="font-serif text-sm leading-snug group-hover:text-[#1A1A1A]/70 transition-colors line-clamp-2 flex-1">
                 {experience.name}
               </h3>
               <CardMenu experienceId={experience.id} />
@@ -347,30 +345,8 @@ function PolaroidCard({
               {experience.country || "\u00A0"}
             </p>
 
-            {/* Badges — always rendered area */}
-            <div className="flex flex-wrap gap-1 mt-auto pt-2">
-              {seasons.map((s) => (
-                <span
-                  key={s}
-                  className="text-[8px] tracking-[0.1em] uppercase bg-[#EBCFBE] text-[#1A1A1A]/70 px-1.5 py-0.5"
-                >
-                  {s}
-                </span>
-              ))}
-              {partnerTypes.map((p) => (
-                <span
-                  key={p}
-                  className="text-[8px] tracking-[0.1em] uppercase bg-[#EBCFBE]/30 text-[#1A1A1A]/50 px-1.5 py-0.5"
-                >
-                  {p}
-                </span>
-              ))}
-              {experience.doByAge && (
-                <span className="text-[8px] tracking-[0.1em] uppercase bg-[#1A1A1A]/5 text-[#1A1A1A]/40 px-1.5 py-0.5">
-                  {experience.doByAge === "60+" ? "60+" : `< ${experience.doByAge}`}
-                </span>
-              )}
-            </div>
+            {/* Spacer to push content up */}
+            <div className="mt-auto" />
           </Link>
         </div>
       </div>
