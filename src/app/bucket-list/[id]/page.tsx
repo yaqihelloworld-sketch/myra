@@ -3,7 +3,6 @@ import { experiences } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import ExperienceForm from "@/components/experience-form";
-import ExperiencePageHeader from "@/components/experience-page-header";
 import AuthGate from "@/components/auth-gate";
 import { auth } from "@/lib/auth";
 
@@ -32,10 +31,7 @@ export default async function EditExperiencePage({
 
   return (
     <div>
-      <ExperiencePageHeader mode="edit" name={result[0].name} returnTab={result[0].status} />
-      <div className="max-w-xl">
-        <ExperienceForm experience={result[0]} />
-      </div>
+      <ExperienceForm experience={result[0]} returnTab={result[0].status} />
     </div>
   );
 }

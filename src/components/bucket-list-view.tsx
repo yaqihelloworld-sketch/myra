@@ -9,7 +9,7 @@ import MapView from "./map-view";
 import Image from "next/image";
 import Link from "next/link";
 import { useI18n } from "@/lib/i18n";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import CardMenu from "./card-menu";
 
 type Tab = "wishlist" | "planned" | "visited";
@@ -24,13 +24,30 @@ export default function BucketListView({
   photoMap: Record<number, { url: string; altDescription: string | null }>;
 }) {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const initialTab = (searchParams.get("tab") as Tab) || "wishlist";
   const [tab, setTab] = useState<Tab>(initialTab);
   const [view, setView] = useState<ViewMode>("card");
   const [sort, setSort] = useState<SortMode>("newest");
   const [sortOpen, setSortOpen] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null);
+  const [snackbar, setSnackbar] = useState("");
   const { t } = useI18n();
+
+  // Show snackbar on delete
+  useEffect(() => {
+    if (searchParams.get("deleted") === "1") {
+      setSnackbar(t("snackbar.deleted"));
+      // Clean URL
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("deleted");
+      const newUrl = params.toString() ? `/bucket-list?${params.toString()}` : "/bucket-list";
+      router.replace(newUrl, { scroll: false });
+      // Auto-dismiss
+      const timer = setTimeout(() => setSnackbar(""), 3500);
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams, t, router]);
 
   // Sync tab with URL params
   useEffect(() => {
@@ -283,6 +300,16 @@ export default function BucketListView({
           {items.map((exp) => (
             <PolaroidCard key={exp.id} experience={exp} photo={photoMap[exp.id]} />
           ))}
+        </div>
+      )}
+
+      {/* Snackbar */}
+      {snackbar && (
+        <div
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#1A1A1A] text-white px-6 py-3 text-sm tracking-wide shadow-lg animate-[slideUp_0.3s_cubic-bezier(0.25,1,0.5,1)]"
+          style={{ animation: "slideUp 0.3s cubic-bezier(0.25, 1, 0.5, 1)" }}
+        >
+          {snackbar}
         </div>
       )}
     </div>

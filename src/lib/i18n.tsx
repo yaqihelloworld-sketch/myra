@@ -245,6 +245,13 @@ const translations = {
   "metric.mentions": { en: "mentions", zh: "次提及" },
   "metric.say": { en: "say", zh: "认为" },
 
+  // Snackbar
+  "snackbar.deleted": { en: "Experience deleted. Until next time!", zh: "体验已删除，期待下次相遇！" },
+
+  // Banner photo
+  "form.addCover": { en: "ADD COVER", zh: "添加封面" },
+  "form.changeCover": { en: "CHANGE COVER", zh: "更换封面" },
+
   // Nav language toggle
   "nav.switchLang": { en: "Switch to Chinese", zh: "切换到英文" },
 } as const;

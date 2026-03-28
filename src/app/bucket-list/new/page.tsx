@@ -1,5 +1,4 @@
 import ExperienceForm from "@/components/experience-form";
-import ExperiencePageHeader from "@/components/experience-page-header";
 import AuthGate from "@/components/auth-gate";
 import { auth } from "@/lib/auth";
 
@@ -15,10 +14,7 @@ export default async function NewExperiencePage() {
 
   return (
     <div>
-      <ExperiencePageHeader mode="new" />
-      <div className="max-w-xl">
-        <ExperienceForm />
-      </div>
+      <ExperienceForm />
     </div>
   );
 }

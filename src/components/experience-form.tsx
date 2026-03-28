@@ -3,19 +3,22 @@
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { SEASONS, PARTNER_TYPES, STATUSES, DO_BY_AGES } from "@/lib/types";
 import { parseCommaSeparated, toCommaSeparated } from "@/lib/utils";
 import type { Experience, ExperiencePhoto } from "@/lib/types";
 import PhotoPicker from "./photo-picker";
-import { Sparkles, X } from "lucide-react";
+import { Sparkles, X, ImagePlus } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 
 type PendingPhoto = Omit<ExperiencePhoto, "id" | "experienceId">;
 
 export default function ExperienceForm({
   experience,
+  returnTab,
 }: {
   experience?: Experience;
+  returnTab?: string;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -44,6 +47,9 @@ export default function ExperienceForm({
   const [photos, setPhotos] = useState<ExperiencePhoto[]>([]);
   const [pendingPhotos, setPendingPhotos] = useState<PendingPhoto[]>([]);
   const [showPhotoPicker, setShowPhotoPicker] = useState(false);
+
+  // Snackbar
+  const [snackbar, setSnackbar] = useState("");
 
   // Load existing photos when editing
   useEffect(() => {
@@ -144,7 +150,8 @@ export default function ExperienceForm({
     if (!isEdit) return;
     setSaving(true);
     await fetch(`/api/experiences/${experience.id}`, { method: "DELETE" });
-    router.push(`/bucket-list?tab=${status}`);
+    // Show snackbar via URL param so it displays on the bucket list page
+    router.push(`/bucket-list?tab=${status}&deleted=1`);
     router.refresh();
   }
 
@@ -189,142 +196,158 @@ export default function ExperienceForm({
   ];
 
   const labelClass = "text-xs md:text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/50 mb-1.5 md:mb-1 block";
+  const backHref = returnTab ? `/bucket-list?tab=${returnTab}` : "/bucket-list";
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
-      {/* Name — hero field */}
-      <div>
-        <label htmlFor="experience-name" className="sr-only">{t("form.nameLabel")}</label>
-        <input
-          id="experience-name"
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          onBlur={() => autoFetchPhoto(name)}
-          placeholder={t("form.namePlaceholder")}
-          className="w-full bg-transparent border-none py-2 font-serif text-3xl md:text-4xl placeholder:text-[#1A1A1A]/15 leading-tight"
-          required
-        />
-        <div className="h-px bg-[#1A1A1A]/10 mt-1" />
-      </div>
+    <div>
+      {/* Banner photo — full width like Notion/LinkedIn */}
+      <div className="relative -mx-6 md:-mx-10 lg:-mx-16">
+        {allPhotos.length > 0 ? (
+          <div className="relative w-full h-48 md:h-64 lg:h-72 group">
+            <Image
+              src={allPhotos[0].url || allPhotos[0].thumbUrl}
+              alt={allPhotos[0].altDescription || name || "Cover photo"}
+              fill
+              className="object-cover"
+              sizes="100vw"
+              priority
+            />
+            {/* Gradient overlay for readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#F7F5F0] via-transparent to-transparent" />
 
-      {/* Photos Section */}
-      <div>
-        <label className={labelClass}>&#9632; {t("form.photos")}</label>
+            {/* Change cover button */}
+            <button
+              type="button"
+              onClick={() => setShowPhotoPicker(!showPhotoPicker)}
+              className="absolute bottom-3 right-3 md:bottom-4 md:right-4 inline-flex items-center gap-1.5 bg-white/80 backdrop-blur-sm border border-[#D4D0C8] px-3 py-2 text-[10px] tracking-[0.12em] uppercase text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-white transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100"
+            >
+              <ImagePlus size={12} />
+              {t("form.changeCover")}
+            </button>
 
-        {allPhotos.length > 0 && (
-          <div className="mt-3 mb-3 max-w-xs">
-            <div className="relative group">
-              <div className="aspect-[3/2] relative overflow-hidden">
-                <Image
-                  src={allPhotos[0].thumbUrl}
-                  alt={allPhotos[0].altDescription || "Travel photo"}
-                  fill
-                  className="object-cover"
-                  sizes="300px"
-                />
-              </div>
-              <button
-                type="button"
-                aria-label="Remove photo"
-                onClick={() =>
-                  allPhotos[0].isPending
-                    ? removePendingPhoto(allPhotos[0].unsplashId)
-                    : removeExistingPhoto(allPhotos[0].id)
-                }
-                className="absolute top-1 right-1 w-7 h-7 md:w-5 md:h-5 bg-black/50 text-white flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
-              >
-                <X size={12} />
-              </button>
-              <a
-                href={allPhotos[0].photographerUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[8px] text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60 mt-0.5 block truncate"
-              >
-                {allPhotos[0].photographerName}
-              </a>
-            </div>
+            {/* Photographer credit */}
+            <a
+              href={allPhotos[0].photographerUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute bottom-3 left-3 md:bottom-4 md:left-4 text-[8px] text-white/50 hover:text-white/80 transition-colors"
+            >
+              {allPhotos[0].photographerName}
+            </a>
           </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setShowPhotoPicker(!showPhotoPicker)}
+            className="w-full h-32 md:h-40 bg-[#F0EDE6] hover:bg-[#EAE6DD] transition-colors flex items-center justify-center gap-2 text-[#1A1A1A]/20 hover:text-[#1A1A1A]/40 group"
+          >
+            <ImagePlus size={18} className="group-hover:scale-110 transition-transform" />
+            <span className="text-[10px] tracking-[0.15em] uppercase">{t("form.addCover")}</span>
+          </button>
         )}
 
-        <button
-          type="button"
-          onClick={() => setShowPhotoPicker(!showPhotoPicker)}
-          className="border border-[#D4D0C8] px-4 py-3 md:py-2 text-xs md:text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/50 hover:border-[#1A1A1A]/30 transition-colors mt-2"
+        {/* Back arrow overlay */}
+        <Link
+          href={backHref}
+          className="absolute top-3 left-3 md:top-4 md:left-4 inline-flex items-center justify-center w-10 h-10 text-lg rounded-full bg-white/70 backdrop-blur-sm text-[#1A1A1A]/50 hover:text-[#1A1A1A] hover:bg-white transition-all"
+          aria-label={isEdit ? t("editExp.back") : t("newExp.back")}
         >
-          {showPhotoPicker ? t("form.hidePhotos") : allPhotos.length > 0 ? t("form.changePhoto") : t("form.findPhotos")}
-        </button>
-
-        {showPhotoPicker && (
-          <PhotoPicker
-            initialQuery={[name, country].filter(Boolean).join(" ")}
-            onSelect={addPhoto}
-            onClose={() => setShowPhotoPicker(false)}
-          />
-        )}
+          &larr;
+        </Link>
       </div>
 
-      {/* Description — optional motivation */}
-      <div>
-        <label htmlFor="experience-desc" className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-2 block">
-          {t("form.descLabel")}
-        </label>
-        <textarea
-          id="experience-desc"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder={t("form.descPlaceholder")}
-          rows={2}
-          className="w-full bg-transparent border-none py-2 text-sm placeholder:text-[#1A1A1A]/15 leading-relaxed resize-none"
-        />
-        <div className="h-px bg-[#1A1A1A]/10" />
-      </div>
-
-      {/* Status toggle — only show when editing */}
-      {isEdit && (
-        <div>
-          <label className={labelClass}>&#9632; {t("form.status")}</label>
-          <div className="flex gap-1 mt-2" role="group" aria-label="Status">
-            {STATUSES.map((s) => (
-              <button
-                key={s}
-                type="button"
-                aria-pressed={status === s}
-                onClick={() => setStatus(s)}
-                className={`px-4 py-3 md:py-2 text-xs md:text-[10px] tracking-[0.15em] uppercase border transition-colors ${
-                  status === s
-                    ? "bg-[#EBCFBE] text-[#1A1A1A] border-[#EBCFBE]"
-                    : "border-[#D4D0C8] text-[#1A1A1A]/50 hover:border-[#1A1A1A]/30"
-                }`}
-              >
-                {t(`formStatus.${s}` as any)}
-              </button>
-            ))}
+      {/* Photo picker modal */}
+      {showPhotoPicker && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm" onClick={() => setShowPhotoPicker(false)}>
+          <div className="bg-[#F7F5F0] w-full max-w-md mx-4 max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <PhotoPicker
+              initialQuery={[name, country].filter(Boolean).join(" ")}
+              onSelect={addPhoto}
+              onClose={() => setShowPhotoPicker(false)}
+            />
           </div>
         </div>
       )}
 
-      <div className="border-t border-[#D4D0C8]/50 md:border-[#D4D0C8] pt-6 flex items-center gap-4">
-        <button
-          type="submit"
-          disabled={saving}
-          className="bg-[#1A1A1A] text-white px-8 py-3.5 md:py-3 text-xs md:text-[10px] tracking-[0.2em] uppercase hover:bg-[#1A1A1A]/80 transition-colors disabled:opacity-50"
-        >
-          {saving ? t("form.saving") : isEdit ? t("form.update") : t("form.addToList")}
-        </button>
+      {/* Form content */}
+      <form onSubmit={handleSubmit} className="max-w-xl space-y-8 mt-6">
+        {/* Name — hero field */}
+        <div>
+          <label htmlFor="experience-name" className="sr-only">{t("form.nameLabel")}</label>
+          <input
+            id="experience-name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            onBlur={() => autoFetchPhoto(name)}
+            placeholder={t("form.namePlaceholder")}
+            className="w-full bg-transparent border-none py-2 font-serif text-3xl md:text-4xl placeholder:text-[#1A1A1A]/15 leading-tight"
+            required
+          />
+          <div className="h-px bg-[#1A1A1A]/10 mt-1" />
+        </div>
 
+        {/* Description — optional motivation */}
+        <div>
+          <label htmlFor="experience-desc" className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-2 block">
+            {t("form.descLabel")}
+          </label>
+          <textarea
+            id="experience-desc"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder={t("form.descPlaceholder")}
+            rows={2}
+            className="w-full bg-transparent border-none py-2 text-sm placeholder:text-[#1A1A1A]/15 leading-relaxed resize-none"
+          />
+          <div className="h-px bg-[#1A1A1A]/10" />
+        </div>
+
+        {/* Status toggle — only show when editing */}
         {isEdit && (
-          <button
-            type="button"
-            onClick={handleDelete}
-            disabled={saving}
-            className="text-xs md:text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/30 hover:text-red-500 transition-colors py-2"
-          >
-            {t("form.delete")}
-          </button>
+          <div>
+            <label className={labelClass}>&#9632; {t("form.status")}</label>
+            <div className="flex gap-1 mt-2" role="group" aria-label="Status">
+              {STATUSES.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  aria-pressed={status === s}
+                  onClick={() => setStatus(s)}
+                  className={`px-4 py-3 md:py-2 text-xs md:text-[10px] tracking-[0.15em] uppercase border transition-colors ${
+                    status === s
+                      ? "bg-[#EBCFBE] text-[#1A1A1A] border-[#EBCFBE]"
+                      : "border-[#D4D0C8] text-[#1A1A1A]/50 hover:border-[#1A1A1A]/30"
+                  }`}
+                >
+                  {t(`formStatus.${s}` as any)}
+                </button>
+              ))}
+            </div>
+          </div>
         )}
-      </div>
-    </form>
+
+        <div className="border-t border-[#D4D0C8]/50 md:border-[#D4D0C8] pt-6 flex items-center gap-4">
+          <button
+            type="submit"
+            disabled={saving}
+            className="bg-[#1A1A1A] text-white px-8 py-3.5 md:py-3 text-xs md:text-[10px] tracking-[0.2em] uppercase hover:bg-[#1A1A1A]/80 transition-colors disabled:opacity-50"
+          >
+            {saving ? t("form.saving") : isEdit ? t("form.update") : t("form.addToList")}
+          </button>
+
+          {isEdit && (
+            <button
+              type="button"
+              onClick={handleDelete}
+              disabled={saving}
+              className="text-xs md:text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/30 hover:text-red-500 transition-colors py-2"
+            >
+              {t("form.delete")}
+            </button>
+          )}
+        </div>
+      </form>
+    </div>
   );
 }
