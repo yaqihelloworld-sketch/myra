@@ -200,17 +200,18 @@ export default function ExperienceForm({
 
   return (
     <div>
-      {/* Banner photo — full width like Notion/LinkedIn */}
-      <div className="relative -mx-6 md:-mx-10 lg:-mx-16">
+      {/* Banner photo — full viewport width, breaking out of container */}
+      <div className="relative" style={{ marginLeft: "calc(-50vw + 50%)", marginRight: "calc(-50vw + 50%)", width: "100vw" }}>
         {allPhotos.length > 0 ? (
           <div className="relative w-full h-48 md:h-64 lg:h-72 group">
             <Image
-              src={allPhotos[0].url || allPhotos[0].thumbUrl}
+              src={allPhotos[0].url}
               alt={allPhotos[0].altDescription || name || "Cover photo"}
               fill
               className="object-cover"
               sizes="100vw"
               priority
+              quality={85}
             />
             {/* Gradient overlay for readability */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#F7F5F0] via-transparent to-transparent" />
