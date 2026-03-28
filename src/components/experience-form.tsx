@@ -23,6 +23,7 @@ export default function ExperienceForm({
   const { t } = useI18n();
 
   const [name, setName] = useState(experience?.name || searchParams.get("name") || "");
+  const [description, setDescription] = useState(experience?.description || "");
   const [country, setCountry] = useState(experience?.country || searchParams.get("country") || "");
   const [selectedSeasons, setSelectedSeasons] = useState<string[]>(
     experience ? parseCommaSeparated(experience.idealSeasons) : []
@@ -92,7 +93,7 @@ export default function ExperienceForm({
 
     const payload = {
       name,
-      description: null,
+      description: description.trim() || null,
       city: null,
       country: country || "",
       idealSeasons: toCommaSeparated(selectedSeasons),
@@ -148,12 +149,9 @@ export default function ExperienceForm({
   }
 
   function addPhoto(photo: PendingPhoto) {
-    const isDupe =
-      pendingPhotos.some((p) => p.unsplashId === photo.unsplashId) ||
-      photos.some((p) => p.unsplashId === photo.unsplashId);
-    if (!isDupe) {
-      setPendingPhotos((prev) => [...prev, photo]);
-    }
+    // Replace any existing photos with the new one
+    setPhotos([]);
+    setPendingPhotos([photo]);
     setShowPhotoPicker(false);
   }
 
@@ -168,6 +166,21 @@ export default function ExperienceForm({
 
   function removePendingPhoto(unsplashId: string) {
     setPendingPhotos((prev) => prev.filter((p) => p.unsplashId !== unsplashId));
+  }
+
+  // Auto-fetch a photo when user finishes typing the name
+  async function autoFetchPhoto(experienceName: string) {
+    if (!experienceName.trim()) return;
+    if (photos.length > 0 || pendingPhotos.length > 0) return;
+    try {
+      const res = await fetch(`/api/photos/search?query=${encodeURIComponent(experienceName)}`);
+      const data = await res.json();
+      if (data.length > 0) {
+        setPendingPhotos([data[0]]);
+      }
+    } catch {
+      // Silently fail
+    }
   }
 
   const allPhotos = [
@@ -187,6 +200,7 @@ export default function ExperienceForm({
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          onBlur={() => autoFetchPhoto(name)}
           placeholder={t("form.namePlaceholder")}
           className="w-full bg-transparent border-none py-2 font-serif text-3xl md:text-4xl placeholder:text-[#1A1A1A]/15 leading-tight"
           required
@@ -194,68 +208,43 @@ export default function ExperienceForm({
         <div className="h-px bg-[#1A1A1A]/10 mt-1" />
       </div>
 
-      {/* Status toggle */}
-      <div>
-        <label className={labelClass}>&#9632; {t("form.status")}</label>
-        <div className="flex gap-1 mt-2" role="group" aria-label="Status">
-          {STATUSES.map((s) => (
-            <button
-              key={s}
-              type="button"
-              aria-pressed={status === s}
-              onClick={() => setStatus(s)}
-              className={`px-4 py-3 md:py-2 text-xs md:text-[10px] tracking-[0.15em] uppercase border transition-colors ${
-                status === s
-                  ? "bg-[#EBCFBE] text-[#1A1A1A] border-[#EBCFBE]"
-                  : "border-[#D4D0C8] text-[#1A1A1A]/50 hover:border-[#1A1A1A]/30"
-              }`}
-            >
-              {s === "visited" ? "completed" : s}
-            </button>
-          ))}
-        </div>
-      </div>
-
-
       {/* Photos Section */}
       <div>
         <label className={labelClass}>&#9632; {t("form.photos")}</label>
 
         {allPhotos.length > 0 && (
-          <div className="grid grid-cols-3 gap-2 mt-3 mb-3">
-            {allPhotos.map((photo) => (
-              <div key={photo.unsplashId} className="relative group">
-                <div className="aspect-[3/2] relative overflow-hidden">
-                  <Image
-                    src={photo.thumbUrl}
-                    alt={photo.altDescription || "Travel photo"}
-                    fill
-                    className="object-cover"
-                    sizes="200px"
-                  />
-                </div>
-                <button
-                  type="button"
-                  aria-label="Remove photo"
-                  onClick={() =>
-                    photo.isPending
-                      ? removePendingPhoto(photo.unsplashId)
-                      : removeExistingPhoto(photo.id)
-                  }
-                  className="absolute top-1 right-1 w-7 h-7 md:w-5 md:h-5 bg-black/50 text-white flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
-                >
-                  <X size={12} />
-                </button>
-                <a
-                  href={photo.photographerUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[8px] text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60 mt-0.5 block truncate"
-                >
-                  {photo.photographerName}
-                </a>
+          <div className="mt-3 mb-3 max-w-xs">
+            <div className="relative group">
+              <div className="aspect-[3/2] relative overflow-hidden">
+                <Image
+                  src={allPhotos[0].thumbUrl}
+                  alt={allPhotos[0].altDescription || "Travel photo"}
+                  fill
+                  className="object-cover"
+                  sizes="300px"
+                />
               </div>
-            ))}
+              <button
+                type="button"
+                aria-label="Remove photo"
+                onClick={() =>
+                  allPhotos[0].isPending
+                    ? removePendingPhoto(allPhotos[0].unsplashId)
+                    : removeExistingPhoto(allPhotos[0].id)
+                }
+                className="absolute top-1 right-1 w-7 h-7 md:w-5 md:h-5 bg-black/50 text-white flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
+              >
+                <X size={12} />
+              </button>
+              <a
+                href={allPhotos[0].photographerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[8px] text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60 mt-0.5 block truncate"
+              >
+                {allPhotos[0].photographerName}
+              </a>
+            </div>
           </div>
         )}
 
@@ -264,7 +253,7 @@ export default function ExperienceForm({
           onClick={() => setShowPhotoPicker(!showPhotoPicker)}
           className="border border-[#D4D0C8] px-4 py-3 md:py-2 text-xs md:text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/50 hover:border-[#1A1A1A]/30 transition-colors mt-2"
         >
-          {showPhotoPicker ? t("form.hidePhotos") : t("form.findPhotos")}
+          {showPhotoPicker ? t("form.hidePhotos") : allPhotos.length > 0 ? t("form.changePhoto") : t("form.findPhotos")}
         </button>
 
         {showPhotoPicker && (
@@ -276,7 +265,47 @@ export default function ExperienceForm({
         )}
       </div>
 
-      <div className="border-t border-[#D4D0C8]/50 md:border-[#D4D0C8] pt-6 flex items-center justify-between">
+      {/* Description — optional motivation */}
+      <div>
+        <label htmlFor="experience-desc" className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-2 block">
+          {t("form.descLabel")}
+        </label>
+        <textarea
+          id="experience-desc"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder={t("form.descPlaceholder")}
+          rows={2}
+          className="w-full bg-transparent border-none py-2 text-sm placeholder:text-[#1A1A1A]/15 leading-relaxed resize-none"
+        />
+        <div className="h-px bg-[#1A1A1A]/10" />
+      </div>
+
+      {/* Status toggle — only show when editing */}
+      {isEdit && (
+        <div>
+          <label className={labelClass}>&#9632; {t("form.status")}</label>
+          <div className="flex gap-1 mt-2" role="group" aria-label="Status">
+            {STATUSES.map((s) => (
+              <button
+                key={s}
+                type="button"
+                aria-pressed={status === s}
+                onClick={() => setStatus(s)}
+                className={`px-4 py-3 md:py-2 text-xs md:text-[10px] tracking-[0.15em] uppercase border transition-colors ${
+                  status === s
+                    ? "bg-[#EBCFBE] text-[#1A1A1A] border-[#EBCFBE]"
+                    : "border-[#D4D0C8] text-[#1A1A1A]/50 hover:border-[#1A1A1A]/30"
+                }`}
+              >
+                {s === "visited" ? "completed" : s}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="border-t border-[#D4D0C8]/50 md:border-[#D4D0C8] pt-6 flex items-center gap-4">
         <button
           type="submit"
           disabled={saving}

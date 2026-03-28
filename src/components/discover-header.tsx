@@ -10,9 +10,10 @@ export default function DiscoverHeader() {
     <div className="max-w-5xl mx-auto mb-10">
       <Link
         href="/"
-        className="text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors"
+        className="inline-flex items-center justify-center w-10 h-10 text-lg text-[#1A1A1A]/30 hover:text-[#1A1A1A] transition-colors -ml-2"
+        aria-label={t("discover.back")}
       >
-        &larr; {t("discover.back")}
+        &larr;
       </Link>
       <p className="text-[10px] tracking-[0.3em] uppercase text-[#1A1A1A]/40 mb-2 mt-6">
         {t("discover.label")}

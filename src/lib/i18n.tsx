@@ -51,6 +51,20 @@ const translations = {
   "bucket.inspiration": { en: "NEED INSPIRATION?", zh: "需要灵感？" },
   "bucket.showMore": { en: "MORE IDEAS", zh: "更多灵感" },
 
+  // Sort
+  "sort.newest": { en: "Newest", zh: "最新" },
+  "sort.az": { en: "A → Z", zh: "A → Z" },
+  "sort.category": { en: "Category", zh: "分类" },
+  "sort.label": { en: "Sort", zh: "排序" },
+  "cat.nature": { en: "Nature", zh: "自然" },
+  "cat.city": { en: "City", zh: "城市" },
+  "cat.cultural": { en: "Cultural", zh: "文化" },
+  "cat.adventure": { en: "Adventure", zh: "探险" },
+  "cat.food": { en: "Food & Drink", zh: "美食" },
+  "cat.wellness": { en: "Wellness", zh: "养生" },
+  "cat.festival": { en: "Festival", zh: "节日" },
+  "cat.other": { en: "Other", zh: "其他" },
+
   // Discover page
   "discover.back": { en: "BACK", zh: "返回" },
   "discover.label": { en: "DISCOVER AN EXPERIENCE", zh: "发现一段体验" },
@@ -90,6 +104,8 @@ const translations = {
   // Experience form
   "form.namePlaceholder": { en: "Attend Carnival in Rio", zh: "参加里约狂欢节" },
   "form.nameLabel": { en: "Experience name", zh: "体验名称" },
+  "form.descLabel": { en: "Why this matters to me", zh: "这对我意味着什么" },
+  "form.descPlaceholder": { en: "What makes this special? Why do you want to do this?", zh: "是什么让这段体验特别？你为什么想去？" },
   "form.status": { en: "STATUS", zh: "状态" },
   "form.country": { en: "COUNTRY", zh: "国家" },
   "form.countryPlaceholder": { en: "Brazil", zh: "巴西" },
@@ -102,10 +118,11 @@ const translations = {
   "form.doByAge": { en: "DO BY AGE", zh: "在几岁前完成" },
   "form.before": { en: "Before", zh: "在" },
   "form.beforeSuffix": { en: "", zh: "岁前" },
-  "form.photos": { en: "INSPIRATION", zh: "灵感" },
+  "form.photos": { en: "VISUALIZE IT", zh: "想象一下" },
   "form.removePhoto": { en: "Remove photo", zh: "移除照片" },
   "form.hidePhotos": { en: "HIDE PHOTOS", zh: "隐藏照片" },
   "form.findPhotos": { en: "FIND PHOTOS", zh: "查找照片" },
+  "form.changePhoto": { en: "CHANGE PHOTO", zh: "更换照片" },
   "form.saving": { en: "SAVING...", zh: "保存中..." },
   "form.addToList": { en: "ADD TO LIST", zh: "添加到列表" },
   "form.update": { en: "UPDATE", zh: "更新" },

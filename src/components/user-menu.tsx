@@ -1,10 +1,23 @@
 "use client";
 
+import { useState, useRef, useEffect } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 
 export default function UserMenu() {
   const { data: session, status } = useSession();
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    if (open) document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [open]);
 
   if (status === "loading") {
     return <div className="w-7 h-7 rounded-full bg-[#D4D0C8] animate-pulse" />;
@@ -22,24 +35,40 @@ export default function UserMenu() {
   }
 
   return (
-    <button
-      onClick={() => signOut()}
-      className="flex items-center gap-2 group"
-      title={`Signed in as ${session.user.name}\nClick to sign out`}
-    >
-      {session.user.image ? (
-        <Image
-          src={session.user.image}
-          alt=""
-          width={36}
-          height={36}
-          className="rounded-full opacity-70 group-hover:opacity-100 group-active:opacity-100 transition-opacity w-9 h-9 md:w-7 md:h-7"
-        />
-      ) : (
-        <div className="w-9 h-9 md:w-7 md:h-7 rounded-full bg-[#EBCFBE] flex items-center justify-center text-xs md:text-[10px] font-medium text-[#1A1A1A]">
-          {session.user.name?.[0] || "?"}
+    <div ref={menuRef} className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-2 group"
+      >
+        {session.user.image ? (
+          <Image
+            src={session.user.image}
+            alt=""
+            width={36}
+            height={36}
+            className="rounded-full opacity-70 group-hover:opacity-100 group-active:opacity-100 transition-opacity w-9 h-9 md:w-7 md:h-7"
+          />
+        ) : (
+          <div className="w-9 h-9 md:w-7 md:h-7 rounded-full bg-[#EBCFBE] flex items-center justify-center text-xs md:text-[10px] font-medium text-[#1A1A1A]">
+            {session.user.name?.[0] || "?"}
+          </div>
+        )}
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-full mt-2 bg-white border border-[#D4D0C8] shadow-[0_2px_8px_rgba(0,0,0,0.08)] z-50 min-w-[160px]">
+          <div className="px-4 py-3 border-b border-[#D4D0C8]/50">
+            <p className="text-xs font-medium text-[#1A1A1A] truncate">{session.user.name}</p>
+            <p className="text-[10px] text-[#1A1A1A]/40 truncate mt-0.5">{session.user.email}</p>
+          </div>
+          <button
+            onClick={() => { setOpen(false); signOut(); }}
+            className="w-full text-left px-4 py-2.5 text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/50 hover:text-[#1A1A1A] hover:bg-[#F7F5F0] transition-colors"
+          >
+            Sign out
+          </button>
         </div>
       )}
-    </button>
+    </div>
   );
 }

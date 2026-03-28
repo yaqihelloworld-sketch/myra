@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Myra Logo Options</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #F7F5F0; font-family: 'Playfair Display', Georgia, serif; color: #1A1A1A; }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; max-width: 900px; margin: 60px auto; padding: 0 40px; }
+  .option { text-align: center; padding: 50px 30px; background: white; border: 1px solid #D4D0C8; }
+  .option:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+  .label { font-family: system-ui; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #1A1A1A80; margin-bottom: 30px; }
+  .preview { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; }
+  .desc { font-family: system-ui; font-size: 11px; color: #1A1A1A60; line-height: 1.6; max-width: 250px; margin: 0 auto; }
+  h1 { font-family: system-ui; font-size: 13px; letter-spacing: 0.25em; text-transform: uppercase; color: #1A1A1A60; text-align: center; margin-top: 60px; }
+
+  /* Option A: Monogram circle */
+  .logo-a .mark {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 1.5px solid #1A1A1A;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 18px; font-style: italic; letter-spacing: -0.5px;
+  }
+  .logo-a .wordmark { font-size: 22px; letter-spacing: 1px; }
+
+  /* Option B: Serif M with dot */
+  .logo-b .mark {
+    font-size: 32px; font-weight: 400; letter-spacing: 2px; position: relative;
+  }
+  .logo-b .dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: #EBCFBE; display: inline-block;
+    margin-left: 3px; margin-bottom: 2px; vertical-align: middle;
+  }
+
+  /* Option C: Stacked minimal */
+  .logo-c .mark {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+  }
+  .logo-c .line { width: 28px; height: 1.5px; background: #EBCFBE; }
+  .logo-c .text { font-size: 24px; letter-spacing: 6px; text-transform: uppercase; font-weight: 400; }
+
+  /* Option D: Italic script with underline */
+  .logo-d .mark {
+    position: relative; display: inline-block;
+  }
+  .logo-d .text { font-size: 28px; font-style: italic; letter-spacing: 1px; }
+  .logo-d .underline {
+    position: absolute; bottom: -2px; left: 0; right: 0;
+    height: 2px; background: linear-gradient(90deg, #EBCFBE, transparent);
+  }
+
+  /* Option E: Compass-inspired */
+  .logo-e .mark {
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .logo-e .icon {
+    width: 28px; height: 28px; position: relative;
+  }
+  .logo-e .icon::before {
+    content: ''; position: absolute; inset: 0;
+    border: 1.2px solid #1A1A1A40; border-radius: 50%;
+  }
+  .logo-e .icon::after {
+    content: ''; position: absolute;
+    top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg);
+    width: 8px; height: 8px;
+    background: #EBCFBE;
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+  }
+  .logo-e .needle {
+    position: absolute; top: 4px; left: 50%; transform: translateX(-50%);
+    width: 1.2px; height: 10px; background: #1A1A1A;
+  }
+  .logo-e .text { font-size: 22px; letter-spacing: 1px; }
+
+  /* Option F: Eye / Mira concept */
+  .logo-f .mark {
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .logo-f svg { width: 32px; height: 20px; }
+  .logo-f .text { font-size: 22px; letter-spacing: 1px; }
+
+  /* Nav preview bar */
+  .nav-preview {
+    max-width: 900px; margin: 0 auto 20px;
+    padding: 20px 40px;
+    display: flex; align-items: center; gap: 30px;
+    border-bottom: 1px solid #D4D0C8;
+    background: #F7F5F0;
+  }
+  .nav-preview .nav-links {
+    font-family: system-ui; font-size: 10px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: #1A1A1A60;
+    display: flex; gap: 20px; margin-left: auto;
+  }
+</style>
+</head>
+<body>
+
+<h1>Myra Logo Options</h1>
+
+<div class="grid">
+
+  <!-- Option A -->
+  <div class="option logo-a">
+    <div class="label">A &mdash; Monogram Circle</div>
+    <div class="preview">
+      <div class="mark"><em>M</em></div>
+      <span class="wordmark">Myra</span>
+    </div>
+    <p class="desc">Italic M in a thin circle, paired with the wordmark. Classic, editorial.</p>
+  </div>
+
+  <!-- Option B -->
+  <div class="option logo-b">
+    <div class="label">B &mdash; Wordmark + Accent Dot</div>
+    <div class="preview">
+      <span class="mark">Myra<span class="dot"></span></span>
+    </div>
+    <p class="desc">Clean wordmark with a small blush dot. Minimal, the dot echoes "mira" (to see).</p>
+  </div>
+
+  <!-- Option C -->
+  <div class="option logo-c">
+    <div class="label">C &mdash; Stacked Minimal</div>
+    <div class="preview">
+      <div class="mark">
+        <span class="line"></span>
+        <span class="text">Myra</span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <p class="desc">Uppercase letters with blush lines above and below. Architectural, quiet authority.</p>
+  </div>
+
+  <!-- Option D -->
+  <div class="option logo-d">
+    <div class="label">D &mdash; Script with Gradient</div>
+    <div class="preview">
+      <div class="mark">
+        <span class="text">Myra</span>
+        <div class="underline"></div>
+      </div>
+    </div>
+    <p class="desc">Italic wordmark with a warm gradient underline that fades. Aspirational, journeyed.</p>
+  </div>
+
+  <!-- Option E -->
+  <div class="option logo-e">
+    <div class="label">E &mdash; Compass Mark</div>
+    <div class="preview">
+      <div class="mark">
+        <div class="icon"><div class="needle"></div></div>
+        <span class="text">Myra</span>
+      </div>
+    </div>
+    <p class="desc">Tiny compass icon with needle pointing north. Travel-rooted, intentional direction.</p>
+  </div>
+
+  <!-- Option F -->
+  <div class="option logo-f">
+    <div class="label">F &mdash; Eye / Mira</div>
+    <div class="preview">
+      <div class="mark">
+        <svg viewBox="0 0 32 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 10C1 10 7 2 16 2C25 2 31 10 31 10C31 10 25 18 16 18C7 18 1 10 1 10Z" stroke="#1A1A1A" stroke-width="1.2" fill="none"/>
+          <circle cx="16" cy="10" r="4" fill="#EBCFBE" stroke="#1A1A1A" stroke-width="1"/>
+          <circle cx="16" cy="10" r="1.5" fill="#1A1A1A"/>
+        </svg>
+        <span class="text">Myra</span>
+      </div>
+    </div>
+    <p class="desc">An eye symbol for "mira" (to look, to see). The iris uses your blush accent. Meaningful.</p>
+  </div>
+
+</div>
+
+<!-- Show how each looks in a nav bar -->
+<h1 style="margin-top: 80px;">In Context &mdash; Navigation Bar</h1>
+
+<div style="max-width: 900px; margin: 30px auto; padding: 0 40px; display: flex; flex-direction: column; gap: 16px;">
+
+  <div class="nav-preview logo-a">
+    <div class="preview" style="margin:0; gap:6px;">
+      <div class="mark" style="width:28px;height:28px;font-size:13px;"><em>M</em></div>
+      <span style="font-size:18px; letter-spacing:0.5px;">Myra</span>
+    </div>
+    <div class="nav-links"><span>Discover</span><span>Bucket List</span></div>
+  </div>
+
+  <div class="nav-preview logo-b">
+    <div class="preview" style="margin:0;">
+      <span class="mark" style="font-size:22px;">Myra<span class="dot" style="width:4px;height:4px;"></span></span>
+    </div>
+    <div class="nav-links"><span>Discover</span><span>Bucket List</span></div>
+  </div>
+
+  <div class="nav-preview logo-d">
+    <div class="preview" style="margin:0;">
+      <div class="mark">
+        <span class="text" style="font-size:20px;">Myra</span>
+        <div class="underline" style="height:1.5px;"></div>
+      </div>
+    </div>
+    <div class="nav-links"><span>Discover</span><span>Bucket List</span></div>
+  </div>
+
+  <div class="nav-preview logo-f">
+    <div class="preview" style="margin:0;">
+      <div class="mark" style="gap:7px;">
+        <svg viewBox="0 0 32 20" fill="none" style="width:24px;height:15px;">
+          <path d="M1 10C1 10 7 2 16 2C25 2 31 10 31 10C31 10 25 18 16 18C7 18 1 10 1 10Z" stroke="#1A1A1A" stroke-width="1.2" fill="none"/>
+          <circle cx="16" cy="10" r="4" fill="#EBCFBE" stroke="#1A1A1A" stroke-width="1"/>
+          <circle cx="16" cy="10" r="1.5" fill="#1A1A1A"/>
+        </svg>
+        <span class="text" style="font-size:18px;">Myra</span>
+      </div>
+    </div>
+    <div class="nav-links"><span>Discover</span><span>Bucket List</span></div>
+  </div>
+
+</div>
+
+<div style="height: 80px;"></div>
+</body>
+</html>

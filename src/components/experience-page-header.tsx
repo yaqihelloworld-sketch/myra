@@ -16,9 +16,10 @@ export default function ExperiencePageHeader({
     <div className="mb-12">
       <Link
         href="/bucket-list"
-        className="text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors"
+        className="inline-flex items-center justify-center w-10 h-10 text-lg text-[#1A1A1A]/30 hover:text-[#1A1A1A] transition-colors -ml-2"
+        aria-label={mode === "new" ? t("newExp.back") : t("editExp.back")}
       >
-        &larr; {mode === "new" ? t("newExp.back") : t("editExp.back")}
+        &larr;
       </Link>
       {mode === "new" && (
         <h1 className="font-serif text-3xl mt-6">

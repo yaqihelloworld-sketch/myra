@@ -149,7 +149,7 @@ export default function TripContextForm({
     const months = rec.bestMonths.split(/[-–,]/).map((m) => m.trim());
     const seasons = [...new Set(months.flatMap((m) => seasonMap[m] || []))];
 
-    await fetch("/api/experiences", {
+    const res = await fetch("/api/experiences", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -161,6 +161,18 @@ export default function TripContextForm({
         status: "planned",
       }),
     });
+
+    const saved = await res.json();
+
+    // Attach the photo shown in the recommendation
+    const photo = photos[index];
+    if (photo && saved.id) {
+      await fetch(`/api/experiences/${saved.id}/photos`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(photo),
+      });
+    }
 
     setAddingToList((prev) => {
       const next = new Set(prev);

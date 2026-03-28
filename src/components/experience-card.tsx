@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { formatIndex, parseCommaSeparated } from "@/lib/utils";
 import type { Experience } from "@/lib/types";
+import CardMenu from "./card-menu";
 
 export default function ExperienceCard({
   experience,
@@ -57,6 +60,7 @@ export default function ExperienceCard({
               {experience.doByAge === "60+" ? "60+" : `< ${experience.doByAge}`}
             </span>
           )}
+          <CardMenu experienceId={experience.id} />
         </div>
       </div>
     </Link>
