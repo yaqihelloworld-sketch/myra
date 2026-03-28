@@ -204,7 +204,7 @@ export default function TripContextForm({
             className="w-full bg-transparent border-b-2 border-[#D4D0C8] pb-[12px] pt-0 font-serif text-2xl md:text-4xl focus:border-[#1A1A1A]/30 transition-colors placeholder:text-[#1A1A1A]/15 resize-none leading-snug"
             rows={2}
           />
-          {!hasResults && (
+          {!hasResults && !loading && (
             <div className="flex flex-wrap gap-2 mt-4">
               {PROMPT_SUGGESTIONS.map((s) => (
                 <button
@@ -425,7 +425,7 @@ export default function TripContextForm({
                     >
                       <div className="flex flex-col md:flex-row items-start gap-3 md:gap-4">
                         {/* Thumbnail */}
-                        <div className="shrink-0 w-full h-36 md:w-28 md:h-20 relative overflow-hidden bg-[#D4D0C8]/20">
+                        <div className="shrink-0 w-full h-44 md:w-28 md:h-20 relative overflow-hidden bg-[#D4D0C8]/20">
                           {photos[i] ? (
                             <Image
                               src={photos[i].url || photos[i].thumbUrl}
@@ -433,6 +433,7 @@ export default function TripContextForm({
                               fill
                               className="object-cover"
                               sizes="(max-width: 768px) 100vw, 112px"
+                              quality={80}
                             />
                           ) : (
                             <div className="w-full h-full animate-pulse bg-[#D4D0C8]/30" />
@@ -461,19 +462,19 @@ export default function TripContextForm({
                             <p className="text-sm md:text-xs text-[#1A1A1A]/50 mt-0.5">
                               {rec.country}
                             </p>
-                            <p className="text-sm md:text-xs text-[#1A1A1A]/55 mt-1.5 leading-relaxed line-clamp-3 md:line-clamp-2">
+                            <p className="text-[13px] md:text-xs text-[#1A1A1A]/55 mt-2 leading-relaxed line-clamp-none md:line-clamp-2">
                               {rec.description}
                             </p>
-                            <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2">
-                              <span className="text-xs md:text-[10px] tracking-[0.1em] text-[#1A1A1A]/40">
+                            <div className="flex flex-wrap gap-x-3 gap-y-1.5 mt-3 md:mt-2">
+                              <span className="text-[11px] md:text-[10px] tracking-[0.1em] text-[#1A1A1A]/40">
                                 {rec.bestMonths}
                               </span>
-                              <span className="text-xs md:text-[10px] text-[#1A1A1A]/20">·</span>
-                              <span className="text-xs md:text-[10px] tracking-[0.1em] text-[#1A1A1A]/40">
+                              <span className="text-[11px] md:text-[10px] text-[#1A1A1A]/20">·</span>
+                              <span className="text-[11px] md:text-[10px] tracking-[0.1em] text-[#1A1A1A]/40">
                                 {rec.estimatedDays}d
                               </span>
-                              <span className="text-xs md:text-[10px] text-[#1A1A1A]/20">·</span>
-                              <span className="text-xs md:text-[10px] tracking-[0.1em] text-[#1A1A1A]/40">
+                              <span className="text-[11px] md:text-[10px] text-[#1A1A1A]/20">·</span>
+                              <span className="text-[11px] md:text-[10px] tracking-[0.1em] text-[#1A1A1A]/40">
                                 {rec.estimatedBudget}
                               </span>
                             </div>
