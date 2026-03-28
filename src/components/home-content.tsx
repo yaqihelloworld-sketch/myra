@@ -56,16 +56,60 @@ export default function HomeContent({
 
   return (
     <div className="py-16 md:py-24">
+      <style>{`
+        @keyframes heroReveal {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes heroFade {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        .hero-reveal {
+          opacity: 0;
+          animation: heroReveal 700ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+        .hero-fade {
+          opacity: 0;
+          animation: heroFade 600ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-reveal, .hero-fade {
+            animation: none;
+            opacity: 1;
+          }
+        }
+      `}</style>
+
       {/* Hero */}
       <div className="text-center mb-20">
-        <p className="text-xs italic text-[#1A1A1A]/40 mb-4 tracking-wide">
+        <p
+          className="text-xs italic text-[#1A1A1A]/40 mb-4 tracking-wide hero-fade"
+          style={{ animationDelay: "100ms" }}
+        >
           {t("home.quote")}
         </p>
         <h1 className="font-serif text-4xl md:text-5xl leading-tight mb-4">
           {isCN ? (
-            <>{t("home.heading1")}<strong>{t("home.heading2")}</strong><br />{t("home.heading4")}<strong>{t("home.heading5")}</strong></>
+            <>
+              <span className="inline-block hero-reveal" style={{ animationDelay: "300ms" }}>
+                {t("home.heading1")}<strong>{t("home.heading2")}</strong>
+              </span>
+              <br />
+              <span className="inline-block hero-reveal" style={{ animationDelay: "450ms" }}>
+                {t("home.heading4")}<strong>{t("home.heading5")}</strong>
+              </span>
+            </>
           ) : (
-            <>{t("home.heading1")}<br /><em>{t("home.heading2")}</em>{t("home.heading3")}</>
+            <>
+              <span className="inline-block hero-reveal" style={{ animationDelay: "300ms" }}>
+                {t("home.heading1")}
+              </span>
+              <br />
+              <span className="inline-block hero-reveal" style={{ animationDelay: "500ms" }}>
+                <em>{t("home.heading2")}</em>{t("home.heading3")}
+              </span>
+            </>
           )}
         </h1>
       </div>
@@ -73,28 +117,9 @@ export default function HomeContent({
       {/* Intent Cards */}
       <div className="grid md:grid-cols-2 gap-3 max-w-2xl mx-auto mb-20">
         <Link
-          href="/bucket-list/new"
-          className="bg-white p-5 md:p-6 rounded-lg shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.03)] group hover:bg-[#EBCFBE] active:bg-[#EBCFBE] transition-colors"
-        >
-          <Image
-            src="/book.svg"
-            alt=""
-            width={44}
-            height={44}
-            className="mb-3 opacity-75 group-hover:opacity-100 group-active:opacity-100 transition-opacity"
-            aria-hidden="true"
-          />
-          <h2 className="font-serif text-lg md:text-xl mb-1.5">
-            {t("home.addBucketList")}
-          </h2>
-          <p className="text-sm md:text-xs text-[#1A1A1A]/40 leading-relaxed">
-            {t("home.addBucketListDesc")}
-          </p>
-        </Link>
-
-        <Link
           href="/trips/new"
-          className="bg-white p-5 md:p-6 rounded-lg shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.03)] group hover:bg-[#EBCFBE] active:bg-[#EBCFBE] transition-colors"
+          className="bg-white p-5 md:p-6 rounded-lg shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.03)] group hover:bg-[#EBCFBE] active:bg-[#EBCFBE] transition-colors hero-reveal"
+          style={{ animationDelay: "700ms" }}
         >
           <Image
             src="/globe-icon.svg"
@@ -111,10 +136,31 @@ export default function HomeContent({
             {t("home.discoverTripDesc")}
           </p>
         </Link>
+
+        <Link
+          href="/bucket-list/new"
+          className="bg-white p-5 md:p-6 rounded-lg shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.03)] group hover:bg-[#EBCFBE] active:bg-[#EBCFBE] transition-colors hero-reveal"
+          style={{ animationDelay: "850ms" }}
+        >
+          <Image
+            src="/book.svg"
+            alt=""
+            width={44}
+            height={44}
+            className="mb-3 opacity-75 group-hover:opacity-100 group-active:opacity-100 transition-opacity"
+            aria-hidden="true"
+          />
+          <h2 className="font-serif text-lg md:text-xl mb-1.5">
+            {t("home.addBucketList")}
+          </h2>
+          <p className="text-sm md:text-xs text-[#1A1A1A]/40 leading-relaxed">
+            {t("home.addBucketListDesc")}
+          </p>
+        </Link>
       </div>
 
       {/* Stats */}
-      <div className="flex justify-center gap-8 md:gap-12 text-center">
+      <div className="flex justify-center gap-8 md:gap-12 text-center hero-fade" style={{ animationDelay: "1000ms" }}>
         <Link href="/bucket-list?tab=wishlist" className="group transition-transform hover:-translate-y-0.5">
           <p className="font-serif text-2xl tabular-nums group-hover:text-[#EBCFBE] transition-colors">
             <AnimatedCount value={wishlistCount} />

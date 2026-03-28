@@ -203,22 +203,24 @@ export default function TripContextForm({
             className="w-full bg-transparent border-b-2 border-[#D4D0C8] pb-[12px] pt-0 font-serif text-2xl md:text-4xl focus:border-[#1A1A1A]/30 transition-colors placeholder:text-[#1A1A1A]/15 resize-none leading-snug"
             rows={2}
           />
-          <div className="flex flex-wrap gap-2 mt-4">
-            {PROMPT_SUGGESTIONS.map((s) => (
-              <button
-                key={s}
-                type="button"
-                onClick={() => setPrompt(s)}
-                className={`px-4 py-2.5 md:px-3.5 md:py-2 text-[13px] md:text-[11px] tracking-[0.03em] rounded-md border transition-colors ${
-                  prompt === s
-                    ? "border-[#1A1A1A]/30 text-[#1A1A1A]/70"
-                    : "border-[#D4D0C8] text-[#1A1A1A]/40 hover:border-[#1A1A1A]/30 hover:text-[#1A1A1A]/60"
-                }`}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
+          {!hasResults && (
+            <div className="flex flex-wrap gap-2 mt-4">
+              {PROMPT_SUGGESTIONS.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => setPrompt(s)}
+                  className={`px-4 py-2.5 md:px-3.5 md:py-2 text-[13px] md:text-[11px] tracking-[0.03em] rounded-md border transition-colors ${
+                    prompt === s
+                      ? "border-[#1A1A1A]/30 text-[#1A1A1A]/70"
+                      : "border-[#D4D0C8] text-[#1A1A1A]/40 hover:border-[#1A1A1A]/30 hover:text-[#1A1A1A]/60"
+                  }`}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Secondary: Quick params — compact inline row */}
@@ -420,9 +422,9 @@ export default function TripContextForm({
                       key={i}
                       className={`py-5 md:py-5 group ${i > 0 ? "border-t border-[#D4D0C8]/50 md:border-[#D4D0C8]" : "border-t border-[#D4D0C8]"}`}
                     >
-                      <div className="flex items-start gap-4">
+                      <div className="flex flex-col md:flex-row items-start gap-3 md:gap-4">
                         {/* Thumbnail */}
-                        <div className="shrink-0 w-24 h-[4.5rem] md:w-28 md:h-20 relative overflow-hidden bg-[#D4D0C8]/20">
+                        <div className="shrink-0 w-full h-36 md:w-28 md:h-20 relative overflow-hidden bg-[#D4D0C8]/20">
                           {photos[i] ? (
                             <Image
                               src={photos[i].thumbUrl}
@@ -458,7 +460,7 @@ export default function TripContextForm({
                             <p className="text-sm md:text-xs text-[#1A1A1A]/50 mt-0.5">
                               {rec.country}
                             </p>
-                            <p className="text-sm md:text-xs text-[#1A1A1A]/55 mt-1.5 leading-relaxed line-clamp-2">
+                            <p className="text-sm md:text-xs text-[#1A1A1A]/55 mt-1.5 leading-relaxed line-clamp-3 md:line-clamp-2">
                               {rec.description}
                             </p>
                             <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2">

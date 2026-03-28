@@ -4,7 +4,8 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import ExperienceCard from "./experience-card";
 import type { Experience } from "@/lib/types";
 import { parseCommaSeparated, deriveCategory, type ExperienceCategory } from "@/lib/utils";
-import { LayoutGrid, List, MapPin, ChevronDown } from "lucide-react";
+import { LayoutGrid, List, MapPin, ChevronDown, Map } from "lucide-react";
+import MapView from "./map-view";
 import Image from "next/image";
 import Link from "next/link";
 import { useI18n } from "@/lib/i18n";
@@ -13,7 +14,7 @@ import CardMenu from "./card-menu";
 import PhotoPicker from "./photo-picker";
 
 type Tab = "wishlist" | "planned" | "visited";
-type ViewMode = "card" | "list";
+type ViewMode = "card" | "list" | "map";
 type SortMode = "newest" | "az" | "category";
 
 export default function BucketListView({
@@ -80,15 +81,15 @@ export default function BucketListView({
   const categoryGroups = useMemo(() => {
     if (sort !== "category") return null;
     const groups: { category: ExperienceCategory; label: string; items: Experience[] }[] = [];
-    const catMap = new Map<ExperienceCategory, Experience[]>();
+    const catMap: Record<string, Experience[]> = {};
     for (const exp of items) {
       const cat = deriveCategory(exp.name);
-      if (!catMap.has(cat)) catMap.set(cat, []);
-      catMap.get(cat)!.push(exp);
+      if (!catMap[cat]) catMap[cat] = [];
+      catMap[cat].push(exp);
     }
     const order: ExperienceCategory[] = ["adventure", "nature", "cultural", "festival", "city", "food", "wellness", "other"];
     for (const cat of order) {
-      const catItems = catMap.get(cat);
+      const catItems = catMap[cat];
       if (catItems && catItems.length > 0) {
         groups.push({ category: cat, label: t(`cat.${cat}` as any), items: catItems });
       }
@@ -207,12 +208,27 @@ export default function BucketListView({
           >
             <List size={16} />
           </button>
+          <button
+            onClick={() => setView("map")}
+            className={`p-3 md:p-2.5 transition-colors ${
+              view === "map"
+                ? "bg-[#1A1A1A] text-white"
+                : "text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60"
+            }`}
+            aria-label="Map view"
+            aria-pressed={view === "map"}
+          >
+            <Map size={16} />
+          </button>
         </div>
         </div>
       </div>
 
-      {/* Empty state */}
-      {items.length === 0 ? (
+      {/* Map view — shows all experiences */}
+      {view === "map" ? (
+        <MapView experiences={experiences} />
+      ) : /* Empty state */
+      items.length === 0 ? (
         <div className="text-center py-10 md:py-16 border-t border-[#D4D0C8]">
           <p className="font-serif text-lg mb-1">
             {tab === "wishlist" ? t("bucket.emptyWishlist") : tab === "planned" ? t("bucket.emptyPlanned") : t("bucket.emptyVisited")}
