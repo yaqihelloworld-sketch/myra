@@ -201,17 +201,17 @@ export default function TripContextForm({
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder={t("discover.placeholder")}
-            className="w-full bg-transparent border-b-2 border-[#D4D0C8] pb-[12px] pt-0 font-serif text-2xl md:text-4xl focus:border-[#1A1A1A]/30 transition-colors placeholder:text-[#1A1A1A]/15 resize-none leading-snug"
+            className="w-full bg-transparent border-b-2 border-[#D4D0C8] pb-2 md:pb-[12px] pt-0 font-serif text-xl md:text-4xl focus:border-[#1A1A1A]/30 transition-colors placeholder:text-[#1A1A1A]/15 resize-none leading-snug"
             rows={2}
           />
           {!loading && !result && (
-            <div className="flex flex-wrap gap-2 mt-4">
+            <div className="flex flex-wrap gap-1.5 md:gap-2 mt-3 md:mt-4">
               {PROMPT_SUGGESTIONS.map((s) => (
                 <button
                   key={s}
                   type="button"
                   onClick={() => setPrompt(s)}
-                  className={`px-4 py-2.5 md:px-3.5 md:py-2 text-[13px] md:text-[11px] tracking-[0.03em] rounded-md border transition-colors ${
+                  className={`px-3 py-2 md:px-3.5 md:py-2 text-[11px] md:text-[11px] tracking-[0.03em] rounded-md border transition-colors ${
                     prompt === s
                       ? "border-[#1A1A1A]/30 text-[#1A1A1A]/70"
                       : "border-[#D4D0C8] text-[#1A1A1A]/40 hover:border-[#1A1A1A]/30 hover:text-[#1A1A1A]/60"
