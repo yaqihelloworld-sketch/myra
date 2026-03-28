@@ -15,10 +15,13 @@ export default function AuthGate({ children }: { children: React.ReactNode }) {
 
   if (!session?.user) {
     return (
-      <div className="flex flex-col items-center justify-center py-32 text-center">
-        <p className="font-serif text-2xl mb-3">Sign in to continue</p>
-        <p className="text-sm text-[#1A1A1A]/40 mb-8">
-          Your bucket list and trips are saved to your account.
+      <div className="flex flex-col items-center justify-center py-32 text-center px-6">
+        <p className="font-serif text-2xl md:text-3xl mb-3">Your dreams are waiting</p>
+        <p className="text-sm text-[#1A1A1A]/50 mb-2 max-w-sm leading-relaxed">
+          Sign in to start building your personal vision board of places and experiences.
+        </p>
+        <p className="text-xs text-[#1A1A1A]/30 mb-8 max-w-xs">
+          Your list is private to you — only you can see what you save.
         </p>
         <button
           onClick={() => signIn("google")}
