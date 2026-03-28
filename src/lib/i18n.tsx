@@ -81,7 +81,7 @@ const translations = {
   "discover.days": { en: "Days", zh: "天数" },
   "discover.budget": { en: "Budget", zh: "预算" },
   "discover.any": { en: "Any", zh: "不限" },
-  "discover.whatElse": { en: "What else is important?", zh: "还需要考虑这些" },
+  "discover.whatElse": { en: "What else is important? (optional)", zh: "还需要考虑这些（选填）" },
   "discover.whatElsePrefix": { en: "What else", zh: "其他" },
   "discover.travelingWith": { en: "Traveling with", zh: "旅伴" },
   "discover.ageRange": { en: "Make this happen in my...", zh: "适合年龄段" },

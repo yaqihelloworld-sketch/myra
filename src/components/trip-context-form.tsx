@@ -225,7 +225,7 @@ export default function TripContextForm({
         </div>
 
         {/* Secondary: Quick params — collapse on mobile when results showing */}
-        <div className={`grid grid-cols-3 gap-4 mb-4 ${hasResults ? "hidden md:grid" : ""}`}>
+        <div className={`grid grid-cols-2 gap-4 mb-4 ${hasResults ? "hidden md:grid" : ""}`}>
           <div>
             <label htmlFor="discover-month" className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-1 md:mb-0.5 block">{t("discover.month")}</label>
             <select
@@ -253,17 +253,6 @@ export default function TripContextForm({
               className="w-full bg-transparent border-b border-[#D4D0C8] py-2.5 md:py-1.5 text-base md:text-sm focus:border-[#1A1A1A]/40 transition-colors placeholder:text-[#1A1A1A]/25"
             />
           </div>
-          <div>
-            <label htmlFor="discover-budget" className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-1 md:mb-0.5 block">{t("discover.budget")}</label>
-            <input
-              id="discover-budget"
-              type="text"
-              value={budget}
-              onChange={(e) => setBudget(e.target.value)}
-              placeholder="$2000"
-              className="w-full bg-transparent border-b border-[#D4D0C8] py-2.5 md:py-1.5 text-base md:text-sm focus:border-[#1A1A1A]/40 transition-colors placeholder:text-[#1A1A1A]/25"
-            />
-          </div>
         </div>
 
         {/* Tertiary: Collapsible filters — hidden on mobile when results showing */}
@@ -274,14 +263,25 @@ export default function TripContextForm({
           className={`text-xs tracking-[0.1em] uppercase text-[#1A1A1A]/30 hover:text-[#1A1A1A]/50 transition-colors mb-4 flex items-center gap-1.5 ${hasResults ? "hidden md:flex" : ""}`}
         >
           <span className={`text-[7px] inline-block transition-transform duration-300 ${showFilters ? "rotate-90" : ""}`} style={{ transitionTimingFunction: "cubic-bezier(0.25, 1, 0.5, 1)" }}>▶</span>
-          {companion || ageRange
-            ? `${t("discover.whatElsePrefix")}${companion ? ` · ${t(`partner.${companion}` as any)}` : ""}${ageRange ? ` · ${t(`age.${ageRange}` as any)}` : ""}`
+          {companion || ageRange || budget
+            ? `${t("discover.whatElsePrefix")}${budget ? ` · ${budget}` : ""}${companion ? ` · ${t(`partner.${companion}` as any)}` : ""}${ageRange ? ` · ${t(`age.${ageRange}` as any)}` : ""}`
             : t("discover.whatElse")}
         </button>
 
         <div className={`grid transition-[grid-template-rows] duration-350 ${showFilters ? "grid-rows-[1fr]" : "grid-rows-[0fr]"} ${hasResults ? "hidden md:grid" : ""}`} style={{ transitionDuration: "350ms", transitionTimingFunction: "cubic-bezier(0.25, 1, 0.5, 1)" }}>
           <div className="overflow-hidden">
           <div className="space-y-4 mb-4 pl-3 border-l border-[#D4D0C8]/50">
+            <div>
+              <label htmlFor="discover-budget" className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-1 md:mb-0.5 block">{t("discover.budget")}</label>
+              <input
+                id="discover-budget"
+                type="text"
+                value={budget}
+                onChange={(e) => setBudget(e.target.value)}
+                placeholder="$2000"
+                className="w-full bg-transparent border-b border-[#D4D0C8] py-2.5 md:py-1.5 text-base md:text-sm focus:border-[#1A1A1A]/40 transition-colors placeholder:text-[#1A1A1A]/25"
+              />
+            </div>
             <div>
               <label className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-2 md:mb-1.5 block">{t("discover.travelingWith")}</label>
               <div className="flex flex-wrap gap-1.5 md:gap-1" role="group" aria-label={t("discover.travelingWith")}>
