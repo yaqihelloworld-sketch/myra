@@ -275,7 +275,7 @@ export default function TripContextForm({
         >
           <span className={`text-[7px] inline-block transition-transform duration-300 ${showFilters ? "rotate-90" : ""}`} style={{ transitionTimingFunction: "cubic-bezier(0.25, 1, 0.5, 1)" }}>▶</span>
           {companion || ageRange
-            ? `${t("discover.whatElsePrefix")}${companion ? ` · ${companion}` : ""}${ageRange ? ` · ${ageRange}` : ""}`
+            ? `${t("discover.whatElsePrefix")}${companion ? ` · ${t(`partner.${companion}` as any)}` : ""}${ageRange ? ` · ${t(`age.${ageRange}` as any)}` : ""}`
             : t("discover.whatElse")}
         </button>
 
