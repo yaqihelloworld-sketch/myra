@@ -38,10 +38,16 @@ export default function ExperienceForm({
   const [status, setStatus] = useState(experience?.status || "wishlist");
   const [saving, setSaving] = useState(false);
 
-  // Best time recommendation
-  const [fetchingBestTime, setFetchingBestTime] = useState(false);
-  const [bestMonths, setBestMonths] = useState("");
-  const [bestTimeTip, setBestTimeTip] = useState("");
+  // AI suggestions
+  const [fetchingSuggestion, setFetchingSuggestion] = useState(false);
+  const [suggestion, setSuggestion] = useState<{
+    bestMonths?: string;
+    tip?: string;
+    idealSeasons?: string[];
+    country?: string;
+    estimatedDays?: number;
+  } | null>(null);
+  const [suggestionAccepted, setSuggestionAccepted] = useState(false);
 
   // Photo state
   const [photos, setPhotos] = useState<ExperiencePhoto[]>([]);
@@ -66,11 +72,11 @@ export default function ExperienceForm({
       : [...arr, item];
   }
 
-  async function handleBestTime() {
+  async function handleAISuggest() {
     if (!name.trim()) return;
-    setFetchingBestTime(true);
-    setBestMonths("");
-    setBestTimeTip("");
+    setFetchingSuggestion(true);
+    setSuggestion(null);
+    setSuggestionAccepted(false);
 
     try {
       const res = await fetch("/api/ai/autofill", {
@@ -79,18 +85,22 @@ export default function ExperienceForm({
         body: JSON.stringify({ name }),
       });
       const data = await res.json();
-
       if (data.error) throw new Error(data.error);
-
-      if (data.bestMonths) setBestMonths(data.bestMonths);
-      if (data.tip) setBestTimeTip(data.tip);
-      if (selectedSeasons.length === 0 && data.idealSeasons)
-        setSelectedSeasons(data.idealSeasons);
+      setSuggestion(data);
     } catch {
       // Silently fail
     }
 
-    setFetchingBestTime(false);
+    setFetchingSuggestion(false);
+  }
+
+  function acceptSuggestion() {
+    if (!suggestion) return;
+    if (suggestion.idealSeasons && selectedSeasons.length === 0)
+      setSelectedSeasons(suggestion.idealSeasons);
+    if (suggestion.country && !country)
+      setCountry(suggestion.country);
+    setSuggestionAccepted(true);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -325,6 +335,62 @@ export default function ExperienceForm({
               ))}
             </div>
         </div>
+
+        {/* AI Quick Suggest — only on add flow */}
+        {!isEdit && (
+          <div>
+            {!suggestion && !fetchingSuggestion && (
+              <button
+                type="button"
+                onClick={handleAISuggest}
+                disabled={!name.trim()}
+                className="inline-flex items-center gap-1.5 text-[10px] tracking-[0.12em] uppercase text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              >
+                <Sparkles size={12} />
+                {t("form.aiSuggest")}
+              </button>
+            )}
+            {fetchingSuggestion && (
+              <div className="flex items-center gap-2 py-3 px-4 border border-[#D4D0C8]/50 bg-[#F7F5F0]">
+                <div className="w-3 h-3 border border-[#D4D0C8] border-t-[#1A1A1A]/40 rounded-full animate-spin" />
+                <span className="text-[10px] tracking-[0.1em] uppercase text-[#1A1A1A]/40">{t("form.aiThinking")}</span>
+              </div>
+            )}
+            {suggestion && !suggestionAccepted && (
+              <div className="py-3 px-4 border border-[#EBCFBE]/50 bg-[#EBCFBE]/5 space-y-2">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-[10px] tracking-[0.1em] uppercase text-[#1A1A1A]/40 flex items-center gap-1">
+                    <Sparkles size={10} />
+                    {t("form.aiSuggestion")}
+                  </p>
+                  <button type="button" onClick={() => setSuggestion(null)} className="text-[#1A1A1A]/20 hover:text-[#1A1A1A]/50">
+                    <X size={12} />
+                  </button>
+                </div>
+                {suggestion.bestMonths && (
+                  <p className="text-xs text-[#1A1A1A]/60">
+                    <span className="text-[#1A1A1A]/30">{t("form.aiBestTime")}</span> {suggestion.bestMonths}
+                  </p>
+                )}
+                {suggestion.tip && (
+                  <p className="text-xs text-[#1A1A1A]/40 italic">{suggestion.tip}</p>
+                )}
+                <button
+                  type="button"
+                  onClick={acceptSuggestion}
+                  className="text-[10px] tracking-[0.12em] uppercase text-[#1A1A1A]/50 hover:text-[#1A1A1A] border border-[#D4D0C8] px-3 py-1.5 transition-colors"
+                >
+                  {t("form.aiAccept")}
+                </button>
+              </div>
+            )}
+            {suggestionAccepted && (
+              <p className="text-[10px] tracking-[0.1em] text-[#1A1A1A]/30 flex items-center gap-1">
+                <Sparkles size={10} /> {t("form.aiApplied")}
+              </p>
+            )}
+          </div>
+        )}
 
         <div className="border-t border-[#D4D0C8]/50 md:border-[#D4D0C8] pt-6 flex items-center gap-4">
           <button
