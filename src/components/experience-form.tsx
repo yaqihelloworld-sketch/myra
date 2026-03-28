@@ -211,7 +211,7 @@ export default function ExperienceForm({
               className="object-cover"
               sizes="100vw"
               priority
-              quality={85}
+              unoptimized
             />
             {/* Gradient overlay for readability */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#F7F5F0] via-transparent to-transparent" />
