@@ -78,7 +78,7 @@ const translations = {
   "discover.chip2": { en: "Push my comfort zone", zh: "突破舒适圈" },
   "discover.chip3": { en: "Slow & restorative escape", zh: "慢节奏疗愈之旅" },
   "discover.month": { en: "Which month?", zh: "哪个月？" },
-  "discover.days": { en: "Days", zh: "天数" },
+  "discover.days": { en: "How long?", zh: "多长时间？" },
   "discover.budget": { en: "Budget", zh: "预算" },
   "discover.any": { en: "Open for suggestion", zh: "帮我推荐" },
   "discover.weekend": { en: "Weekend", zh: "周末" },
