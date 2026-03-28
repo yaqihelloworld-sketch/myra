@@ -9,9 +9,8 @@ import MapView from "./map-view";
 import Image from "next/image";
 import Link from "next/link";
 import { useI18n } from "@/lib/i18n";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import CardMenu from "./card-menu";
-import PhotoPicker from "./photo-picker";
 
 type Tab = "wishlist" | "planned" | "visited";
 type ViewMode = "card" | "list" | "map";
@@ -302,27 +301,13 @@ function PolaroidCard({
   const seasons = parseCommaSeparated(experience.idealSeasons);
   const partnerTypes = parseCommaSeparated(experience.idealPartnerTypes);
   const { t } = useI18n();
-  const [showPicker, setShowPicker] = useState(false);
-  const router = useRouter();
-
-  async function handlePhotoSelect(selectedPhoto: any) {
-    await fetch(`/api/experiences/${experience.id}/photos`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(selectedPhoto),
-    });
-    setShowPicker(false);
-    router.refresh();
-  }
-
   return (
-    <>
       <div className="block group">
         <div className="bg-white p-2.5 pb-4 shadow-[0_1px_3px_rgba(0,0,0,0.08),0_4px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_2px_8px_rgba(0,0,0,0.12),0_8px_24px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-[box-shadow,transform] duration-300 h-full flex flex-col" style={{ transitionTimingFunction: "cubic-bezier(0.25, 1, 0.5, 1)" }}>
           {/* Photo */}
           <div className="aspect-[4/3] relative overflow-hidden bg-[#F0EDE6]">
-            {photo ? (
-              <Link href={`/bucket-list/${experience.id}`}>
+            <Link href={`/bucket-list/${experience.id}`} className="block w-full h-full">
+              {photo ? (
                 <Image
                   src={photo.url}
                   alt={photo.altDescription || experience.name}
@@ -330,19 +315,12 @@ function PolaroidCard({
                   className="object-cover group-hover:scale-[1.03] transition-transform duration-500"
                   sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 />
-              </Link>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setShowPicker(true)}
-                className="w-full h-full flex flex-col items-center justify-center gap-1.5 group-hover:bg-[#EBE8E1] transition-colors cursor-pointer"
-              >
-                <MapPin size={16} strokeWidth={1} className="text-[#1A1A1A]/10 group-hover:text-[#1A1A1A]/25 transition-colors" />
-                <span className="text-[8px] tracking-[0.15em] uppercase text-[#1A1A1A]/0 group-hover:text-[#1A1A1A]/30 transition-colors">
-                  + photo
-                </span>
-              </button>
-            )}
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center gap-1.5">
+                  <MapPin size={16} strokeWidth={1} className="text-[#1A1A1A]/10" />
+                </div>
+              )}
+            </Link>
 
             {/* Status overlay */}
             {experience.status === "visited" && (
@@ -396,19 +374,5 @@ function PolaroidCard({
           </Link>
         </div>
       </div>
-
-      {/* Photo picker modal */}
-      {showPicker && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm" onClick={() => setShowPicker(false)}>
-          <div className="bg-[#F7F5F0] w-full max-w-md mx-4 max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-            <PhotoPicker
-              initialQuery={experience.name}
-              onSelect={handlePhotoSelect}
-              onClose={() => setShowPicker(false)}
-            />
-          </div>
-        </div>
-      )}
-    </>
   );
 }
