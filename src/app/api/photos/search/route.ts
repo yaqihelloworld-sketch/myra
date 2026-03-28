@@ -41,5 +41,7 @@ export async function GET(request: NextRequest) {
     })
   );
 
-  return NextResponse.json(photos);
+  const response = NextResponse.json(photos);
+  response.headers.set("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=86400");
+  return response;
 }

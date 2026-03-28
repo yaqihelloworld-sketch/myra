@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { experiences, experiencePhotos } from "@/db/schema";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, inArray } from "drizzle-orm";
 import BucketListView from "@/components/bucket-list-view";
 import BucketListSuggestions from "@/components/bucket-list-suggestions";
 import BucketListHeader from "@/components/bucket-list-header";
@@ -25,15 +25,21 @@ export default async function BucketListPage() {
     .where(eq(experiences.userId, userId))
     .orderBy(desc(experiences.createdAt));
 
-  // Fetch first photo for each experience
-  const photos = await db.select().from(experiencePhotos);
+  // Fetch first photo for each experience — filtered to user's experiences only
+  const expIds = allExperiences.map((e: { id: number }) => e.id);
   const photoMap: Record<number, { url: string; altDescription: string | null }> = {};
-  for (const photo of photos) {
-    if (!photoMap[photo.experienceId]) {
-      photoMap[photo.experienceId] = {
-        url: photo.url,
-        altDescription: photo.altDescription,
-      };
+  if (expIds.length > 0) {
+    const photos = await db
+      .select()
+      .from(experiencePhotos)
+      .where(inArray(experiencePhotos.experienceId, expIds));
+    for (const photo of photos) {
+      if (!photoMap[photo.experienceId]) {
+        photoMap[photo.experienceId] = {
+          url: photo.url,
+          altDescription: photo.altDescription,
+        };
+      }
     }
   }
 

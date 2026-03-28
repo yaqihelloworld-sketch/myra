@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { experiences } from "@/db/schema";
-import { eq, and, sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import HomeContent from "@/components/home-content";
 import { auth } from "@/lib/auth";
 
@@ -10,26 +10,25 @@ export default async function Home() {
   const session = await auth();
   const userId = session?.user?.id || "";
 
-  const wishlistCount = await db
-    .select({ count: sql<number>`count(*)` })
+  const counts = await db
+    .select({
+      status: experiences.status,
+      count: sql<number>`count(*)`,
+    })
     .from(experiences)
-    .where(and(eq(experiences.status, "wishlist"), eq(experiences.userId, userId)));
+    .where(eq(experiences.userId, userId))
+    .groupBy(experiences.status);
 
-  const plannedCount = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(experiences)
-    .where(and(eq(experiences.status, "planned"), eq(experiences.userId, userId)));
-
-  const visitedCount = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(experiences)
-    .where(and(eq(experiences.status, "visited"), eq(experiences.userId, userId)));
+  const countMap: Record<string, number> = {};
+  for (const row of counts) {
+    countMap[row.status] = row.count;
+  }
 
   return (
     <HomeContent
-      wishlistCount={wishlistCount[0].count}
-      plannedCount={plannedCount[0].count}
-      visitedCount={visitedCount[0].count}
+      wishlistCount={countMap["wishlist"] || 0}
+      plannedCount={countMap["planned"] || 0}
+      visitedCount={countMap["visited"] || 0}
     />
   );
 }
