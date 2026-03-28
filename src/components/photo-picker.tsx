@@ -19,15 +19,21 @@ export default function PhotoPicker({
   const [query, setQuery] = useState(initialQuery);
   const [results, setResults] = useState<UnsplashResult[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const { t } = useI18n();
 
-  const searchPhotos = async (q: string) => {
+  const searchPhotos = async (q: string, pageNum = 1, append = false) => {
     if (!q.trim()) return;
-    setLoading(true);
-    const res = await fetch(`/api/photos/search?query=${encodeURIComponent(q)}`);
+    if (append) setLoadingMore(true); else setLoading(true);
+    const res = await fetch(`/api/photos/search?query=${encodeURIComponent(q)}&page=${pageNum}`);
     const data = await res.json();
-    setResults(data);
+    setResults((prev) => append ? [...prev, ...data] : data);
+    setHasMore(data.length >= 9);
+    setPage(pageNum);
     setLoading(false);
+    setLoadingMore(false);
   };
 
   useEffect(() => {
@@ -57,13 +63,13 @@ export default function PhotoPicker({
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), searchPhotos(query))}
+          onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), searchPhotos(query, 1))}
           placeholder={t("photos.searchPlaceholder")}
           className="flex-1 bg-transparent border-b border-[#D4D0C8] py-2 text-sm focus:border-[#1A1A1A] transition-colors placeholder:text-[#1A1A1A]/25"
         />
         <button
           type="button"
-          onClick={() => searchPhotos(query)}
+          onClick={() => searchPhotos(query, 1)}
           className="border border-[#D4D0C8] px-4 py-2 text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/50 hover:border-[#1A1A1A]/30 transition-colors"
         >
           {t("photos.search")}
@@ -79,29 +85,41 @@ export default function PhotoPicker({
           {t("photos.noResults")}
         </p>
       ) : (
-        <div className="grid grid-cols-3 gap-2">
-          {results.map((photo) => (
+        <>
+          <div className="grid grid-cols-3 gap-2">
+            {results.map((photo, i) => (
+              <button
+                key={`${photo.unsplashId}-${i}`}
+                type="button"
+                onClick={() => onSelect(photo)}
+                className="relative aspect-[3/2] overflow-hidden group"
+              >
+                <Image
+                  src={photo.thumbUrl}
+                  alt={photo.altDescription || "Travel photo"}
+                  fill
+                  className="object-cover group-hover:opacity-80 transition-opacity"
+                  sizes="200px"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-end">
+                  <span className="text-[8px] text-white/0 group-hover:text-white/80 px-2 py-1 transition-colors truncate w-full">
+                    {photo.photographerName}
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
+          {hasMore && (
             <button
-              key={photo.unsplashId}
               type="button"
-              onClick={() => onSelect(photo)}
-              className="relative aspect-[3/2] overflow-hidden group"
+              onClick={() => searchPhotos(query, page + 1, true)}
+              disabled={loadingMore}
+              className="w-full mt-3 py-2 text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60 transition-colors border border-[#D4D0C8] hover:border-[#1A1A1A]/30"
             >
-              <Image
-                src={photo.thumbUrl}
-                alt={photo.altDescription || "Travel photo"}
-                fill
-                className="object-cover group-hover:opacity-80 transition-opacity"
-                sizes="200px"
-              />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-end">
-                <span className="text-[8px] text-white/0 group-hover:text-white/80 px-2 py-1 transition-colors truncate w-full">
-                  {photo.photographerName}
-                </span>
-              </div>
+              {loadingMore ? t("photos.searching") : t("photos.loadMore")}
             </button>
-          ))}
-        </div>
+          )}
+        </>
       )}
 
       <p className="text-[8px] text-[#1A1A1A]/30 mt-3">

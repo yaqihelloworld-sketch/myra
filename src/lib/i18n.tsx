@@ -164,6 +164,7 @@ const translations = {
   "photos.searchPlaceholder": { en: "Search for photos...", zh: "搜索照片..." },
   "photos.search": { en: "SEARCH", zh: "搜索" },
   "photos.searching": { en: "Searching...", zh: "搜索中..." },
+  "photos.loadMore": { en: "LOAD MORE", zh: "加载更多" },
   "photos.noResults": { en: "No photos found. Try a different search.", zh: "未找到照片，请尝试其他搜索词。" },
   "photos.attribution": { en: "Photos provided by Unsplash", zh: "照片由 Unsplash 提供" },
 
