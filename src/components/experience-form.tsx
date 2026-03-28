@@ -133,7 +133,7 @@ export default function ExperienceForm({
       }
 
       router.refresh();
-      router.push("/bucket-list");
+      router.push(`/bucket-list?tab=${status}`);
     } catch (err) {
       setSaving(false);
       alert(err instanceof Error ? err.message : "Something went wrong. Please try again.");
@@ -144,7 +144,7 @@ export default function ExperienceForm({
     if (!isEdit) return;
     setSaving(true);
     await fetch(`/api/experiences/${experience.id}`, { method: "DELETE" });
-    router.push("/bucket-list");
+    router.push(`/bucket-list?tab=${status}`);
     router.refresh();
   }
 

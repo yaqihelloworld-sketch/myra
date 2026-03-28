@@ -32,7 +32,7 @@ export default async function EditExperiencePage({
 
   return (
     <div>
-      <ExperiencePageHeader mode="edit" name={result[0].name} />
+      <ExperiencePageHeader mode="edit" name={result[0].name} returnTab={result[0].status} />
       <div className="max-w-xl">
         <ExperienceForm experience={result[0]} />
       </div>
