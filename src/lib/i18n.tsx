@@ -138,6 +138,7 @@ const translations = {
   "form.aiBudget": { en: "Budget:", zh: "预算：" },
   "form.aiAccept": { en: "Apply", zh: "采纳" },
   "form.aiApplied": { en: "Applied!", zh: "已采纳！" },
+  "form.aiDaysUnit": { en: "days", zh: "天" },
   "form.update": { en: "UPDATE", zh: "更新" },
   "form.delete": { en: "DELETE", zh: "删除" },
 

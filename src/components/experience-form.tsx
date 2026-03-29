@@ -397,10 +397,30 @@ export default function ExperienceForm({
                 </button>
               </div>
             )}
-            {suggestionAccepted && (
-              <p className="text-[10px] tracking-[0.1em] text-[#1A1A1A]/30 flex items-center gap-1">
-                <Sparkles size={10} /> {t("form.aiApplied")}
-              </p>
+            {suggestionAccepted && suggestion && (
+              <div className="flex flex-wrap items-center gap-2">
+                <Sparkles size={10} className="text-[#1A1A1A]/20" />
+                {suggestion.bestMonths && (
+                  <span className="inline-flex items-center gap-1 text-[10px] tracking-[0.08em] bg-[#EBCFBE]/20 text-[#1A1A1A]/50 px-2.5 py-1 border border-[#EBCFBE]/30">
+                    {suggestion.bestMonths}
+                  </span>
+                )}
+                {suggestion.estimatedDays && (
+                  <span className="inline-flex items-center gap-1 text-[10px] tracking-[0.08em] bg-[#EBCFBE]/20 text-[#1A1A1A]/50 px-2.5 py-1 border border-[#EBCFBE]/30">
+                    {suggestion.estimatedDays} {t("form.aiDaysUnit")}
+                  </span>
+                )}
+                {suggestion.estimatedBudget && (
+                  <span className="inline-flex items-center gap-1 text-[10px] tracking-[0.08em] bg-[#EBCFBE]/20 text-[#1A1A1A]/50 px-2.5 py-1 border border-[#EBCFBE]/30">
+                    {suggestion.estimatedBudget}
+                  </span>
+                )}
+                {suggestion.idealSeasons && suggestion.idealSeasons.length > 0 && (
+                  <span className="inline-flex items-center gap-1 text-[10px] tracking-[0.08em] bg-[#EBCFBE]/20 text-[#1A1A1A]/50 px-2.5 py-1 border border-[#EBCFBE]/30">
+                    {suggestion.idealSeasons.map(s => t(`formSeason.${s}` as any)).join(", ")}
+                  </span>
+                )}
+              </div>
             )}
           </div>
         )}

@@ -18,11 +18,11 @@ export default function UserMenu() {
         setOpen(false);
       }
     }
-    // Delay adding listener to avoid it catching the same click that opened the menu
+    // Delay adding listener to avoid it catching the same click/tap that opened the menu
     const timer = setTimeout(() => {
       document.addEventListener("mousedown", handleClickOutside);
       document.addEventListener("touchstart", handleClickOutside);
-    }, 10);
+    }, 150);
     return () => {
       clearTimeout(timer);
       document.removeEventListener("mousedown", handleClickOutside);
