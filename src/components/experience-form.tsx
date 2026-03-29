@@ -415,6 +415,14 @@ export default function ExperienceForm({
                     {suggestion.estimatedBudget}
                   </span>
                 )}
+                <button
+                  type="button"
+                  onClick={() => { setSuggestionAccepted(false); setSuggestion(null); handleAISuggest(); }}
+                  className="inline-flex items-center gap-1 text-[10px] tracking-[0.08em] text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60 transition-colors"
+                  title={t("form.aiRefresh")}
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 1 1-3.2-6.87" /><polyline points="21 3 21 9 15 9" /></svg>
+                </button>
               </div>
             )}
           </div>
