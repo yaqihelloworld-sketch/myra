@@ -84,14 +84,17 @@ export async function GET(request: Request) {
         } catch {}
       }
       if (claimUser) {
-        const unclaimed = await client.execute("SELECT COUNT(*) as cnt FROM experiences WHERE user_id = ''");
+        // Claim entries with empty user_id OR user_id = 'dev'
+        const unclaimed = await client.execute("SELECT COUNT(*) as cnt FROM experiences WHERE user_id = '' OR user_id = 'dev'");
         const count = (unclaimed.rows[0] as any).cnt;
         if (Number(count) > 0) {
-          await client.execute({ sql: "UPDATE experiences SET user_id = ? WHERE user_id = ''", args: [claimUser] });
-          await client.execute({ sql: "UPDATE trips SET user_id = ? WHERE user_id = ''", args: [claimUser] });
+          await client.execute({ sql: "UPDATE experiences SET user_id = ? WHERE user_id = '' OR user_id = 'dev'", args: [claimUser] });
+          await client.execute({ sql: "UPDATE trips SET user_id = ? WHERE user_id = '' OR user_id = 'dev'", args: [claimUser] });
           results.push(`Claimed ${count} entries for user ${claimUser}`);
         } else {
-          results.push("No unclaimed entries found");
+          // Show what user_ids exist for debugging
+          const existing = await client.execute("SELECT DISTINCT user_id, COUNT(*) as cnt FROM experiences GROUP BY user_id");
+          results.push(`No unclaimed entries. Existing user_ids: ${JSON.stringify(existing.rows)}`);
         }
       }
 
