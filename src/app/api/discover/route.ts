@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
   }
   const client = new Anthropic({ apiKey });
   const body = await request.json();
-  const { prompt, month, days, companion, ageRange, budget, lang } = body;
+  const { prompt, month, days, companion, ageRange, budget, lang, previousNames } = body;
 
   // Fetch the user's bucket list
   const wishlist = await db
@@ -70,7 +70,7 @@ Rules:
 - Match the energy/vibe of their prompt
 - Keep descriptions concise but evocative
 - ONLY return valid JSON, no markdown or extra text
-- IMPORTANT: Respond in ${lang === "zh" ? "Chinese (简体中文)" : "English"}. All text fields (name, description, matchReason, travelInsight) must be in ${lang === "zh" ? "Chinese" : "English"}. Keep country names, month names, and budget in English/international format.`;
+- IMPORTANT: Respond in ${lang === "zh" ? "Chinese (简体中文)" : "English"}. All text fields (name, description, matchReason, travelInsight) must be in ${lang === "zh" ? "Chinese" : "English"}. Keep country names, month names, and budget in English/international format.${previousNames?.length ? `\n- DO NOT recommend any of these already-shown experiences: ${previousNames.join(", ")}. Suggest completely different destinations.` : ""}`;
 
   const userMessage = [
     prompt ? `My travel intent: "${prompt}"` : "",

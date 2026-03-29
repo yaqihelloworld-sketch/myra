@@ -60,6 +60,7 @@ export default function TripContextForm({
   const thinkingInterval = useRef<ReturnType<typeof setInterval> | null>(null);
   const [photos, setPhotos] = useState<Record<number, PhotoResult>>({});
   const [showFilters, setShowFilters] = useState(false);
+  const [previousNames, setPreviousNames] = useState<string[]>([]);
 
   const PROMPT_SUGGESTIONS = [
     t("discover.chip1"),
@@ -126,11 +127,14 @@ export default function TripContextForm({
       const res = await fetch("/api/discover", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: effectivePrompt, month, days, companion, ageRange, budget, lang }),
+        body: JSON.stringify({ prompt: effectivePrompt, month, days, companion, ageRange, budget, lang, previousNames }),
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       setResult(data);
+      // Track shown names to avoid repeats on "Discover more"
+      const newNames = data.recommendations?.map((r: Recommendation) => r.name) || [];
+      setPreviousNames((prev) => [...prev, ...newNames]);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     }
