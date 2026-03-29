@@ -10,9 +10,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
+    jwt({ token, account, profile }) {
+      // Persist the Google account ID so it's stable across devices
+      if (account?.providerAccountId) {
+        token.googleId = account.providerAccountId;
+      }
+      return token;
+    },
     session({ session, token }) {
-      if (session.user && token.sub) {
-        session.user.id = token.sub;
+      if (session.user) {
+        // Use Google account ID (stable) instead of token.sub (random per device)
+        session.user.id = (token.googleId as string) || token.sub!;
       }
       return session;
     },
