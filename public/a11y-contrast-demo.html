@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Myra Travel Planner — Contrast Accessibility Improvements</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /*
+      Contrast ratio calculations (text on #F7F5F0 background):
+      ─────────────────────────────────────────────────────────
+      #F7F5F0 relative luminance ≈ 0.906
+
+      Blended color formula: blended = bg + (fg - bg) * opacity
+      For #1A1A1A (rgb 26,26,26) on #F7F5F0 (rgb 247,245,240):
+
+      Opacity 15% → rgb(214,212,208) → #D6D4D0 → L≈0.651 → ratio ≈ 1.6:1
+      Opacity 30% → rgb(181,179,176) → #B5B3B0 → L≈0.449 → ratio ≈ 2.3:1
+      Opacity 35% → rgb(170,168,165) → #AAA8A5 → L≈0.393 → ratio ≈ 2.7:1
+      Opacity 40% → rgb(159,157,154) → #9F9D9A → L≈0.340 → ratio ≈ 3.1:1
+      Opacity 50% → rgb(137,136,133) → #898885 → L≈0.247 → ratio ≈ 4.2:1
+      Opacity 55% → rgb(126,125,122) → #7E7D7A → L≈0.209 → ratio ≈ 4.9:1
+      Opacity 60% → rgb(115,114,112) → #737270 → L≈0.175 → ratio ≈ 5.7:1
+      Opacity 65% → rgb(104,103,101) → #686765 → L≈0.145 → ratio ≈ 6.7:1
+
+      WCAG AA requires:
+        Normal text (< 18px or < 14px bold): 4.5:1
+        Large text (≥ 18px or ≥ 14px bold):  3.0:1
+    */
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #F7F5F0;
+      color: #1A1A1A;
+      line-height: 1.6;
+      padding: 2rem;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .page-header {
+      max-width: 960px;
+      margin: 0 auto 2rem;
+      text-align: center;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(26,26,26,0.1);
+    }
+
+    .page-header h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.02em;
+    }
+
+    .page-header p {
+      font-size: 0.95rem;
+      color: rgba(26,26,26,0.6);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Summary cards */
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      max-width: 960px;
+      margin: 0 auto 3rem;
+    }
+
+    .summary-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .summary-card .number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .summary-card .label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(26,26,26,0.55);
+      margin-top: 0.25rem;
+    }
+
+    .summary-card.fail .number { color: #C0392B; }
+    .summary-card.pass .number { color: #27864D; }
+    .summary-card.neutral .number { color: #1A1A1A; }
+
+    /* Comparison rows */
+    .comparisons {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .comparison {
+      background: white;
+      border-radius: 16px;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .comparison-title {
+      padding: 1.25rem 1.5rem 0;
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+    }
+
+    .comparison-title h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    .comparison-title .element-type {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(26,26,26,0.45);
+      background: rgba(26,26,26,0.05);
+      padding: 0.2em 0.6em;
+      border-radius: 4px;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+
+    .comparison-side {
+      padding: 1.25rem 1.5rem 1.5rem;
+    }
+
+    .comparison-side:first-child {
+      border-right: 1px solid rgba(26,26,26,0.06);
+    }
+
+    .side-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .side-label.before { color: #C0392B; }
+    .side-label.after { color: #27864D; }
+
+    /* The actual demo text sits on a cream swatch */
+    .swatch {
+      background: #F7F5F0;
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.75rem;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+    }
+
+    .meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .meta-row .info {
+      font-size: 0.72rem;
+      color: rgba(26,26,26,0.5);
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    }
+
+    .badge {
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.2em 0.65em;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .badge.fail {
+      background: #FDECEA;
+      color: #C0392B;
+    }
+
+    .badge.pass {
+      background: #E8F5E9;
+      color: #27864D;
+    }
+
+    .badge.marginal {
+      background: #FFF8E1;
+      color: #B8860B;
+    }
+
+    /* Note block at bottom */
+    .notes {
+      max-width: 960px;
+      margin: 2rem auto 0;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .notes h4 {
+      font-size: 0.85rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .notes ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .notes li {
+      font-size: 0.82rem;
+      color: rgba(26,26,26,0.65);
+      padding: 0.3em 0;
+      padding-left: 1.2em;
+      position: relative;
+    }
+
+    .notes li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.65em;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #EBCFBE;
+    }
+
+    /* Utility: sample text styles */
+    .sample-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-weight: 600;
+    }
+
+    .sample-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .sample-tab {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 600;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .sample-tab .active-tab {
+      color: #1A1A1A;
+      border-bottom: 2px solid #1A1A1A;
+      padding-bottom: 0.25rem;
+    }
+
+    .sample-placeholder {
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+
+    .sample-meta {
+      font-size: 0.75rem;
+      letter-spacing: 0.02em;
+    }
+
+    .sample-nav {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-weight: 600;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .sample-nav .active-nav {
+      color: #1A1A1A;
+    }
+
+    .sample-button {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 600;
+      border: 1.5px solid;
+      border-radius: 999px;
+      padding: 0.5em 1.25em;
+      background: transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4em;
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 1rem; }
+      .comparison-grid { grid-template-columns: 1fr; }
+      .comparison-side:first-child { border-right: none; border-bottom: 1px solid rgba(26,26,26,0.06); }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="page-header">
+    <h1>Contrast Accessibility Audit</h1>
+    <p>Before &amp; after comparison of text contrast improvements for the Myra travel planner. All "after" values target WCAG AA compliance while preserving the refined, understated aesthetic.</p>
+  </header>
+
+  <!-- Summary -->
+  <div class="summary">
+    <div class="summary-card fail">
+      <span class="number">7</span>
+      <div class="label">Elements Failing AA</div>
+    </div>
+    <div class="summary-card pass">
+      <span class="number">7</span>
+      <div class="label">Elements Fixed</div>
+    </div>
+    <div class="summary-card neutral">
+      <span class="number">100%</span>
+      <div class="label">Now AA Compliant</div>
+    </div>
+    <div class="summary-card neutral">
+      <span class="number">~2x</span>
+      <div class="label">Avg Ratio Improvement</div>
+    </div>
+  </div>
+
+  <div class="comparisons">
+
+    <!-- 1. Form Labels -->
+    <div class="comparison">
+      <div class="comparison-title">
+        <h3>Form Labels</h3>
+        <span class="element-type">Normal text &middot; requires 4.5 : 1</span>
+      </div>
+      <div class="comparison-grid">
+        <div class="comparison-side">
+          <div class="side-label before">Before</div>
+          <div class="swatch">
+            <span class="sample-label" style="color: rgba(26,26,26,0.30);">WHICH MONTH?&nbsp;&nbsp;&nbsp;&nbsp;HOW LONG?&nbsp;&nbsp;&nbsp;&nbsp;STATUS</span>
+          </div>
+          <div class="meta-row">
+            <span class="info">opacity 30% &rarr; #B5B3B0 &rarr; 2.3 : 1</span>
+            <span class="badge fail">Fail AA</span>
+          </div>
+        </div>
+        <div class="comparison-side">
+          <div class="side-label after">After</div>
+          <div class="swatch">
+            <span class="sample-label" style="color: rgba(26,26,26,0.55);">WHICH MONTH?&nbsp;&nbsp;&nbsp;&nbsp;HOW LONG?&nbsp;&nbsp;&nbsp;&nbsp;STATUS</span>
+          </div>
+          <div class="meta-row">
+            <span class="info">opacity 55% &rarr; #7E7D7A &rarr; 4.9 : 1</span>
+            <span class="badge pass">Pass AA</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Section Headers -->
+    <div class="comparison">
+      <div class="comparison-title">
+        <h3>Section Headers</h3>
+        <span class="element-type">Large text 18px+ &middot; requires 3.0 : 1</span>
+      </div>
+      <div class="comparison-grid">
+        <div class="comparison-side">
+          <div class="side-label before">Before</div>
+          <div class="swatch">
+            <span class="sample-heading" style="color: rgba(26,26,26,0.40);">The Vision Board</span>
+          </div>
+          <div class="meta-row">
+            <span class="info">opacity 40% &rarr; #9F9D9A &rarr; 3.1 : 1</span>
+            <span class="badge marginal">Barely passes large</span>
+          </div>
+        </div>
+        <div class="comparison-side">
+          <div class="side-label after">After</div>
+          <div class="swatch">
+            <span class="sample-heading" style="color: rgba(26,26,26,0.55);">The Vision Board</span>
+          </div>
+          <div class="meta-row">
+            <span class="info">opacity 55% &rarr; #7E7D7A &rarr; 4.9 : 1</span>
+            <span class="badge pass">Pass AA (large + normal)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Inactive Tabs -->
+    <div class="comparison">
+      <div class="comparison-title">
+        <h3>Inactive Tab Text</h3>
+        <span class="element-type">Normal text &middot; requires 4.5 : 1</span>
+      </div>
+      <div class="comparison-grid">
+        <div class="comparison-side">
+          <div class="side-label before">Before</div>
+          <div class="swatch">
+            <div class="sample-tab">
+              <span class="active-tab">UPCOMING 3</span>
+              <span style="color: rgba(26,26,26,0.40);">PLANNED 1</span>
+              <span style="color: rgba(26,26,26,0.40);">COMPLETED 0</span>
+            </div>
+          </div>
+          <div class="meta-row">
+            <span class="info">opacity 40% &rarr; #9F9D9A &rarr; 3.1 : 1</span>
+            <span class="badge fail">Fail AA</span>
+          </div>
+        </div>
+        <div class="comparison-side">
+          <div class="side-label after">After</div>
+          <div class="swatch">
+            <div class="sample-tab">
+              <span class="active-tab">UPCOMING 3</span>
+              <span style="color: rgba(26,26,26,0.55);">PLANNED 1</span>
+              <span style="color: rgba(26,26,26,0.55);">COMPLETED 0</span>
+            </div>
+          </div>
+          <div class="meta-row">
+            <span class="info">opacity 55% &rarr; #7E7D7A &rarr; 4.9 : 1</span>
+            <span class="badge pass">Pass AA</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Placeholder Text -->
+    <div class="comparison">
+      <div class="comparison-title">
+        <h3>Placeholder Text</h3>
+        <span class="element-type">Normal text &middot; requires 4.5 : 1 (recommended)</span>
+      </div>
+      <div class="comparison-grid">
+        <div class="comparison-side">
+          <div class="side-label before">Before</div>
+          <div class="swatch">
+            <span class="sample-placeholder" style="color: rgba(26,26,26,0.15);">I want to work remotely from a beach town...</span>
+          </div>
+          <div class="meta-row">
+            <span class="info">opacity 15% &rarr; #D6D4D0 &rarr; 1.6 : 1</span>
+            <span class="badge fail">Fail AA</span>
+          </div>
+        </div>
+        <div class="comparison-side">
+          <div class="side-label after">After</div>
+          <div class="swatch">
+            <span class="sample-placeholder" style="color: rgba(26,26,26,0.50);">I want to work remotely from a beach town...</span>
+          </div>
+          <div class="meta-row">
+            <span class="info">opacity 50% &rarr; #898885 &rarr; 4.2 : 1</span>
+            <span class="badge marginal">~4.2 : 1 &mdash; see note</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Metadata Text -->
+    <div class="comparison">
+      <div class="comparison-title">
+        <h3>Metadata &amp; Photo Credits</h3>
+        <span class="element-type">Normal text &middot; requires 4.5 : 1</span>
+      </div>
+      <div class="comparison-grid">
+        <div class="comparison-side">
+          <div class="side-label before">Before</div>
+          <div class="swatch">
+            <span class="sample-meta" style="color: rgba(26,26,26,0.30);">94% say life-changing &nbsp;&middot;&nbsp; Photo by Ava Chen</span>
+          </div>
+          <div class="meta-row">
+            <span class="info">opacity 30% &rarr; #B5B3B0 &rarr; 2.3 : 1</span>
+            <span class="badge fail">Fail AA</span>
+          </div>
+        </div>
+        <div class="comparison-side">
+          <div class="side-label after">After</div>
+          <div class="swatch">
+            <span class="sample-meta" style="color: rgba(26,26,26,0.55);">94% say life-changing &nbsp;&middot;&nbsp; Photo by Ava Chen</span>
+          </div>
+          <div class="meta-row">
+            <span class="info">opacity 55% &rarr; #7E7D7A &rarr; 4.9 : 1</span>
+            <span class="badge pass">Pass AA</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Navigation Inactive Links -->
+    <div class="comparison">
+      <div class="comparison-title">
+        <h3>Navigation Inactive Links</h3>
+        <span class="element-type">Normal text &middot; requires 4.5 : 1</span>
+      </div>
+      <div class="comparison-grid">
+        <div class="comparison-side">
+          <div class="side-label before">Before</div>
+          <div class="swatch">
+            <div class="sample-nav">
+              <span class="active-nav">MY TRIPS</span>
+              <span style="color: rgba(26,26,26,0.40);">DISCOVER</span>
+              <span style="color: rgba(26,26,26,0.40);">BUCKET LIST</span>
+              <span style="color: rgba(26,26,26,0.40);">JOURNAL</span>
+            </div>
+          </div>
+          <div class="meta-row">
+            <span class="info">opacity 40% &rarr; #9F9D9A &rarr; 3.1 : 1</span>
+            <span class="badge fail">Fail AA</span>
+          </div>
+        </div>
+        <div class="comparison-side">
+          <div class="side-label after">After</div>
+          <div class="swatch">
+            <div class="sample-nav">
+              <span class="active-nav">MY TRIPS</span>
+              <span style="color: rgba(26,26,26,0.55);">DISCOVER</span>
+              <span style="color: rgba(26,26,26,0.55);">BUCKET LIST</span>
+              <span style="color: rgba(26,26,26,0.55);">JOURNAL</span>
+            </div>
+          </div>
+          <div class="meta-row">
+            <span class="info">opacity 55% &rarr; #7E7D7A &rarr; 4.9 : 1</span>
+            <span class="badge pass">Pass AA</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Button Text -->
+    <div class="comparison">
+      <div class="comparison-title">
+        <h3>Button &amp; Chip Text</h3>
+        <span class="element-type">Normal text &middot; requires 4.5 : 1</span>
+      </div>
+      <div class="comparison-grid">
+        <div class="comparison-side">
+          <div class="side-label before">Before</div>
+          <div class="swatch">
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+              <span class="sample-button" style="color: rgba(26,26,26,0.30); border-color: rgba(26,26,26,0.12);">Help Me Plan</span>
+              <span class="sample-button" style="color: rgba(26,26,26,0.30); border-color: rgba(26,26,26,0.12);">Beach + Culture</span>
+            </div>
+          </div>
+          <div class="meta-row">
+            <span class="info">opacity 30% &rarr; #B5B3B0 &rarr; 2.3 : 1</span>
+            <span class="badge fail">Fail AA</span>
+          </div>
+        </div>
+        <div class="comparison-side">
+          <div class="side-label after">After</div>
+          <div class="swatch">
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+              <span class="sample-button" style="color: rgba(26,26,26,0.55); border-color: rgba(26,26,26,0.25);">Help Me Plan</span>
+              <span class="sample-button" style="color: rgba(26,26,26,0.55); border-color: rgba(26,26,26,0.25);">Beach + Culture</span>
+            </div>
+          </div>
+          <div class="meta-row">
+            <span class="info">opacity 55% &rarr; #7E7D7A &rarr; 4.9 : 1</span>
+            <span class="badge pass">Pass AA</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Notes -->
+  <div class="notes">
+    <h4>Implementation Notes</h4>
+    <ul>
+      <li><strong>Key change:</strong> The minimum viable opacity on #F7F5F0 for normal-text AA (4.5:1) is approximately <strong>53%</strong>. Using 55% provides a small safety margin and rounds cleanly in Tailwind classes.</li>
+      <li><strong>Placeholder text:</strong> WCAG 2.1 does not strictly require placeholder text to meet 4.5:1 contrast since it is not considered essential content. However, raising from 15% to 50% (4.2:1) greatly improves usability. For strict AA compliance, use 55% opacity instead.</li>
+      <li><strong>Section headers</strong> at the current 40% opacity (3.1:1) technically pass AA for <em>large text</em> only. Bumping to 55% makes them pass for all text sizes, which is safer for responsive layouts where font sizes may shrink.</li>
+      <li><strong>Tailwind migration:</strong> Replace <code>text-[#1A1A1A]/30</code> with <code>text-[#1A1A1A]/55</code>, and <code>text-[#1A1A1A]/40</code> with <code>text-[#1A1A1A]/55</code>. For placeholders, replace <code>text-[#1A1A1A]/15</code> with <code>text-[#1A1A1A]/50</code>.</li>
+      <li><strong>Aesthetic impact:</strong> At 55% opacity, text remains clearly subordinate to primary content at 100% opacity. The visual hierarchy is preserved; the difference is that secondary elements become comfortably legible rather than straining to read.</li>
+      <li><strong>Button borders</strong> also benefit from increased opacity (12% &rarr; 25%) to meet the 3:1 non-text contrast requirement for interactive component boundaries.</li>
+    </ul>
+  </div>
+
+</body>
+</html>

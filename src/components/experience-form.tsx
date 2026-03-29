@@ -149,8 +149,9 @@ export default function ExperienceForm({
       });
 
       if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Failed to save");
+        let msg = "Failed to save";
+        try { const err = await res.json(); msg = err.error || msg; } catch {}
+        throw new Error(msg);
       }
 
       const saved = await res.json();

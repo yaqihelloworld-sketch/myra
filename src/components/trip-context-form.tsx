@@ -163,6 +163,11 @@ export default function TripContextForm({
       }),
     });
 
+    if (!res.ok) {
+      setAddingToList((prev) => { const next = new Set(prev); next.delete(index); return next; });
+      return;
+    }
+
     const saved = await res.json();
 
     // Attach the photo shown in the recommendation

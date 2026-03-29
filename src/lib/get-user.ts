@@ -2,14 +2,21 @@ import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
 export async function getUser() {
-  const session = await auth();
-  if (!session?.user?.id) {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      if (process.env.NODE_ENV === "development") {
+        return { id: "dev", name: "Dev User", email: "dev@localhost" };
+      }
+      return null;
+    }
+    return session.user;
+  } catch {
     if (process.env.NODE_ENV === "development") {
       return { id: "dev", name: "Dev User", email: "dev@localhost" };
     }
     return null;
   }
-  return session.user;
 }
 
 export function unauthorized() {
