@@ -250,9 +250,25 @@ const DESTINATIONS: Record<string, TravelInfo> = {
     estimatedBudget: "$1,500–$3,000",
     tip: "Dry season means clearer views. May and September are less crowded than peak months.",
   },
+  rio: {
+    bestMonths: "May–October",
+    idealSeasons: ["autumn", "winter"],
+    estimatedDays: 5,
+    estimatedBudget: "$1,500–$3,000",
+    tip: "Rio's dry season (May–Oct) has sunny skies and mild temps. February for Carnival.",
+  },
+  "rio de janeiro": {
+    bestMonths: "May–October",
+    idealSeasons: ["autumn", "winter"],
+    estimatedDays: 5,
+    estimatedBudget: "$1,500–$3,000",
+    tip: "Rio's dry season (May–Oct) has sunny skies and mild temps. February for Carnival.",
+  },
   brazil: {
-    bestMonths: "March to May, September to November",
+    bestMonths: "March–May, September–November",
     idealSeasons: ["spring", "autumn"],
+    estimatedDays: 10,
+    estimatedBudget: "$2,000–$4,000",
     tip: "Shoulder seasons avoid both rainy season and peak tourist prices.",
   },
   mexico: {
