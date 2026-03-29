@@ -130,7 +130,7 @@ const translations = {
   "form.changePhoto": { en: "CHANGE PHOTO", zh: "更换照片" },
   "form.saving": { en: "SAVING...", zh: "保存中..." },
   "form.addToList": { en: "ADD TO LIST", zh: "添加到列表" },
-  "form.aiSuggest": { en: "Quick plan with AI", zh: "AI 快速规划" },
+  "form.aiSuggest": { en: "Help me plan", zh: "帮我规划" },
   "form.aiThinking": { en: "Thinking...", zh: "思考中..." },
   "form.aiSuggestion": { en: "Suggestion", zh: "建议" },
   "form.aiBestTime": { en: "Best time:", zh: "最佳时间：" },

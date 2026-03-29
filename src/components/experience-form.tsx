@@ -345,7 +345,7 @@ export default function ExperienceForm({
                 type="button"
                 onClick={handleAISuggest}
                 disabled={!name.trim()}
-                className="inline-flex items-center gap-1.5 text-[10px] tracking-[0.12em] uppercase text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-1.5 text-[10px] tracking-[0.12em] uppercase text-[#1A1A1A]/50 hover:text-[#1A1A1A]/80 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 <Sparkles size={12} />
                 {t("form.aiSuggest")}
