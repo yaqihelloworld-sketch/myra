@@ -3,7 +3,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import ExperienceCard from "./experience-card";
 import type { Experience } from "@/lib/types";
-import { deriveCategory, type ExperienceCategory } from "@/lib/utils";
 import { LayoutGrid, List, MapPin, ChevronDown, Map } from "lucide-react";
 import MapView from "./map-view";
 import Image from "next/image";
@@ -14,7 +13,7 @@ import CardMenu from "./card-menu";
 
 type Tab = "wishlist" | "planned" | "visited";
 type ViewMode = "card" | "list" | "map";
-type SortMode = "newest" | "az" | "category";
+type SortMode = "newest" | "az";
 
 export default function BucketListView({
   experiences,
@@ -78,47 +77,17 @@ export default function BucketListView({
     const sorted = [...filtered];
     if (sort === "az") {
       sorted.sort((a, b) => a.name.localeCompare(b.name));
-    } else if (sort === "category") {
-      sorted.sort((a, b) => {
-        const catA = deriveCategory(a.name);
-        const catB = deriveCategory(b.name);
-        if (catA === catB) return a.name.localeCompare(b.name);
-        if (catA === "other") return 1;
-        if (catB === "other") return -1;
-        return catA.localeCompare(catB);
-      });
     } else {
       sorted.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
     }
     return sorted;
   }, [filtered, sort]);
 
-  // For category view, compute groups
-  const categoryGroups = useMemo(() => {
-    if (sort !== "category") return null;
-    const groups: { category: ExperienceCategory; label: string; items: Experience[] }[] = [];
-    const catMap: Record<string, Experience[]> = {};
-    for (const exp of items) {
-      const cat = deriveCategory(exp.name);
-      if (!catMap[cat]) catMap[cat] = [];
-      catMap[cat].push(exp);
-    }
-    const order: ExperienceCategory[] = ["adventure", "nature", "cultural", "festival", "city", "food", "wellness", "other"];
-    for (const cat of order) {
-      const catItems = catMap[cat];
-      if (catItems && catItems.length > 0) {
-        groups.push({ category: cat, label: t(`cat.${cat}` as any), items: catItems });
-      }
-    }
-    return groups;
-  }, [items, sort, t]);
-
   const count = { wishlist: wishlist.length, planned: planned.length, visited: visited.length };
 
   const sortOptions: { value: SortMode; label: string }[] = [
     { value: "newest", label: t("sort.newest") },
     { value: "az", label: t("sort.az") },
-    { value: "category", label: t("sort.category") },
   ];
 
   return (
@@ -185,7 +154,7 @@ export default function BucketListView({
                 <button
                   key={opt.value}
                   onClick={() => { setSort(opt.value); setSortOpen(false); }}
-                  className={`w-full text-left px-3 py-2.5 md:py-2 text-[11px] md:text-[10px] tracking-[0.1em] uppercase transition-colors ${
+                  className={`w-full text-left px-3 py-3 md:py-2 text-[11px] md:text-[10px] tracking-[0.1em] uppercase transition-colors ${
                     sort === opt.value
                       ? "bg-[#F7F5F0] text-[#1A1A1A]"
                       : "text-[#1A1A1A]/50 hover:text-[#1A1A1A] hover:bg-[#F7F5F0]"
@@ -256,35 +225,6 @@ export default function BucketListView({
               ? t("bucket.emptyPlannedDesc")
               : t("bucket.emptyVisitedDesc")}
           </p>
-        </div>
-      ) : sort === "category" && categoryGroups ? (
-        /* Category-grouped view */
-        <div className="space-y-8">
-          {categoryGroups.map((group) => (
-            <div key={group.category}>
-              <div className="flex items-center gap-3 mb-4">
-                <span className="text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/55">
-                  {group.label}
-                </span>
-                <span className="text-[9px] text-[#1A1A1A]/25">{group.items.length}</span>
-                <div className="flex-1 h-px bg-[#D4D0C8]" />
-              </div>
-              {view === "list" ? (
-                <div>
-                  {group.items.map((exp, i) => (
-                    <ExperienceCard key={exp.id} experience={exp} index={i} />
-                  ))}
-                  <div className="border-t border-[#D4D0C8]" />
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
-                  {group.items.map((exp) => (
-                    <PolaroidCard key={exp.id} experience={exp} photo={photoMap[exp.id]} />
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
         </div>
       ) : view === "list" ? (
         /* List view */

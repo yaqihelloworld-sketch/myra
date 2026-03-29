@@ -70,7 +70,7 @@ export default function PhotoPicker({
         <button
           type="button"
           onClick={() => searchPhotos(query, 1)}
-          className="border border-[#D4D0C8] px-4 py-2 text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/50 hover:border-[#1A1A1A]/30 transition-colors"
+          className="border border-[#D4D0C8] px-4 py-3 md:py-2 text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/50 hover:border-[#1A1A1A]/30 transition-colors"
         >
           {t("photos.search")}
         </button>
@@ -114,7 +114,7 @@ export default function PhotoPicker({
               type="button"
               onClick={() => searchPhotos(query, page + 1, true)}
               disabled={loadingMore}
-              className="w-full mt-3 py-2 text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/50 hover:text-[#1A1A1A]/60 transition-colors border border-[#D4D0C8] hover:border-[#1A1A1A]/30"
+              className="w-full mt-3 py-3 md:py-2 text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/50 hover:text-[#1A1A1A]/60 transition-colors border border-[#D4D0C8] hover:border-[#1A1A1A]/30"
             >
               {loadingMore ? t("photos.searching") : t("photos.loadMore")}
             </button>

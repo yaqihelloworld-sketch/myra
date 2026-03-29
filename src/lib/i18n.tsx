@@ -35,7 +35,7 @@ const translations = {
   // Bucket list page
   "bucket.archive": { en: "THE VISION BOARD", zh: "愿景板" },
   "bucket.title": { en: "Bucket List", zh: "心愿单" },
-  "bucket.addExperience": { en: "ADD EXPERIENCE", zh: "添加体验" },
+  "bucket.addExperience": { en: "EXPERIENCE", zh: "体验" },
   "bucket.wishlist": { en: "Wishlist", zh: "心愿" },
   "bucket.planned": { en: "Planned", zh: "已计划" },
   "bucket.visited": { en: "Completed", zh: "已完成" },

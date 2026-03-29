@@ -38,7 +38,7 @@ export default function UserMenu() {
     return (
       <button
         onClick={() => signIn("google")}
-        className="text-[10px] md:text-xs tracking-[0.15em] text-[#1A1A1A]/55 hover:text-[#1A1A1A] transition-colors whitespace-nowrap"
+        className="text-[10px] md:text-xs tracking-[0.15em] text-[#1A1A1A]/55 hover:text-[#1A1A1A] transition-colors whitespace-nowrap py-2 md:py-0"
       >
         {t("user.signIn")}
       </button>
@@ -74,7 +74,7 @@ export default function UserMenu() {
           </div>
           <button
             onClick={() => { setOpen(false); signOut(); }}
-            className="w-full text-left px-4 py-2.5 text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/50 hover:text-[#1A1A1A] hover:bg-[#F7F5F0] transition-colors"
+            className="w-full text-left px-4 py-3 md:py-2.5 text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/50 hover:text-[#1A1A1A] hover:bg-[#F7F5F0] transition-colors"
           >
             {t("user.signOut")}
           </button>

@@ -36,16 +36,16 @@ export async function PUT(
     .update(experiences)
     .set({
       name: body.name,
-      description: body.description || null,
-      city: body.city || null,
-      country: body.country || "",
-      idealSeasons: body.idealSeasons || "",
-      idealPartnerTypes: body.idealPartnerTypes || "",
-      estimatedDays: body.estimatedDays || null,
-      bestMonths: body.bestMonths || null,
-      estimatedBudget: body.estimatedBudget || null,
-      doByAge: body.doByAge || null,
-      status: body.status || "wishlist",
+      description: body.description ?? null,
+      city: body.city ?? null,
+      country: body.country ?? "",
+      idealSeasons: body.idealSeasons ?? "",
+      idealPartnerTypes: body.idealPartnerTypes ?? "",
+      estimatedDays: body.estimatedDays ?? null,
+      bestMonths: body.bestMonths ?? null,
+      estimatedBudget: body.estimatedBudget ?? null,
+      doByAge: body.doByAge ?? null,
+      status: body.status ?? "wishlist",
     })
     .where(and(eq(experiences.id, parseInt(id)), eq(experiences.userId, user.id!)))
     .returning();

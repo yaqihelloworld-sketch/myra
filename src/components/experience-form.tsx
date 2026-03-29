@@ -129,9 +129,9 @@ export default function ExperienceForm({
       country: country || "",
       idealSeasons: toCommaSeparated(selectedSeasons),
       idealPartnerTypes: toCommaSeparated(selectedPartnerTypes),
-      estimatedDays: suggestion?.estimatedDays || experience?.estimatedDays || null,
-      bestMonths: suggestion?.bestMonths || experience?.bestMonths || null,
-      estimatedBudget: suggestion?.estimatedBudget || experience?.estimatedBudget || null,
+      estimatedDays: suggestionAccepted ? (suggestion?.estimatedDays ?? null) : (experience?.estimatedDays ?? null),
+      bestMonths: suggestionAccepted ? (suggestion?.bestMonths ?? null) : (experience?.bestMonths ?? null),
+      estimatedBudget: suggestionAccepted ? (suggestion?.estimatedBudget ?? null) : (experience?.estimatedBudget ?? null),
       doByAge: doByAge || null,
       status,
     };
@@ -355,8 +355,7 @@ export default function ExperienceForm({
         </div>
 
         {/* AI Quick Suggest */}
-        {(!isEdit || hasSavedPlan) && (
-          <div>
+        <div>
             {!suggestion && !fetchingSuggestion && (
               <button
                 type="button"
@@ -463,8 +462,7 @@ export default function ExperienceForm({
                 </button>
               </div>
             )}
-          </div>
-        )}
+        </div>
 
         <div className="border-t border-[#D4D0C8]/50 md:border-[#D4D0C8] pt-6 flex items-center gap-4">
           <button
