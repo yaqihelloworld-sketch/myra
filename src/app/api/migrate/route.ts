@@ -83,18 +83,23 @@ export async function GET(request: Request) {
           if (session?.user?.id) claimUser = session.user.id;
         } catch {}
       }
+      results.push(`Current user: ${claimUser || "not signed in"}`);
+
       if (claimUser) {
-        // Claim entries with empty user_id OR user_id = 'dev'
-        const unclaimed = await client.execute("SELECT COUNT(*) as cnt FROM experiences WHERE user_id = '' OR user_id = 'dev'");
-        const count = (unclaimed.rows[0] as any).cnt;
-        if (Number(count) > 0) {
-          await client.execute({ sql: "UPDATE experiences SET user_id = ? WHERE user_id = '' OR user_id = 'dev'", args: [claimUser] });
-          await client.execute({ sql: "UPDATE trips SET user_id = ? WHERE user_id = '' OR user_id = 'dev'", args: [claimUser] });
-          results.push(`Claimed ${count} entries for user ${claimUser}`);
+        const claimAll = new URL(request.url).searchParams.get("claim_all");
+
+        if (claimAll === "true") {
+          // Reassign ALL entries to the current user
+          const total = await client.execute("SELECT COUNT(*) as cnt FROM experiences");
+          const count = (total.rows[0] as any).cnt;
+          await client.execute({ sql: "UPDATE experiences SET user_id = ?", args: [claimUser] });
+          await client.execute({ sql: "UPDATE trips SET user_id = ?", args: [claimUser] });
+          results.push(`Claimed ALL ${count} entries for user ${claimUser}`);
         } else {
-          // Show what user_ids exist for debugging
+          // Show existing user_ids for debugging
           const existing = await client.execute("SELECT DISTINCT user_id, COUNT(*) as cnt FROM experiences GROUP BY user_id");
-          results.push(`No unclaimed entries. Existing user_ids: ${JSON.stringify(existing.rows)}`);
+          results.push(`Existing user_ids: ${JSON.stringify(existing.rows)}`);
+          results.push("Add ?claim_all=true to reassign all entries to your account");
         }
       }
 
