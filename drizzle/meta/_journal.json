@@ -15,6 +15,13 @@
       "when": 1774504040220,
       "tag": "0001_wet_stone_men",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1774762122498,
+      "tag": "0002_absent_morbius",
+      "breakpoints": true
     }
   ]
 }

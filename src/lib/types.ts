@@ -18,6 +18,8 @@ export interface Experience {
   idealSeasons: string;
   idealPartnerTypes: string;
   estimatedDays: number | null;
+  bestMonths: string | null;
+  estimatedBudget: string | null;
   doByAge: string | null;
   status: string;
   createdAt: string;

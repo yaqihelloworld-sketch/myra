@@ -42,6 +42,8 @@ export async function PUT(
       idealSeasons: body.idealSeasons || "",
       idealPartnerTypes: body.idealPartnerTypes || "",
       estimatedDays: body.estimatedDays || null,
+      bestMonths: body.bestMonths || null,
+      estimatedBudget: body.estimatedBudget || null,
       doByAge: body.doByAge || null,
       status: body.status || "wishlist",
     })

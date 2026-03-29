@@ -38,7 +38,8 @@ export default function ExperienceForm({
   const [status, setStatus] = useState(experience?.status || "wishlist");
   const [saving, setSaving] = useState(false);
 
-  // AI suggestions
+  // AI suggestions — initialize from saved data if available
+  const hasSavedPlan = !!(experience?.bestMonths || experience?.estimatedDays || experience?.estimatedBudget);
   const [fetchingSuggestion, setFetchingSuggestion] = useState(false);
   const [suggestion, setSuggestion] = useState<{
     bestMonths?: string;
@@ -47,8 +48,12 @@ export default function ExperienceForm({
     country?: string;
     estimatedDays?: number;
     estimatedBudget?: string;
-  } | null>(null);
-  const [suggestionAccepted, setSuggestionAccepted] = useState(false);
+  } | null>(hasSavedPlan ? {
+    bestMonths: experience?.bestMonths || undefined,
+    estimatedDays: experience?.estimatedDays || undefined,
+    estimatedBudget: experience?.estimatedBudget || undefined,
+  } : null);
+  const [suggestionAccepted, setSuggestionAccepted] = useState(hasSavedPlan);
 
   // Photo state
   const [photos, setPhotos] = useState<ExperiencePhoto[]>([]);
@@ -66,6 +71,15 @@ export default function ExperienceForm({
         .then((data) => setPhotos(data));
     }
   }, [isEdit, experience?.id]);
+
+  // Auto-fetch photo when name is prefilled (e.g. from suggestion chips)
+  useEffect(() => {
+    const prefilled = searchParams.get("name");
+    if (prefilled && !isEdit && photos.length === 0 && pendingPhotos.length === 0) {
+      autoFetchPhoto(prefilled);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function toggleItem(arr: string[], item: string): string[] {
     return arr.includes(item)
@@ -115,7 +129,9 @@ export default function ExperienceForm({
       country: country || "",
       idealSeasons: toCommaSeparated(selectedSeasons),
       idealPartnerTypes: toCommaSeparated(selectedPartnerTypes),
-      estimatedDays: null,
+      estimatedDays: suggestion?.estimatedDays || experience?.estimatedDays || null,
+      bestMonths: suggestion?.bestMonths || experience?.bestMonths || null,
+      estimatedBudget: suggestion?.estimatedBudget || experience?.estimatedBudget || null,
       doByAge: doByAge || null,
       status,
     };
@@ -337,8 +353,8 @@ export default function ExperienceForm({
             </div>
         </div>
 
-        {/* AI Quick Suggest — only on add flow */}
-        {!isEdit && (
+        {/* AI Quick Suggest */}
+        {(!isEdit || hasSavedPlan) && (
           <div>
             {!suggestion && !fetchingSuggestion && (
               <button
