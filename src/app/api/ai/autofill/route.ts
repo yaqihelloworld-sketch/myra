@@ -20,12 +20,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(wikiResult);
   }
 
-  // If nothing found, return helpful defaults
+  // If nothing found, return helpful defaults with specific months
   return NextResponse.json({
-    bestMonths: "Spring or Autumn",
+    bestMonths: "March–May or September–November",
     idealSeasons: ["spring", "autumn"],
     estimatedDays: 5,
     estimatedBudget: "$1,500–$3,000",
-    tip: "Spring and autumn offer mild weather and fewer crowds for most destinations. Budget varies by region.",
+    tip: "These months tend to offer mild weather and fewer crowds for most destinations.",
   });
 }

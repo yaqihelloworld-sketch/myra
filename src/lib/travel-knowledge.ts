@@ -12,23 +12,31 @@ type TravelInfo = {
 // Major events/festivals with specific timing
 const EVENTS: Record<string, TravelInfo> = {
   carnival: {
-    bestMonths: "February to March",
+    bestMonths: "February–March",
     idealSeasons: ["summer"],
+    estimatedDays: 5,
+    estimatedBudget: "$1,500–$3,000",
     tip: "Carnival dates shift yearly based on Easter — usually falls in February or early March.",
   },
   "rio carnival": {
-    bestMonths: "February to March",
+    bestMonths: "February–March",
     idealSeasons: ["summer"],
+    estimatedDays: 5,
+    estimatedBudget: "$2,000–$4,000",
     tip: "Rio's Carnival is the world's largest — book 6+ months ahead for Sambadrome tickets.",
   },
   oktoberfest: {
-    bestMonths: "September to October",
+    bestMonths: "Late September–early October",
     idealSeasons: ["autumn"],
+    estimatedDays: 4,
+    estimatedBudget: "$1,500–$3,000",
     tip: "Despite the name, Oktoberfest mostly runs in September. Weekdays are less crowded.",
   },
   "cherry blossom": {
-    bestMonths: "March to April",
+    bestMonths: "Late March–mid April",
     idealSeasons: ["spring"],
+    estimatedDays: 7,
+    estimatedBudget: "$2,000–$4,000",
     tip: "Peak bloom lasts only 1-2 weeks. Tokyo blooms late March, Kyoto early April.",
   },
   hanami: {
@@ -116,28 +124,38 @@ const EVENTS: Record<string, TravelInfo> = {
 // Country/region-level best travel times
 const DESTINATIONS: Record<string, TravelInfo> = {
   japan: {
-    bestMonths: "March to May, October to November",
+    bestMonths: "March–May or October–November",
     idealSeasons: ["spring", "autumn"],
+    estimatedDays: 10,
+    estimatedBudget: "$3,000–$5,000",
     tip: "Spring cherry blossoms and autumn foliage are Japan's most magical seasons.",
   },
   tokyo: {
-    bestMonths: "March to May, October to November",
+    bestMonths: "March–May or October–November",
     idealSeasons: ["spring", "autumn"],
+    estimatedDays: 5,
+    estimatedBudget: "$2,000–$3,500",
     tip: "Mild weather and cherry blossoms in spring; stunning autumn colors and clear skies in fall.",
   },
   kyoto: {
-    bestMonths: "March to May, October to November",
+    bestMonths: "March–May or October–November",
     idealSeasons: ["spring", "autumn"],
+    estimatedDays: 4,
+    estimatedBudget: "$1,500–$2,500",
     tip: "Kyoto's temples are breathtaking during cherry blossom and autumn foliage seasons.",
   },
   italy: {
-    bestMonths: "April to June, September to October",
+    bestMonths: "April–June or September–October",
     idealSeasons: ["spring", "autumn"],
+    estimatedDays: 10,
+    estimatedBudget: "$2,500–$5,000",
     tip: "Shoulder seasons offer pleasant weather without the crushing summer crowds.",
   },
   rome: {
-    bestMonths: "April to June, September to October",
+    bestMonths: "April–June or September–October",
     idealSeasons: ["spring", "autumn"],
+    estimatedDays: 4,
+    estimatedBudget: "$1,500–$3,000",
     tip: "Avoid July–August heat. Spring has perfect weather for walking the ancient city.",
   },
   florence: {
@@ -156,8 +174,10 @@ const DESTINATIONS: Record<string, TravelInfo> = {
     tip: "Beach weather without peak-season prices and crowds. Lemon season peaks in May.",
   },
   paris: {
-    bestMonths: "April to June, September to October",
+    bestMonths: "April–June or September–October",
     idealSeasons: ["spring", "autumn"],
+    estimatedDays: 5,
+    estimatedBudget: "$2,000–$4,000",
     tip: "Paris in spring is iconic. September brings la rentrée — the city buzzes back to life.",
   },
   france: {
@@ -166,8 +186,10 @@ const DESTINATIONS: Record<string, TravelInfo> = {
     tip: "Lavender blooms in Provence June–July. Wine harvest (vendange) starts in September.",
   },
   iceland: {
-    bestMonths: "June to August",
+    bestMonths: "June–August",
     idealSeasons: ["summer"],
+    estimatedDays: 7,
+    estimatedBudget: "$3,000–$5,000",
     tip: "Midnight sun in summer means endless daylight for exploration. Winter for northern lights.",
   },
   norway: {
@@ -186,13 +208,17 @@ const DESTINATIONS: Record<string, TravelInfo> = {
     tip: "Caldera sunsets without the July–August cruise ship crowds. Water is still warm in October.",
   },
   bali: {
-    bestMonths: "April to October",
+    bestMonths: "April–October",
     idealSeasons: ["spring", "summer", "autumn"],
+    estimatedDays: 7,
+    estimatedBudget: "$1,500–$3,000",
     tip: "Dry season offers clear skies. May and September are sweet spots — dry but less touristy.",
   },
   thailand: {
-    bestMonths: "November to February",
+    bestMonths: "November–February",
     idealSeasons: ["winter"],
+    estimatedDays: 10,
+    estimatedBudget: "$1,500–$3,000",
     tip: "Cool, dry season is ideal. Avoid March–May (scorching) and monsoon months (June–October).",
   },
   "new zealand": {
@@ -206,8 +232,10 @@ const DESTINATIONS: Record<string, TravelInfo> = {
     tip: "Avoid scorching summer (Dec–Feb) in the south. Northern tropics are best May–October.",
   },
   morocco: {
-    bestMonths: "March to May, September to November",
+    bestMonths: "March–May or September–November",
     idealSeasons: ["spring", "autumn"],
+    estimatedDays: 7,
+    estimatedBudget: "$1,500–$2,500",
     tip: "Desert heat is extreme in summer. Spring brings wildflowers in the Atlas Mountains.",
   },
   peru: {
@@ -216,8 +244,10 @@ const DESTINATIONS: Record<string, TravelInfo> = {
     tip: "Dry season for Machu Picchu and the Inca Trail. June–August is busiest but driest.",
   },
   "machu picchu": {
-    bestMonths: "May to September",
+    bestMonths: "May–September",
     idealSeasons: ["winter", "spring"],
+    estimatedDays: 5,
+    estimatedBudget: "$1,500–$3,000",
     tip: "Dry season means clearer views. May and September are less crowded than peak months.",
   },
   brazil: {
@@ -266,8 +296,10 @@ const DESTINATIONS: Record<string, TravelInfo> = {
     tip: "Summer for hiking and lakes, winter for skiing. Shoulder months can be grey and rainy.",
   },
   maldives: {
-    bestMonths: "November to April",
+    bestMonths: "November–April",
     idealSeasons: ["winter", "spring"],
+    estimatedDays: 5,
+    estimatedBudget: "$3,000–$8,000",
     tip: "Dry northeast monsoon season. January–March is sunniest but priciest.",
   },
   "sri lanka": {
