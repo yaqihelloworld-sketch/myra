@@ -5,6 +5,8 @@ type TravelInfo = {
   bestMonths: string;
   idealSeasons: string[];
   tip: string;
+  estimatedDays?: number;
+  estimatedBudget?: string;
 };
 
 // Major events/festivals with specific timing

@@ -46,6 +46,7 @@ export default function ExperienceForm({
     idealSeasons?: string[];
     country?: string;
     estimatedDays?: number;
+    estimatedBudget?: string;
   } | null>(null);
   const [suggestionAccepted, setSuggestionAccepted] = useState(false);
 
@@ -367,11 +368,23 @@ export default function ExperienceForm({
                     <X size={12} />
                   </button>
                 </div>
-                {suggestion.bestMonths && (
-                  <p className="text-xs text-[#1A1A1A]/60">
-                    <span className="text-[#1A1A1A]/30">{t("form.aiBestTime")}</span> {suggestion.bestMonths}
-                  </p>
-                )}
+                <div className="flex flex-wrap gap-x-4 gap-y-1">
+                  {suggestion.bestMonths && (
+                    <p className="text-xs text-[#1A1A1A]/60">
+                      <span className="text-[#1A1A1A]/30">{t("form.aiBestTime")}</span> {suggestion.bestMonths}
+                    </p>
+                  )}
+                  {suggestion.estimatedDays && (
+                    <p className="text-xs text-[#1A1A1A]/60">
+                      <span className="text-[#1A1A1A]/30">{t("form.aiDays")}</span> {suggestion.estimatedDays} days
+                    </p>
+                  )}
+                  {suggestion.estimatedBudget && (
+                    <p className="text-xs text-[#1A1A1A]/60">
+                      <span className="text-[#1A1A1A]/30">{t("form.aiBudget")}</span> {suggestion.estimatedBudget}
+                    </p>
+                  )}
+                </div>
                 {suggestion.tip && (
                   <p className="text-xs text-[#1A1A1A]/40 italic">{suggestion.tip}</p>
                 )}

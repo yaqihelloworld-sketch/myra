@@ -20,10 +20,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(wikiResult);
   }
 
-  // If nothing found, return a helpful message
+  // If nothing found, return helpful defaults
   return NextResponse.json({
-    bestMonths: "Varies — research recommended",
+    bestMonths: "Spring or Autumn",
     idealSeasons: ["spring", "autumn"],
-    tip: "We couldn't find specific timing data for this experience. Spring and autumn are generally safe bets for most destinations.",
+    estimatedDays: 5,
+    estimatedBudget: "$1,500–$3,000",
+    tip: "Spring and autumn offer mild weather and fewer crowds for most destinations. Budget varies by region.",
   });
 }

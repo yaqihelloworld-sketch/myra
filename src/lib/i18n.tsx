@@ -134,6 +134,8 @@ const translations = {
   "form.aiThinking": { en: "Thinking...", zh: "思考中..." },
   "form.aiSuggestion": { en: "Suggestion", zh: "建议" },
   "form.aiBestTime": { en: "Best time:", zh: "最佳时间：" },
+  "form.aiDays": { en: "Days:", zh: "天数：" },
+  "form.aiBudget": { en: "Budget:", zh: "预算：" },
   "form.aiAccept": { en: "Apply", zh: "采纳" },
   "form.aiApplied": { en: "Applied!", zh: "已采纳！" },
   "form.update": { en: "UPDATE", zh: "更新" },
