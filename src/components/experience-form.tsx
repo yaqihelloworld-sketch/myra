@@ -415,11 +415,6 @@ export default function ExperienceForm({
                     {suggestion.estimatedBudget}
                   </span>
                 )}
-                {suggestion.idealSeasons && suggestion.idealSeasons.length > 0 && (
-                  <span className="inline-flex items-center gap-1 text-[10px] tracking-[0.08em] bg-[#EBCFBE]/20 text-[#1A1A1A]/50 px-2.5 py-1 border border-[#EBCFBE]/30">
-                    {suggestion.idealSeasons.map(s => t(`formSeason.${s}` as any)).join(", ")}
-                  </span>
-                )}
               </div>
             )}
           </div>
