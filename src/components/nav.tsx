@@ -21,7 +21,7 @@ export default function Nav() {
           Myra
           <span className="inline-block w-[5px] h-[5px] rounded-full bg-[#EBCFBE] ml-[3px] mb-[2px] self-center" />
         </Link>
-        <div className="flex items-center gap-3 md:gap-8 overflow-x-auto">
+        <div className="flex items-center gap-3 md:gap-8">
           {links.map((link) => (
             <Link
               key={link.href}
