@@ -417,18 +417,39 @@ export default function ExperienceForm({
               <div className="flex flex-wrap items-center gap-2">
                 <Sparkles size={10} className="text-[#1A1A1A]/20" />
                 {suggestion.bestMonths && (
-                  <span className="inline-flex items-center gap-1 text-[10px] tracking-[0.08em] bg-[#EBCFBE]/20 text-[#1A1A1A]/50 px-2.5 py-1 border border-[#EBCFBE]/30">
+                  <span className="group/chip inline-flex items-center gap-1 text-[10px] tracking-[0.08em] bg-[#EBCFBE]/20 text-[#1A1A1A]/50 px-2.5 py-1 border border-[#EBCFBE]/30">
                     {suggestion.bestMonths}
+                    <button
+                      type="button"
+                      onClick={() => setSuggestion({ ...suggestion, bestMonths: undefined })}
+                      className="opacity-0 group-hover/chip:opacity-100 transition-opacity text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60 -mr-1"
+                    >
+                      <X size={10} />
+                    </button>
                   </span>
                 )}
                 {suggestion.estimatedDays && (
-                  <span className="inline-flex items-center gap-1 text-[10px] tracking-[0.08em] bg-[#EBCFBE]/20 text-[#1A1A1A]/50 px-2.5 py-1 border border-[#EBCFBE]/30">
+                  <span className="group/chip inline-flex items-center gap-1 text-[10px] tracking-[0.08em] bg-[#EBCFBE]/20 text-[#1A1A1A]/50 px-2.5 py-1 border border-[#EBCFBE]/30">
                     {suggestion.estimatedDays} {t("form.aiDaysUnit")}
+                    <button
+                      type="button"
+                      onClick={() => setSuggestion({ ...suggestion, estimatedDays: undefined })}
+                      className="opacity-0 group-hover/chip:opacity-100 transition-opacity text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60 -mr-1"
+                    >
+                      <X size={10} />
+                    </button>
                   </span>
                 )}
                 {suggestion.estimatedBudget && (
-                  <span className="inline-flex items-center gap-1 text-[10px] tracking-[0.08em] bg-[#EBCFBE]/20 text-[#1A1A1A]/50 px-2.5 py-1 border border-[#EBCFBE]/30">
+                  <span className="group/chip inline-flex items-center gap-1 text-[10px] tracking-[0.08em] bg-[#EBCFBE]/20 text-[#1A1A1A]/50 px-2.5 py-1 border border-[#EBCFBE]/30">
                     {suggestion.estimatedBudget}
+                    <button
+                      type="button"
+                      onClick={() => setSuggestion({ ...suggestion, estimatedBudget: undefined })}
+                      className="opacity-0 group-hover/chip:opacity-100 transition-opacity text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60 -mr-1"
+                    >
+                      <X size={10} />
+                    </button>
                   </span>
                 )}
                 <button
