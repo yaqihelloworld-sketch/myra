@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: Request) {
   const results: string[] = [];
 
   try {
@@ -70,6 +70,28 @@ export async function GET() {
           results.push("Created experience_photos");
         } catch (err) {
           results.push(`Failed experience_photos: ${err}`);
+        }
+      }
+
+      // Claim unclaimed entries: assign entries with empty user_id to the current signed-in user
+      let claimUser = new URL(request.url).searchParams.get("claim");
+      if (!claimUser) {
+        // Try to get user from session
+        try {
+          const { auth } = await import("@/lib/auth");
+          const session = await auth();
+          if (session?.user?.id) claimUser = session.user.id;
+        } catch {}
+      }
+      if (claimUser) {
+        const unclaimed = await client.execute("SELECT COUNT(*) as cnt FROM experiences WHERE user_id = ''");
+        const count = (unclaimed.rows[0] as any).cnt;
+        if (Number(count) > 0) {
+          await client.execute({ sql: "UPDATE experiences SET user_id = ? WHERE user_id = ''", args: [claimUser] });
+          await client.execute({ sql: "UPDATE trips SET user_id = ? WHERE user_id = ''", args: [claimUser] });
+          results.push(`Claimed ${count} entries for user ${claimUser}`);
+        } else {
+          results.push("No unclaimed entries found");
         }
       }
 
