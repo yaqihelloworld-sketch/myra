@@ -7,7 +7,8 @@ import { auth } from "@/lib/auth";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const session = await auth();
+  let session;
+  try { session = await auth(); } catch {}
   const userId = session?.user?.id || "";
 
   const counts = await db

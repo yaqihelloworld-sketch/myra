@@ -16,7 +16,7 @@ export default function AboutPage() {
     <div className="max-w-xl mx-auto py-16 md:py-24">
       <Link
         href="/"
-        className="text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors"
+        className="text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/55 hover:text-[#1A1A1A] transition-colors"
       >
         {t("about.backHome")}
       </Link>

@@ -22,7 +22,7 @@ export default function AuthGate({ children }: { children: React.ReactNode }) {
         <p className="text-sm text-[#1A1A1A]/50 mb-2 max-w-sm leading-relaxed">
           {t("auth.desc")}
         </p>
-        <p className="text-xs text-[#1A1A1A]/30 mb-8 max-w-xs">
+        <p className="text-xs text-[#1A1A1A]/50 mb-8 max-w-xs">
           {t("auth.privacy")}
         </p>
         <button

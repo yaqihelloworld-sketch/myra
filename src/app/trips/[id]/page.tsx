@@ -38,11 +38,11 @@ export default async function TripDetailPage({
       <div className="mb-12">
         <Link
           href="/trips"
-          className="text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors"
+          className="text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/55 hover:text-[#1A1A1A] transition-colors"
         >
           &larr; BACK TO TRIPS
         </Link>
-        <p className="text-[10px] tracking-[0.3em] uppercase text-[#1A1A1A]/40 mb-2 mt-6">
+        <p className="text-[10px] tracking-[0.3em] uppercase text-[#1A1A1A]/55 mb-2 mt-6">
           TRIP DETAILS
         </p>
         <h1 className="font-serif text-3xl">{trip.name}</h1>
@@ -52,7 +52,7 @@ export default async function TripDetailPage({
       <div className="border-t border-b border-[#D4D0C8] py-5 mb-12 grid grid-cols-2 md:grid-cols-4 gap-6">
         {trip.startDate && (
           <div>
-            <p className="text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/40 mb-1">
+            <p className="text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/55 mb-1">
               &#9632; DATES
             </p>
             <p className="text-sm">
@@ -63,7 +63,7 @@ export default async function TripDetailPage({
         )}
         {trip.season && (
           <div>
-            <p className="text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/40 mb-1">
+            <p className="text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/55 mb-1">
               &#9650; SEASON
             </p>
             <p className="text-sm capitalize">{trip.season}</p>
@@ -71,14 +71,14 @@ export default async function TripDetailPage({
         )}
         {trip.partnerType && (
           <div>
-            <p className="text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/40 mb-1">
+            <p className="text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/55 mb-1">
               &#9650; COMPANION
             </p>
             <p className="text-sm capitalize">{trip.partnerType}</p>
           </div>
         )}
         <div>
-          <p className="text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/40 mb-1">
+          <p className="text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/55 mb-1">
             &#9632; EXPERIENCES
           </p>
           <p className="text-sm">{exps.length}</p>
@@ -92,7 +92,7 @@ export default async function TripDetailPage({
 
       {exps.length === 0 ? (
         <div className="text-center py-12 border-t border-[#D4D0C8]">
-          <p className="text-sm text-[#1A1A1A]/40 italic">
+          <p className="text-sm text-[#1A1A1A]/55 italic">
             No experiences linked to this trip yet.
           </p>
         </div>
@@ -106,7 +106,7 @@ export default async function TripDetailPage({
             >
               <div className="border-t border-[#D4D0C8] py-5 flex items-center justify-between gap-4">
                 <div className="flex gap-4 items-start">
-                  <span className="text-xs text-[#1A1A1A]/30 font-mono pt-0.5">
+                  <span className="text-xs text-[#1A1A1A]/50 font-mono pt-0.5">
                     {formatIndex(i + 1)}
                   </span>
                   <div>

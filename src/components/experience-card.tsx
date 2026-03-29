@@ -21,7 +21,7 @@ export default function ExperienceCard({
     <Link href={`/bucket-list/${experience.id}`} className="block group">
       <div className="border-t border-[#D4D0C8] py-5 flex items-start justify-between gap-4">
         <div className="flex gap-4 items-start flex-1 min-w-0">
-          <span className="text-xs text-[#1A1A1A]/30 font-mono pt-0.5">
+          <span className="text-xs text-[#1A1A1A]/50 font-mono pt-0.5">
             {formatIndex(index + 1)}
           </span>
           <div className="min-w-0">
@@ -37,7 +37,7 @@ export default function ExperienceCard({
               {seasons.map((s) => (
                 <span
                   key={s}
-                  className="text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/40"
+                  className="text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/55"
                 >
                   {t(`season.${s}` as any) || s}
                 </span>
@@ -48,7 +48,7 @@ export default function ExperienceCard({
               {partnerTypes.map((p) => (
                 <span
                   key={p}
-                  className="text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/40"
+                  className="text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/55"
                 >
                   {t(`partner.${p}` as any) || p}
                 </span>

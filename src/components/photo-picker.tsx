@@ -52,7 +52,7 @@ export default function PhotoPicker({
         <button
           type="button"
           onClick={onClose}
-          className="text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/30 hover:text-[#1A1A1A] transition-colors"
+          className="text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/50 hover:text-[#1A1A1A] transition-colors"
         >
           {t("photos.close")}
         </button>
@@ -77,11 +77,11 @@ export default function PhotoPicker({
       </div>
 
       {loading ? (
-        <p className="text-sm text-[#1A1A1A]/40 italic py-8 text-center">
+        <p className="text-sm text-[#1A1A1A]/55 italic py-8 text-center">
           {t("photos.searching")}
         </p>
       ) : results.length === 0 ? (
-        <p className="text-sm text-[#1A1A1A]/40 italic py-8 text-center">
+        <p className="text-sm text-[#1A1A1A]/55 italic py-8 text-center">
           {t("photos.noResults")}
         </p>
       ) : (
@@ -114,7 +114,7 @@ export default function PhotoPicker({
               type="button"
               onClick={() => searchPhotos(query, page + 1, true)}
               disabled={loadingMore}
-              className="w-full mt-3 py-2 text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60 transition-colors border border-[#D4D0C8] hover:border-[#1A1A1A]/30"
+              className="w-full mt-3 py-2 text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/50 hover:text-[#1A1A1A]/60 transition-colors border border-[#D4D0C8] hover:border-[#1A1A1A]/30"
             >
               {loadingMore ? t("photos.searching") : t("photos.loadMore")}
             </button>

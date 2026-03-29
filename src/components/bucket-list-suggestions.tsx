@@ -46,7 +46,7 @@ const METRIC_ICON = {
 };
 
 const METRIC_COLOR = {
-  trending: "text-[#1A1A1A]/40",
+  trending: "text-[#1A1A1A]/55",
   loved: "text-[#EBCFBE]",
   popular: "text-[#1A1A1A]/25",
 };
@@ -149,7 +149,7 @@ export default function BucketListSuggestions({
     <div className="mt-16 border-t border-[#D4D0C8]/50 pt-10">
       <div className="flex items-center gap-2 mb-5">
         <Sparkles size={13} className="text-[#1A1A1A]/25" />
-        <h2 className="text-[10px] tracking-[0.25em] uppercase text-[#1A1A1A]/40">
+        <h2 className="text-[10px] tracking-[0.25em] uppercase text-[#1A1A1A]/55">
           {t("bucket.inspiration")}
         </h2>
       </div>
@@ -181,7 +181,7 @@ export default function BucketListSuggestions({
       <button
         onClick={handleShuffle}
         disabled={phase !== "visible"}
-        className="mt-4 inline-flex items-center gap-1.5 text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60 transition-colors disabled:opacity-50"
+        className="mt-4 inline-flex items-center gap-1.5 text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/50 hover:text-[#1A1A1A]/60 transition-colors disabled:opacity-50"
       >
         <Shuffle
           size={11}

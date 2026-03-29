@@ -84,7 +84,7 @@ export default function HomeContent({
       {/* Hero */}
       <div className="text-center mb-20">
         <p
-          className="text-xs italic text-[#1A1A1A]/40 mb-4 tracking-wide hero-fade"
+          className="text-xs italic text-[#1A1A1A]/55 mb-4 tracking-wide hero-fade"
           style={{ animationDelay: "100ms" }}
         >
           {t("home.quote")}
@@ -132,7 +132,7 @@ export default function HomeContent({
           <h2 className="font-serif text-lg md:text-xl mb-1.5">
             {t("home.discoverTrip")}
           </h2>
-          <p className="text-sm md:text-xs text-[#1A1A1A]/40 leading-relaxed">
+          <p className="text-sm md:text-xs text-[#1A1A1A]/55 leading-relaxed">
             {t("home.discoverTripDesc")}
           </p>
         </Link>
@@ -153,7 +153,7 @@ export default function HomeContent({
           <h2 className="font-serif text-lg md:text-xl mb-1.5">
             {t("home.addBucketList")}
           </h2>
-          <p className="text-sm md:text-xs text-[#1A1A1A]/40 leading-relaxed">
+          <p className="text-sm md:text-xs text-[#1A1A1A]/55 leading-relaxed">
             {t("home.addBucketListDesc")}
           </p>
         </Link>
@@ -165,7 +165,7 @@ export default function HomeContent({
           <p className="font-serif text-2xl tabular-nums group-hover:text-[#EBCFBE] transition-colors">
             <AnimatedCount value={wishlistCount} />
           </p>
-          <p className="text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/40 mt-1">
+          <p className="text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/55 mt-1">
             {t("home.wishlist")}
           </p>
         </Link>
@@ -174,7 +174,7 @@ export default function HomeContent({
           <p className="font-serif text-2xl tabular-nums group-hover:text-[#EBCFBE] transition-colors">
             <AnimatedCount value={plannedCount} />
           </p>
-          <p className="text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/40 mt-1">
+          <p className="text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/55 mt-1">
             {t("home.planned")}
           </p>
         </Link>
@@ -183,7 +183,7 @@ export default function HomeContent({
           <p className="font-serif text-2xl tabular-nums group-hover:text-[#EBCFBE] transition-colors">
             <AnimatedCount value={visitedCount} />
           </p>
-          <p className="text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/40 mt-1">
+          <p className="text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/55 mt-1">
             {t("home.visited")}
           </p>
         </Link>

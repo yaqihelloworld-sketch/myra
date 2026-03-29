@@ -219,7 +219,7 @@ export default function TripContextForm({
                   className={`px-3 py-2 md:px-3.5 md:py-2 text-[11px] md:text-[11px] tracking-[0.03em] rounded-md border transition-colors ${
                     prompt === s
                       ? "border-[#1A1A1A]/30 text-[#1A1A1A]/70"
-                      : "border-[#D4D0C8] text-[#1A1A1A]/40 hover:border-[#1A1A1A]/30 hover:text-[#1A1A1A]/60"
+                      : "border-[#D4D0C8] text-[#1A1A1A]/55 hover:border-[#1A1A1A]/30 hover:text-[#1A1A1A]/60"
                   }`}
                 >
                   {s}
@@ -232,7 +232,7 @@ export default function TripContextForm({
         {/* Secondary: Quick params — collapse on mobile when results showing */}
         <div className={`grid grid-cols-2 gap-4 mb-4 ${hasResults ? "hidden md:grid" : ""}`}>
           <div>
-            <label htmlFor="discover-month" className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-1 md:mb-0.5 block">{t("discover.month")}</label>
+            <label htmlFor="discover-month" className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/50 mb-1 md:mb-0.5 block">{t("discover.month")}</label>
             <select
               id="discover-month"
               value={month}
@@ -246,7 +246,7 @@ export default function TripContextForm({
             </select>
           </div>
           <div>
-            <label htmlFor="discover-days" className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-1 md:mb-0.5 block">{t("discover.days")}</label>
+            <label htmlFor="discover-days" className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/50 mb-1 md:mb-0.5 block">{t("discover.days")}</label>
             <select
               id="discover-days"
               value={days}
@@ -267,7 +267,7 @@ export default function TripContextForm({
           type="button"
           onClick={() => setShowFilters(!showFilters)}
           aria-expanded={showFilters}
-          className={`text-xs tracking-[0.1em] uppercase text-[#1A1A1A]/30 hover:text-[#1A1A1A]/50 transition-colors mb-4 flex items-center gap-1.5 ${hasResults ? "hidden md:flex" : ""}`}
+          className={`text-xs tracking-[0.1em] uppercase text-[#1A1A1A]/50 hover:text-[#1A1A1A]/60 transition-colors mb-4 flex items-center gap-1.5 ${hasResults ? "hidden md:flex" : ""}`}
         >
           <span className={`text-[7px] inline-block transition-transform duration-300 ${showFilters ? "rotate-90" : ""}`} style={{ transitionTimingFunction: "cubic-bezier(0.25, 1, 0.5, 1)" }}>▶</span>
           {companion || ageRange || budget
@@ -279,7 +279,7 @@ export default function TripContextForm({
           <div className="overflow-hidden">
           <div className="space-y-4 mb-4 pl-3 border-l border-[#D4D0C8]/50">
             <div>
-              <label htmlFor="discover-budget" className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-1 md:mb-0.5 block">{t("discover.budget")}</label>
+              <label htmlFor="discover-budget" className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/50 mb-1 md:mb-0.5 block">{t("discover.budget")}</label>
               <input
                 id="discover-budget"
                 type="text"
@@ -290,7 +290,7 @@ export default function TripContextForm({
               />
             </div>
             <div>
-              <label className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-2 md:mb-1.5 block">{t("discover.travelingWith")}</label>
+              <label className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/50 mb-2 md:mb-1.5 block">{t("discover.travelingWith")}</label>
               <div className="flex flex-wrap gap-1.5 md:gap-1" role="group" aria-label={t("discover.travelingWith")}>
                 {PARTNER_TYPES.map((p) => (
                   <button
@@ -310,7 +310,7 @@ export default function TripContextForm({
               </div>
             </div>
             <div>
-              <label className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-2 md:mb-1.5 block">{t("discover.ageRange")}</label>
+              <label className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/50 mb-2 md:mb-1.5 block">{t("discover.ageRange")}</label>
               <div className="flex flex-wrap gap-1.5 md:gap-1" role="group" aria-label={t("discover.ageRange")}>
                 {AGE_RANGES.map((a) => (
                   <button
@@ -412,7 +412,7 @@ export default function TripContextForm({
               {/* Insight */}
               {result.travelInsight && (
                 <div className="py-4 px-5 border-l border-[#D4D0C8]">
-                  <p className="font-serif text-[13px] text-[#1A1A1A]/30 italic leading-relaxed">
+                  <p className="font-serif text-[13px] text-[#1A1A1A]/50 italic leading-relaxed">
                     {result.travelInsight}
                   </p>
                 </div>
@@ -474,15 +474,15 @@ export default function TripContextForm({
                               {rec.description}
                             </p>
                             <div className="flex flex-wrap gap-x-3 gap-y-1.5 mt-3 md:mt-2">
-                              <span className="text-[11px] md:text-[10px] tracking-[0.1em] text-[#1A1A1A]/40">
+                              <span className="text-[11px] md:text-[10px] tracking-[0.1em] text-[#1A1A1A]/55">
                                 {rec.bestMonths}
                               </span>
                               <span className="text-[11px] md:text-[10px] text-[#1A1A1A]/20">·</span>
-                              <span className="text-[11px] md:text-[10px] tracking-[0.1em] text-[#1A1A1A]/40">
+                              <span className="text-[11px] md:text-[10px] tracking-[0.1em] text-[#1A1A1A]/55">
                                 {rec.estimatedDays}d
                               </span>
                               <span className="text-[11px] md:text-[10px] text-[#1A1A1A]/20">·</span>
-                              <span className="text-[11px] md:text-[10px] tracking-[0.1em] text-[#1A1A1A]/40">
+                              <span className="text-[11px] md:text-[10px] tracking-[0.1em] text-[#1A1A1A]/55">
                                 {rec.estimatedBudget}
                               </span>
                             </div>
@@ -505,7 +505,7 @@ export default function TripContextForm({
                                     className={`inline-flex items-center gap-1.5 px-4 py-3 text-[11px] tracking-[0.15em] uppercase border transition-all ${
                                       addingToList.has(i)
                                         ? "border-[#D4D0C8] text-[#1A1A1A]/30 animate-pulse"
-                                        : "border-[#D4D0C8] text-[#1A1A1A]/40 hover:border-[#1A1A1A] hover:text-[#1A1A1A]"
+                                        : "border-[#D4D0C8] text-[#1A1A1A]/55 hover:border-[#1A1A1A] hover:text-[#1A1A1A]"
                                     }`}
                                   >
                                     <BookmarkPlus size={10} />
@@ -536,7 +536,7 @@ export default function TripContextForm({
                                   className={`inline-flex items-center gap-1.5 px-3 py-2 text-[9px] tracking-[0.15em] uppercase border transition-all ${
                                     addingToList.has(i)
                                       ? "border-[#D4D0C8] text-[#1A1A1A]/30 animate-pulse"
-                                      : "border-[#D4D0C8] text-[#1A1A1A]/40 hover:border-[#1A1A1A] hover:text-[#1A1A1A]"
+                                      : "border-[#D4D0C8] text-[#1A1A1A]/55 hover:border-[#1A1A1A] hover:text-[#1A1A1A]"
                                   }`}
                                 >
                                   <BookmarkPlus size={10} />
@@ -565,7 +565,7 @@ export default function TripContextForm({
                 </button>
                 <button
                   onClick={() => router.push("/bucket-list?tab=planned")}
-                  className="inline-flex items-center gap-2 text-xs md:text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors"
+                  className="inline-flex items-center gap-2 text-xs md:text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/55 hover:text-[#1A1A1A] transition-colors"
                 >
                   {t("discover.viewBucketList")}
                   <ArrowRight size={10} />

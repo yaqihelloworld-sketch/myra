@@ -134,7 +134,7 @@ export default function BucketListView({
             className={`px-3 py-3 md:px-6 md:py-2.5 text-[11px] md:text-[10px] tracking-[0.1em] md:tracking-[0.2em] uppercase transition-colors ${
               tab === "wishlist"
                 ? "bg-[#1A1A1A] text-white"
-                : "text-[#1A1A1A]/40 hover:text-[#1A1A1A]/70"
+                : "text-[#1A1A1A]/55 hover:text-[#1A1A1A]/70"
             }`}
           >
             {t("bucket.wishlist")}
@@ -147,7 +147,7 @@ export default function BucketListView({
             className={`px-3 py-3 md:px-6 md:py-2.5 text-[11px] md:text-[10px] tracking-[0.1em] md:tracking-[0.2em] uppercase transition-colors ${
               tab === "planned"
                 ? "bg-[#1A1A1A] text-white"
-                : "text-[#1A1A1A]/40 hover:text-[#1A1A1A]/70"
+                : "text-[#1A1A1A]/55 hover:text-[#1A1A1A]/70"
             }`}
           >
             {t("bucket.planned")}
@@ -160,7 +160,7 @@ export default function BucketListView({
             className={`px-3 py-3 md:px-6 md:py-2.5 text-[11px] md:text-[10px] tracking-[0.1em] md:tracking-[0.2em] uppercase transition-colors ${
               tab === "visited"
                 ? "bg-[#1A1A1A] text-white"
-                : "text-[#1A1A1A]/40 hover:text-[#1A1A1A]/70"
+                : "text-[#1A1A1A]/55 hover:text-[#1A1A1A]/70"
             }`}
           >
             {t("bucket.visited")}
@@ -205,7 +205,7 @@ export default function BucketListView({
             className={`p-3 md:p-2.5 transition-colors ${
               view === "card"
                 ? "bg-[#1A1A1A] text-white"
-                : "text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60"
+                : "text-[#1A1A1A]/50 hover:text-[#1A1A1A]/60"
             }`}
             aria-label={t("bucket.cardView")}
             aria-pressed={view === "card"}
@@ -217,7 +217,7 @@ export default function BucketListView({
             className={`p-3 md:p-2.5 transition-colors ${
               view === "list"
                 ? "bg-[#1A1A1A] text-white"
-                : "text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60"
+                : "text-[#1A1A1A]/50 hover:text-[#1A1A1A]/60"
             }`}
             aria-label={t("bucket.listView")}
             aria-pressed={view === "list"}
@@ -229,7 +229,7 @@ export default function BucketListView({
             className={`p-3 md:p-2.5 transition-colors ${
               view === "map"
                 ? "bg-[#1A1A1A] text-white"
-                : "text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60"
+                : "text-[#1A1A1A]/50 hover:text-[#1A1A1A]/60"
             }`}
             aria-label={t("map.view")}
             aria-pressed={view === "map"}
@@ -249,7 +249,7 @@ export default function BucketListView({
           <p className="font-serif text-lg mb-1">
             {tab === "wishlist" ? t("bucket.emptyWishlist") : tab === "planned" ? t("bucket.emptyPlanned") : t("bucket.emptyVisited")}
           </p>
-          <p className="text-sm text-[#1A1A1A]/40">
+          <p className="text-sm text-[#1A1A1A]/55">
             {tab === "wishlist"
               ? t("bucket.emptyWishlistDesc")
               : tab === "planned"
@@ -263,7 +263,7 @@ export default function BucketListView({
           {categoryGroups.map((group) => (
             <div key={group.category}>
               <div className="flex items-center gap-3 mb-4">
-                <span className="text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/40">
+                <span className="text-[10px] tracking-[0.2em] uppercase text-[#1A1A1A]/55">
                   {group.label}
                 </span>
                 <span className="text-[9px] text-[#1A1A1A]/25">{group.items.length}</span>

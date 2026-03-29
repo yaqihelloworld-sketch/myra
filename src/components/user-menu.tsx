@@ -38,7 +38,7 @@ export default function UserMenu() {
     return (
       <button
         onClick={() => signIn("google")}
-        className="text-[10px] md:text-xs tracking-[0.15em] text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors whitespace-nowrap"
+        className="text-[10px] md:text-xs tracking-[0.15em] text-[#1A1A1A]/55 hover:text-[#1A1A1A] transition-colors whitespace-nowrap"
       >
         {t("user.signIn")}
       </button>
@@ -70,7 +70,7 @@ export default function UserMenu() {
         <div className="absolute right-0 top-full mt-2 bg-white border border-[#D4D0C8] shadow-[0_2px_8px_rgba(0,0,0,0.08)] z-50 min-w-[160px]">
           <div className="px-4 py-3 border-b border-[#D4D0C8]/50">
             <p className="text-xs font-medium text-[#1A1A1A] truncate">{session.user.name}</p>
-            <p className="text-[10px] text-[#1A1A1A]/40 truncate mt-0.5">{session.user.email}</p>
+            <p className="text-[10px] text-[#1A1A1A]/55 truncate mt-0.5">{session.user.email}</p>
           </div>
           <button
             onClick={() => { setOpen(false); signOut(); }}

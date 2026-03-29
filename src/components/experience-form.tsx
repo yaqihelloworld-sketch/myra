@@ -318,7 +318,7 @@ export default function ExperienceForm({
 
         {/* Description — optional motivation */}
         <div>
-          <label htmlFor="experience-desc" className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/30 mb-2 block">
+          <label htmlFor="experience-desc" className="text-[11px] md:text-[9px] tracking-[0.1em] uppercase text-[#1A1A1A]/50 mb-2 block">
             {t("form.descLabel")}
           </label>
           <textarea
@@ -371,13 +371,13 @@ export default function ExperienceForm({
             {fetchingSuggestion && (
               <div className="flex items-center gap-2 py-3 px-4 border border-[#D4D0C8]/50 bg-[#F7F5F0]">
                 <div className="w-3 h-3 border border-[#D4D0C8] border-t-[#1A1A1A]/40 rounded-full animate-spin" />
-                <span className="text-[10px] tracking-[0.1em] uppercase text-[#1A1A1A]/40">{t("form.aiThinking")}</span>
+                <span className="text-[10px] tracking-[0.1em] uppercase text-[#1A1A1A]/55">{t("form.aiThinking")}</span>
               </div>
             )}
             {suggestion && !suggestionAccepted && (
               <div className="py-3 px-4 border border-[#EBCFBE]/50 bg-[#EBCFBE]/5 space-y-2">
                 <div className="flex items-start justify-between gap-2">
-                  <p className="text-[10px] tracking-[0.1em] uppercase text-[#1A1A1A]/40 flex items-center gap-1">
+                  <p className="text-[10px] tracking-[0.1em] uppercase text-[#1A1A1A]/55 flex items-center gap-1">
                     <Sparkles size={10} />
                     {t("form.aiSuggestion")}
                   </p>
@@ -388,22 +388,22 @@ export default function ExperienceForm({
                 <div className="flex flex-wrap gap-x-4 gap-y-1">
                   {suggestion.bestMonths && (
                     <p className="text-xs text-[#1A1A1A]/60">
-                      <span className="text-[#1A1A1A]/30">{t("form.aiBestTime")}</span> {suggestion.bestMonths}
+                      <span className="text-[#1A1A1A]/50">{t("form.aiBestTime")}</span> {suggestion.bestMonths}
                     </p>
                   )}
                   {suggestion.estimatedDays && (
                     <p className="text-xs text-[#1A1A1A]/60">
-                      <span className="text-[#1A1A1A]/30">{t("form.aiDays")}</span> {suggestion.estimatedDays} days
+                      <span className="text-[#1A1A1A]/50">{t("form.aiDays")}</span> {suggestion.estimatedDays} days
                     </p>
                   )}
                   {suggestion.estimatedBudget && (
                     <p className="text-xs text-[#1A1A1A]/60">
-                      <span className="text-[#1A1A1A]/30">{t("form.aiBudget")}</span> {suggestion.estimatedBudget}
+                      <span className="text-[#1A1A1A]/50">{t("form.aiBudget")}</span> {suggestion.estimatedBudget}
                     </p>
                   )}
                 </div>
                 {suggestion.tip && (
-                  <p className="text-xs text-[#1A1A1A]/40 italic">{suggestion.tip}</p>
+                  <p className="text-xs text-[#1A1A1A]/55 italic">{suggestion.tip}</p>
                 )}
                 <button
                   type="button"
@@ -423,7 +423,7 @@ export default function ExperienceForm({
                     <button
                       type="button"
                       onClick={() => setSuggestion({ ...suggestion, bestMonths: undefined })}
-                      className="opacity-0 group-hover/chip:opacity-100 transition-opacity text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60 -mr-1"
+                      className="opacity-0 group-hover/chip:opacity-100 transition-opacity text-[#1A1A1A]/50 hover:text-[#1A1A1A]/60 -mr-1"
                     >
                       <X size={10} />
                     </button>
@@ -435,7 +435,7 @@ export default function ExperienceForm({
                     <button
                       type="button"
                       onClick={() => setSuggestion({ ...suggestion, estimatedDays: undefined })}
-                      className="opacity-0 group-hover/chip:opacity-100 transition-opacity text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60 -mr-1"
+                      className="opacity-0 group-hover/chip:opacity-100 transition-opacity text-[#1A1A1A]/50 hover:text-[#1A1A1A]/60 -mr-1"
                     >
                       <X size={10} />
                     </button>
@@ -447,7 +447,7 @@ export default function ExperienceForm({
                     <button
                       type="button"
                       onClick={() => setSuggestion({ ...suggestion, estimatedBudget: undefined })}
-                      className="opacity-0 group-hover/chip:opacity-100 transition-opacity text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60 -mr-1"
+                      className="opacity-0 group-hover/chip:opacity-100 transition-opacity text-[#1A1A1A]/50 hover:text-[#1A1A1A]/60 -mr-1"
                     >
                       <X size={10} />
                     </button>
@@ -456,7 +456,7 @@ export default function ExperienceForm({
                 <button
                   type="button"
                   onClick={() => { setSuggestionAccepted(false); setSuggestion(null); handleAISuggest(); }}
-                  className="inline-flex items-center gap-1 text-[10px] tracking-[0.08em] text-[#1A1A1A]/30 hover:text-[#1A1A1A]/60 transition-colors"
+                  className="inline-flex items-center gap-1 text-[10px] tracking-[0.08em] text-[#1A1A1A]/50 hover:text-[#1A1A1A]/60 transition-colors"
                   title={t("form.aiRefresh")}
                 >
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 1 1-3.2-6.87" /><polyline points="21 3 21 9 15 9" /></svg>
@@ -480,7 +480,7 @@ export default function ExperienceForm({
               type="button"
               onClick={handleDelete}
               disabled={saving}
-              className="text-xs md:text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/30 hover:text-red-500 transition-colors py-2"
+              className="text-xs md:text-[10px] tracking-[0.15em] uppercase text-[#1A1A1A]/50 hover:text-red-500 transition-colors py-2"
             >
               {t("form.delete")}
             </button>
