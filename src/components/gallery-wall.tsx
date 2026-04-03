@@ -9,16 +9,16 @@ export interface GalleryItem {
 }
 
 const DEFAULT_GALLERY: GalleryItem[] = [
-  { name: "Northern Lights, Iceland", url: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=300&q=60" },
-  { name: "Santorini, Greece", url: "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=300&q=60" },
-  { name: "Cherry Blossoms, Tokyo", url: "https://images.unsplash.com/photo-1522383225653-ed111181a951?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1522383225653-ed111181a951?w=300&q=60" },
-  { name: "Safari, Kenya", url: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=300&q=60" },
-  { name: "Machu Picchu, Peru", url: "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=300&q=60" },
-  { name: "Amalfi Coast, Italy", url: "https://images.unsplash.com/photo-1534113414509-0eec2bfb493f?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1534113414509-0eec2bfb493f?w=300&q=60" },
-  { name: "Bali Temples", url: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=300&q=60" },
-  { name: "Swiss Alps", url: "https://images.unsplash.com/photo-1531973576160-7125cd663d86?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1531973576160-7125cd663d86?w=300&q=60" },
-  { name: "Maldives Overwater", url: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=300&q=60" },
-  { name: "Patagonia, Argentina", url: "https://images.unsplash.com/photo-1531761535209-180857e963b9?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1531761535209-180857e963b9?w=300&q=60" },
+  { name: "Chase the Northern Lights", url: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=500&q=80" },
+  { name: "Sunset Sail in Santorini", url: "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=500&q=80" },
+  { name: "Cherry Blossom Season in Tokyo", url: "https://images.unsplash.com/photo-1522383225653-ed111181a951?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1522383225653-ed111181a951?w=500&q=80" },
+  { name: "Safari at Sunrise in Kenya", url: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=500&q=80" },
+  { name: "Hike the Inca Trail", url: "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=500&q=80" },
+  { name: "Cooking Class on Amalfi Coast", url: "https://images.unsplash.com/photo-1534113414509-0eec2bfb493f?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1534113414509-0eec2bfb493f?w=500&q=80" },
+  { name: "Yoga Retreat in Bali", url: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=500&q=80" },
+  { name: "Ski the Swiss Alps", url: "https://images.unsplash.com/photo-1531973576160-7125cd663d86?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1531973576160-7125cd663d86?w=500&q=80" },
+  { name: "Overwater Villa in Maldives", url: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=500&q=80" },
+  { name: "Trek Patagonia Glaciers", url: "https://images.unsplash.com/photo-1531761535209-180857e963b9?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1531761535209-180857e963b9?w=500&q=80" },
 ];
 
 interface GalleryWallProps {
