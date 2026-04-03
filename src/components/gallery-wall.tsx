@@ -49,7 +49,9 @@ export default function GalleryWall({ items }: GalleryWallProps) {
     if (!s.isDragging) {
       s.targetScroll += s.velocity;
       s.velocity *= 0.95;
-      s.targetScroll += 0.4; // auto-scroll
+      if (s.hoveredIndex === -1) {
+        s.targetScroll += 0.4; // auto-scroll (pause on hover)
+      }
     }
 
     s.currentScroll += (s.targetScroll - s.currentScroll) * 0.08;
@@ -71,9 +73,10 @@ export default function GalleryWall({ items }: GalleryWallProps) {
         const opacity = Math.max(0, 1 - Math.pow(Math.abs(progress), 2.5));
 
         const isHovered = s.hoveredIndex === index;
-        const scale = isHovered ? 1.08 : 1;
-        card.style.transform = `translateX(${virtualX}px) translateZ(${z}px) rotateY(${rotateY}deg) scale(${scale})`;
-        card.style.opacity = String(opacity);
+        const scale = isHovered ? 1.15 : 1;
+        const hoverZ = isHovered ? z + 150 : z;
+        card.style.transform = `translateX(${virtualX}px) translateZ(${hoverZ}px) rotateY(${isHovered ? 0 : rotateY}deg) scale(${scale})`;
+        card.style.opacity = String(isHovered ? 1 : opacity);
         card.style.zIndex = isHovered ? "100" : "0";
       } else {
         card.style.display = "none";
