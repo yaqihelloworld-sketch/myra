@@ -168,6 +168,11 @@ export default function TripContextForm({
     });
 
     if (!res.ok) {
+      if (res.status === 401) {
+        // Not signed in — redirect to sign in
+        window.location.href = "/api/auth/signin?callbackUrl=" + encodeURIComponent(window.location.pathname);
+        return;
+      }
       setAddingToList((prev) => { const next = new Set(prev); next.delete(index); return next; });
       return;
     }
