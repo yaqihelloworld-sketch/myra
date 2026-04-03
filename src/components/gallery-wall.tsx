@@ -37,6 +37,9 @@ export default function GalleryWall({ items }: GalleryWallProps) {
     velocity: 0,
     rafId: 0,
     hoveredIndex: -1,
+    mouseX: -9999,
+    mouseInViewport: false,
+    cardPositions: [] as number[],
   });
 
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
@@ -58,12 +61,18 @@ export default function GalleryWall({ items }: GalleryWallProps) {
 
     const totalSetWidth = gallery.length * cardWidth;
 
+    // Calculate card positions and find closest to mouse
+    const centerX = vw / 2;
+    s.cardPositions = [];
+
     cardsRef.current.forEach((card, index) => {
       if (!card) return;
       let virtualX = index * cardWidth - s.currentScroll;
 
       while (virtualX < -totalSetWidth / 2) virtualX += totalSetWidth;
       while (virtualX > totalSetWidth / 2) virtualX -= totalSetWidth;
+
+      s.cardPositions[index] = centerX + virtualX;
 
       if (Math.abs(virtualX) < vw) {
         card.style.display = "block";
@@ -82,6 +91,23 @@ export default function GalleryWall({ items }: GalleryWallProps) {
         card.style.display = "none";
       }
     });
+
+    // Determine hovered card based on mouse proximity
+    if (s.mouseInViewport && !s.isDragging) {
+      const cw = vw < 768 ? 110 : 160;
+      let closest = -1;
+      let closestDist = cw * 0.6; // must be within ~60% of card width
+      s.cardPositions.forEach((pos, i) => {
+        const dist = Math.abs(s.mouseX - pos);
+        if (dist < closestDist) {
+          closestDist = dist;
+          closest = i;
+        }
+      });
+      s.hoveredIndex = closest;
+    } else {
+      s.hoveredIndex = -1;
+    }
 
     s.rafId = requestAnimationFrame(animate);
   }, [gallery.length]);
@@ -125,9 +151,16 @@ export default function GalleryWall({ items }: GalleryWallProps) {
       s.velocity = -delta * 0.5;
     };
 
+    const onViewportEnter = () => { s.mouseInViewport = true; };
+    const onViewportLeave = () => { s.mouseInViewport = false; s.hoveredIndex = -1; };
+    const onViewportMouseMove = (e: MouseEvent) => { s.mouseX = e.clientX; };
+
     viewport.addEventListener("mousedown", onMouseDown);
     window.addEventListener("mouseup", onMouseUp);
     window.addEventListener("mousemove", onMouseMove);
+    viewport.addEventListener("mouseenter", onViewportEnter);
+    viewport.addEventListener("mouseleave", onViewportLeave);
+    viewport.addEventListener("mousemove", onViewportMouseMove);
     viewport.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchend", onTouchEnd);
     window.addEventListener("touchmove", onTouchMove, { passive: true });
@@ -139,6 +172,9 @@ export default function GalleryWall({ items }: GalleryWallProps) {
       viewport.removeEventListener("mousedown", onMouseDown);
       window.removeEventListener("mouseup", onMouseUp);
       window.removeEventListener("mousemove", onMouseMove);
+      viewport.removeEventListener("mouseenter", onViewportEnter);
+      viewport.removeEventListener("mouseleave", onViewportLeave);
+      viewport.removeEventListener("mousemove", onViewportMouseMove);
       viewport.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchend", onTouchEnd);
       window.removeEventListener("touchmove", onTouchMove);
@@ -156,10 +192,8 @@ export default function GalleryWall({ items }: GalleryWallProps) {
           <div
             key={`${item.name}-${i}`}
             ref={(el) => { if (el) cardsRef.current[i] = el; }}
-            onMouseEnter={() => { stateRef.current.hoveredIndex = i; }}
-            onMouseLeave={() => { stateRef.current.hoveredIndex = -1; }}
-            className="absolute top-1/2 left-1/2 w-[110px] h-[145px] md:w-[160px] md:h-[200px] -ml-[55px] -mt-[72px] md:-ml-[80px] md:-mt-[100px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition-shadow duration-300"
-            style={{ transformStyle: "preserve-3d", willChange: "transform, opacity", transition: "box-shadow 0.3s, transform 0.2s ease-out" }}
+            className="absolute top-1/2 left-1/2 w-[110px] h-[145px] md:w-[160px] md:h-[200px] -ml-[55px] -mt-[72px] md:-ml-[80px] md:-mt-[100px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] transition-shadow duration-300"
+            style={{ transformStyle: "preserve-3d", willChange: "transform, opacity" }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
