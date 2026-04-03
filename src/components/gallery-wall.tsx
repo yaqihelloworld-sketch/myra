@@ -38,7 +38,8 @@ export default function GalleryWall({ items }: GalleryWallProps) {
     rafId: 0,
   });
 
-  const cardWidth = 170;
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+  const cardWidth = isMobile ? 125 : 170;
 
   const animate = useCallback(() => {
     const s = stateRef.current;
