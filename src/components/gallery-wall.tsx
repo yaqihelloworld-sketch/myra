@@ -16,7 +16,7 @@ const DEFAULT_GALLERY: GalleryItem[] = [
   { name: "Hike the Inca Trail", url: "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=500&q=80" },
   { name: "Cooking Class on Amalfi Coast", url: "https://images.unsplash.com/photo-1534113414509-0eec2bfb493f?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1534113414509-0eec2bfb493f?w=500&q=80" },
   { name: "Yoga Retreat in Bali", url: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=500&q=80" },
-  { name: "Ski the Swiss Alps", url: "https://images.unsplash.com/photo-1531973576160-7125cd663d86?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1531973576160-7125cd663d86?w=500&q=80" },
+  { name: "Ski the Swiss Alps", url: "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?w=500&q=80" },
   { name: "Overwater Villa in Maldives", url: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=500&q=80" },
   { name: "Trek Patagonia Glaciers", url: "https://images.unsplash.com/photo-1531761535209-180857e963b9?w=500&q=80", thumbUrl: "https://images.unsplash.com/photo-1531761535209-180857e963b9?w=500&q=80" },
 ];
@@ -36,6 +36,7 @@ export default function GalleryWall({ items }: GalleryWallProps) {
     lastX: 0,
     velocity: 0,
     rafId: 0,
+    hoveredIndex: -1,
   });
 
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
@@ -69,8 +70,11 @@ export default function GalleryWall({ items }: GalleryWallProps) {
         const rotateY = progress * 40;
         const opacity = Math.max(0, 1 - Math.pow(Math.abs(progress), 2.5));
 
-        card.style.transform = `translateX(${virtualX}px) translateZ(${z}px) rotateY(${rotateY}deg)`;
+        const isHovered = s.hoveredIndex === index;
+        const scale = isHovered ? 1.08 : 1;
+        card.style.transform = `translateX(${virtualX}px) translateZ(${z}px) rotateY(${rotateY}deg) scale(${scale})`;
         card.style.opacity = String(opacity);
+        card.style.zIndex = isHovered ? "100" : "0";
       } else {
         card.style.display = "none";
       }
@@ -149,8 +153,10 @@ export default function GalleryWall({ items }: GalleryWallProps) {
           <div
             key={`${item.name}-${i}`}
             ref={(el) => { if (el) cardsRef.current[i] = el; }}
-            className="absolute top-1/2 left-1/2 w-[110px] h-[145px] md:w-[160px] md:h-[200px] -ml-[55px] -mt-[72px] md:-ml-[80px] md:-mt-[100px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.12)] transition-shadow duration-300"
-            style={{ transformStyle: "preserve-3d", willChange: "transform, opacity" }}
+            onMouseEnter={() => { stateRef.current.hoveredIndex = i; }}
+            onMouseLeave={() => { stateRef.current.hoveredIndex = -1; }}
+            className="absolute top-1/2 left-1/2 w-[110px] h-[145px] md:w-[160px] md:h-[200px] -ml-[55px] -mt-[72px] md:-ml-[80px] md:-mt-[100px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition-shadow duration-300"
+            style={{ transformStyle: "preserve-3d", willChange: "transform, opacity", transition: "box-shadow 0.3s, transform 0.2s ease-out" }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
