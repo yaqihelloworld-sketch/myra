@@ -140,7 +140,7 @@ export default function GalleryWall({ items }: GalleryWallProps) {
   return (
     <div
       ref={viewportRef}
-      className="relative w-screen h-[24vh] md:h-[28vh] cursor-grab active:cursor-grabbing overflow-visible"
+      className="relative w-full h-[22vh] md:h-[28vh] cursor-grab active:cursor-grabbing overflow-visible"
       style={{ perspective: "1200px" }}
     >
       <div className="relative w-full h-full" style={{ transformStyle: "preserve-3d" }}>
@@ -148,7 +148,7 @@ export default function GalleryWall({ items }: GalleryWallProps) {
           <div
             key={`${item.name}-${i}`}
             ref={(el) => { if (el) cardsRef.current[i] = el; }}
-            className="absolute top-1/2 left-1/2 w-[140px] h-[180px] md:w-[160px] md:h-[200px] -ml-[70px] -mt-[90px] md:-ml-[80px] md:-mt-[100px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.12)] transition-shadow duration-300"
+            className="absolute top-1/2 left-1/2 w-[110px] h-[145px] md:w-[160px] md:h-[200px] -ml-[55px] -mt-[72px] md:-ml-[80px] md:-mt-[100px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.12)] transition-shadow duration-300"
             style={{ transformStyle: "preserve-3d", willChange: "transform, opacity" }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}

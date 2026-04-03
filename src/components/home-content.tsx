@@ -118,7 +118,7 @@ export default function HomeContent({
       </div>
 
       {/* Gallery Wall */}
-      <div className="-mx-6 md:-mx-8 mb-20 hero-fade" style={{ animationDelay: "600ms" }}>
+      <div className="-mx-6 md:-mx-8 mb-20 overflow-x-clip hero-fade" style={{ animationDelay: "600ms" }}>
         <GalleryWall items={galleryItems} />
       </div>
 
