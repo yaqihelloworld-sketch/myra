@@ -256,6 +256,35 @@ export default function BucketListView({
   );
 }
 
+const PIN_COLORS = ["#D94B4B", "#C94040", "#E05555", "#B83A3A", "#D04848"];
+
+function PushPin({ seed }: { seed: number }) {
+  const color = PIN_COLORS[seed % PIN_COLORS.length];
+  const tilt = ((seed * 7) % 30) - 15;
+  return (
+    <div
+      className="absolute -top-3 left-1/2 z-20 drop-shadow-[0_2px_3px_rgba(0,0,0,0.3)]"
+      style={{ transform: `translateX(-50%) rotate(${tilt}deg)` }}
+      aria-hidden="true"
+    >
+      <svg width="18" height="26" viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="10" cy="8" r="7" fill={color} />
+        <circle cx="10" cy="8" r="7" fill="url(#pinShine)" />
+        <ellipse cx="8" cy="6" rx="2.5" ry="2" fill="white" opacity="0.35" />
+        <path d="M10 15 L10 27" stroke="#999" strokeWidth="1" strokeLinecap="round" />
+        <path d="M10 15 L10 18" stroke="#777" strokeWidth="1" strokeLinecap="round" />
+        <ellipse cx="10" cy="15" rx="2.5" ry="0.8" fill="black" opacity="0.08" />
+        <defs>
+          <radialGradient id="pinShine" cx="0.35" cy="0.3" r="0.65">
+            <stop offset="0%" stopColor="white" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="black" stopOpacity="0.12" />
+          </radialGradient>
+        </defs>
+      </svg>
+    </div>
+  );
+}
+
 function PolaroidCard({
   experience,
   photo,
@@ -266,8 +295,10 @@ function PolaroidCard({
   onPhotoAdded?: () => void;
 }) {
   const { t } = useI18n();
+  const cardRotation = ((experience.id * 13) % 7) - 3;
   return (
-      <div className="block group">
+      <div className="block group relative pt-3" style={{ transform: `rotate(${cardRotation}deg)` }}>
+        <PushPin seed={experience.id} />
         <div className="bg-white p-2.5 pb-4 shadow-[0_1px_3px_rgba(0,0,0,0.08),0_4px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_2px_8px_rgba(0,0,0,0.12),0_8px_24px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-[box-shadow,transform] duration-300 h-full flex flex-col" style={{ transitionTimingFunction: "cubic-bezier(0.25, 1, 0.5, 1)" }}>
           {/* Photo */}
           <div className="aspect-[4/3] relative overflow-hidden bg-[#F0EDE6]">
