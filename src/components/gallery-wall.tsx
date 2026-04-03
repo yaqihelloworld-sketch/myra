@@ -40,6 +40,7 @@ export default function GalleryWall({ items }: GalleryWallProps) {
     mouseX: -9999,
     mouseInViewport: false,
     cardPositions: [] as number[],
+    hoverAmounts: [] as number[], // 0 = not hovered, 1 = fully hovered (lerped)
   });
 
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
@@ -74,19 +75,28 @@ export default function GalleryWall({ items }: GalleryWallProps) {
 
       s.cardPositions[index] = centerX + virtualX;
 
+      // Lerp hover amount (smooth transition)
+      if (!s.hoverAmounts[index]) s.hoverAmounts[index] = 0;
+      const targetHover = s.hoveredIndex === index ? 1 : 0;
+      s.hoverAmounts[index] += (targetHover - s.hoverAmounts[index]) * 0.12;
+      if (Math.abs(s.hoverAmounts[index] - targetHover) < 0.005) s.hoverAmounts[index] = targetHover;
+      const h = s.hoverAmounts[index];
+
       if (Math.abs(virtualX) < vw) {
         card.style.display = "block";
         const progress = virtualX / (vw / 1.5);
         const z = -Math.pow(Math.abs(progress), 2) * 400;
         const rotateY = progress * 40;
-        const opacity = Math.max(0, 1 - Math.pow(Math.abs(progress), 2.5));
+        const baseOpacity = Math.max(0, 1 - Math.pow(Math.abs(progress), 2.5));
 
-        const isHovered = s.hoveredIndex === index;
-        const scale = isHovered ? 1.15 : 1;
-        const hoverZ = isHovered ? z + 150 : z;
-        card.style.transform = `translateX(${virtualX}px) translateZ(${hoverZ}px) rotateY(${isHovered ? 0 : rotateY}deg) scale(${scale})`;
-        card.style.opacity = String(isHovered ? 1 : opacity);
-        card.style.zIndex = isHovered ? "100" : "0";
+        const scale = 1 + h * 0.15;
+        const lerpZ = z + h * 150;
+        const lerpRotateY = rotateY * (1 - h);
+        const lerpOpacity = baseOpacity + h * (1 - baseOpacity);
+
+        card.style.transform = `translateX(${virtualX}px) translateZ(${lerpZ}px) rotateY(${lerpRotateY}deg) scale(${scale})`;
+        card.style.opacity = String(lerpOpacity);
+        card.style.zIndex = h > 0.1 ? "100" : "0";
       } else {
         card.style.display = "none";
       }
