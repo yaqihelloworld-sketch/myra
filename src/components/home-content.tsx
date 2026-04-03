@@ -117,17 +117,12 @@ export default function HomeContent({
         </h1>
       </div>
 
-      {/* Gallery Wall */}
-      <div className="-mx-6 md:-mx-8 mb-20 overflow-x-clip hero-fade" style={{ animationDelay: "600ms" }}>
-        <GalleryWall items={galleryItems} />
-      </div>
-
       {/* Intent Cards — Discover first */}
       <div className="grid md:grid-cols-2 gap-3 max-w-2xl mx-auto mb-20">
         <Link
           href="/trips/new"
           className="bg-white p-5 md:p-6 rounded-lg shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.03)] group hover:bg-[#EBCFBE] active:bg-[#EBCFBE] transition-colors hero-reveal"
-          style={{ animationDelay: "700ms" }}
+          style={{ animationDelay: "600ms" }}
         >
           <Image
             src="/globe-icon.svg"
@@ -148,7 +143,7 @@ export default function HomeContent({
         <Link
           href="/bucket-list/new"
           className="bg-white p-5 md:p-6 rounded-lg shadow-[0_1px_4px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.03)] group hover:bg-[#EBCFBE] active:bg-[#EBCFBE] transition-colors hero-reveal"
-          style={{ animationDelay: "850ms" }}
+          style={{ animationDelay: "750ms" }}
         >
           <Image
             src="/book.svg"
@@ -165,6 +160,11 @@ export default function HomeContent({
             {t("home.addBucketListDesc")}
           </p>
         </Link>
+      </div>
+
+      {/* Gallery Wall */}
+      <div className="-mx-6 md:-mx-8 mb-20 overflow-x-clip hero-fade" style={{ animationDelay: "900ms" }}>
+        <GalleryWall items={galleryItems} />
       </div>
 
       {/* Stats */}
