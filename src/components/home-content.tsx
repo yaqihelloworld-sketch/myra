@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useI18n } from "@/lib/i18n";
+import GalleryWall, { type GalleryItem } from "@/components/gallery-wall";
 
 function AnimatedCount({ value }: { value: number }) {
   const [count, setCount] = useState(0);
@@ -46,10 +47,12 @@ export default function HomeContent({
   wishlistCount,
   plannedCount,
   visitedCount,
+  galleryItems,
 }: {
   wishlistCount: number;
   plannedCount: number;
   visitedCount: number;
+  galleryItems?: GalleryItem[];
 }) {
   const { t, lang } = useI18n();
   const isCN = lang === "zh";
@@ -112,6 +115,11 @@ export default function HomeContent({
             </>
           )}
         </h1>
+      </div>
+
+      {/* Gallery Wall */}
+      <div className="-mx-6 md:-mx-8 mb-20 hero-fade" style={{ animationDelay: "600ms" }}>
+        <GalleryWall items={galleryItems} />
       </div>
 
       {/* Intent Cards — Discover first */}

@@ -1,6 +1,6 @@
 import { db } from "@/db";
-import { experiences } from "@/db/schema";
-import { eq, sql } from "drizzle-orm";
+import { experiences, experiencePhotos } from "@/db/schema";
+import { eq, sql, inArray } from "drizzle-orm";
 import HomeContent from "@/components/home-content";
 import { auth } from "@/lib/auth";
 
@@ -25,11 +25,38 @@ export default async function Home() {
     countMap[row.status] = row.count;
   }
 
+  // Fetch gallery photos from user's experiences
+  let galleryItems: { name: string; url: string; thumbUrl: string }[] = [];
+  try {
+    const userExps = await db
+      .select({ id: experiences.id, name: experiences.name })
+      .from(experiences)
+      .where(eq(experiences.userId, userId));
+    const expIds = userExps.map((e) => e.id);
+    if (expIds.length > 0) {
+      const photos = await db
+        .select({
+          experienceId: experiencePhotos.experienceId,
+          url: experiencePhotos.url,
+          thumbUrl: experiencePhotos.thumbUrl,
+        })
+        .from(experiencePhotos)
+        .where(inArray(experiencePhotos.experienceId, expIds));
+      const nameMap = Object.fromEntries(userExps.map((e) => [e.id, e.name]));
+      galleryItems = photos.map((p) => ({
+        name: nameMap[p.experienceId] || "",
+        url: p.url,
+        thumbUrl: p.thumbUrl,
+      }));
+    }
+  } catch {}
+
   return (
     <HomeContent
       wishlistCount={countMap["wishlist"] || 0}
       plannedCount={countMap["planned"] || 0}
       visitedCount={countMap["visited"] || 0}
+      galleryItems={galleryItems}
     />
   );
 }
