@@ -1,35 +1,7 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: "Playfair Display";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("https://fonts.gstatic.com/s/playfairdisplay/v37/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDXbtM.woff2")
-    format("woff2");
-}
-
-@font-face {
-  font-family: "Playfair Display";
-  font-style: italic;
-  font-weight: 400;
-  font-display: swap;
-  src: url("https://fonts.gstatic.com/s/playfairdisplay/v37/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_qiTbtbK.woff2")
-    format("woff2");
-}
-
-@font-face {
-  font-family: "Playfair Display";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("https://fonts.gstatic.com/s/playfairdisplay/v37/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKd6uHDXbtM.woff2")
-    format("woff2");
-}
-
-
 @theme inline {
-  --font-serif: "Playfair Display", "Noto Serif SC", Georgia, serif;
+  --font-serif: var(--font-newsreader), "Noto Serif SC", Georgia, serif;
   --font-sans: "Inter", "Noto Sans SC", system-ui, sans-serif;
   --color-cream: #f7f5f0;
   --color-butter: #f2e6b5;

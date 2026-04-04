@@ -92,7 +92,7 @@ export default function HomeContent({
         >
           {t("home.quote")}
         </p>
-        <h1 className="font-serif text-4xl md:text-5xl leading-tight mb-4">
+        <h1 className="font-serif text-4xl md:text-5xl leading-tight mb-4 font-light tracking-tight">
           {isCN ? (
             <>
               <span className="inline-block hero-reveal" style={{ animationDelay: "300ms" }}>
