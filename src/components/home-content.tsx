@@ -162,8 +162,8 @@ export default function HomeContent({
         </Link>
       </div>
 
-      {/* Gallery Wall */}
-      <div className="-mx-6 md:-mx-8 mb-20 overflow-x-clip hero-fade" style={{ animationDelay: "900ms" }}>
+      {/* Gallery Wall — break out of max-w container to full viewport width */}
+      <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen mb-20 overflow-x-clip hero-fade" style={{ animationDelay: "900ms" }}>
         <GalleryWall items={galleryItems} />
       </div>
 
